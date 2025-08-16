@@ -1,0 +1,45 @@
+{
+    "name": "boldlinestudios/laravel-revenuecat-api",
+    "description": "Laravel wrapper for the RevenueCat API 2.0",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "BoldlineStudios\\RevenueCatApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        "BoldlineStudios\\RevenueCatApi\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "illuminate/support": "^12.24"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^10.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist",
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BoldlineStudios\\RevenueCatApi\\RevenueCatApiServiceProvider"
+            ],
+            "aliases": {
+                "RevenueCat": "BoldlineStudios\\RevenueCatApi\\Facades\\RevenueCatApi"
+            }
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    }
+}
