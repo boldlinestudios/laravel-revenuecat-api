@@ -10,7 +10,7 @@ uses(TestCase::class)
         // Set up test configuration
         config([
             'revenuecat-api.api_key' => 'test_api_key',
-            'revenuecat-api.base_url' => 'https://api.revenuecat.com',
+            'revenuecat-api.base_url' => 'https://api.revenuecat.com/v2',
             'revenuecat-api.timeout' => 30,
         ]);
     })

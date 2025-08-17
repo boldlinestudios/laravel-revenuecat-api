@@ -32,7 +32,7 @@ return [
     | production URL unless you're testing with a different environment.
     |
     */
-    'base_url' => env('REVENUECAT_BASE_URL', 'https://api.revenuecat.com'),
+    'base_url' => env('REVENUECAT_BASE_URL', 'https://api.revenuecat.com/v2'),
 
     /*
     |--------------------------------------------------------------------------

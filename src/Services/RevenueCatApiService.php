@@ -31,7 +31,7 @@ class RevenueCatApiService
      */
     public function getSubscriber(string $appUserId): Response
     {
-        return $this->http->get("{$this->baseUrl}/v2/subscribers/{$appUserId}");
+        return $this->http->get("{$this->baseUrl}/subscribers/{$appUserId}");
     }
 
     /**
@@ -39,7 +39,7 @@ class RevenueCatApiService
      */
     public function getSubscriberEntitlements(string $appUserId): Response
     {
-        return $this->http->get("{$this->baseUrl}/v2/subscribers/{$appUserId}/entitlements");
+        return $this->http->get("{$this->baseUrl}/subscribers/{$appUserId}/entitlements");
     }
 
     /**
@@ -47,7 +47,7 @@ class RevenueCatApiService
      */
     public function grantPromotionalEntitlement(string $appUserId, array $data): Response
     {
-        return $this->http->post("{$this->baseUrl}/v2/subscribers/{$appUserId}/entitlements", $data);
+        return $this->http->post("{$this->baseUrl}/subscribers/{$appUserId}/entitlements", $data);
     }
 
     /**
@@ -55,7 +55,7 @@ class RevenueCatApiService
      */
     public function revokePromotionalEntitlement(string $appUserId, string $entitlementId): Response
     {
-        return $this->http->delete("{$this->baseUrl}/v2/subscribers/{$appUserId}/entitlements/{$entitlementId}");
+        return $this->http->delete("{$this->baseUrl}/subscribers/{$appUserId}/entitlements/{$entitlementId}");
     }
 
     /**
@@ -63,7 +63,7 @@ class RevenueCatApiService
      */
     public function getProducts(): Response
     {
-        return $this->http->get("{$this->baseUrl}/v2/products");
+        return $this->http->get("{$this->baseUrl}/products");
     }
 
     /**
@@ -71,7 +71,7 @@ class RevenueCatApiService
      */
     public function getOfferings(): Response
     {
-        return $this->http->get("{$this->baseUrl}/v2/offerings");
+        return $this->http->get("{$this->baseUrl}/offerings");
     }
 
     /**

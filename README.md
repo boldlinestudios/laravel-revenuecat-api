@@ -24,7 +24,7 @@ Add the following environment variables to your `.env` file:
 
 ```env
 REVENUECAT_API_KEY=your_api_key_here
-REVENUECAT_BASE_URL=https://api.revenuecat.com
+REVENUECAT_BASE_URL=https://api.revenuecat.com/v2
 REVENUECAT_TIMEOUT=30
 REVENUECAT_RETRY_ATTEMPTS=3
 REVENUECAT_RETRY_DELAY=1
