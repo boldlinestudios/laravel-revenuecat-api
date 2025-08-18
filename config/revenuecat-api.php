@@ -44,23 +44,4 @@ return [
     */
     'timeout' => env('REVENUECAT_TIMEOUT', 30),
 
-    /*
-    |--------------------------------------------------------------------------
-    | Retry Attempts
-    |--------------------------------------------------------------------------
-    |
-    | Number of retry attempts for failed requests. Default is 3.
-    |
-    */
-    'retry_attempts' => env('REVENUECAT_RETRY_ATTEMPTS', 3),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Retry Delay
-    |--------------------------------------------------------------------------
-    |
-    | Delay in seconds between retry attempts. Default is 1 second.
-    |
-    */
-    'retry_delay' => env('REVENUECAT_RETRY_DELAY', 1),
 ];

@@ -2,7 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi;
 
-use BoldlineStudios\RevenueCatApi\Services\RevenueCatApiService;
+use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Support\ServiceProvider;
 
 class RevenueCatApiServiceProvider extends ServiceProvider
@@ -16,32 +16,25 @@ class RevenueCatApiServiceProvider extends ServiceProvider
             __DIR__.'/../config/revenuecat-api.php', 'revenuecat-api'
         );
 
-        $this->app->singleton(RevenueCatApiService::class, function ($app) {
-
+        $this->app->singleton(RevenueCatClient::class, function ($app) {
             $apiKey = config('revenuecat-api.api_key');
             $baseUrl = config('revenuecat-api.base_url');
             $timeout = config('revenuecat-api.timeout');
 
-            if (!is_string($apiKey) || empty($apiKey)) {
-                throw new \InvalidArgumentException('REVENUECAT_API_KEY must be a string and not empty');
+            if (! is_string($apiKey) || $apiKey === '') {
+                throw new \InvalidArgumentException('REVENUECAT_API_KEY must be a non-empty string');
+            }
+            if (! is_string($baseUrl) || $baseUrl === '') {
+                throw new \InvalidArgumentException('REVENUECAT_BASE_URL must be a non-empty string');
+            }
+            if (! is_int($timeout) || $timeout <= 0) {
+                throw new \InvalidArgumentException('REVENUECAT_TIMEOUT must be a positive integer');
             }
 
-            if (!is_string($baseUrl) || empty($baseUrl)) {
-                throw new \InvalidArgumentException('REVENUECAT_BASE_URL must be a string and not empty');
-            }
-
-            if (!is_int($timeout) || empty($timeout)) {
-                throw new \InvalidArgumentException('REVENUECAT_TIMEOUT must be an integer and not empty');
-            }
-
-            return new RevenueCatApiService(
-                $apiKey,
-                $baseUrl,
-                $timeout
+            return new RevenueCatClient(
+                $apiKey, $baseUrl, $timeout
             );
         });
-
-        $this->app->alias(RevenueCatApiService::class, 'revenuecat-api');
     }
 
     /**
