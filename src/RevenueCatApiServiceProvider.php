@@ -2,8 +2,8 @@
 
 namespace BoldlineStudios\RevenueCatApi;
 
-use Illuminate\Support\ServiceProvider;
 use BoldlineStudios\RevenueCatApi\Services\RevenueCatApiService;
+use Illuminate\Support\ServiceProvider;
 
 class RevenueCatApiServiceProvider extends ServiceProvider
 {

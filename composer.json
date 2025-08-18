@@ -18,6 +18,7 @@
         "illuminate/support": "^12.24"
     },
     "require-dev": {
+        "laravel/pint": "^1.24",
         "orchestra/testbench": "^10.4",
         "pestphp/pest": "^3.8"
     },

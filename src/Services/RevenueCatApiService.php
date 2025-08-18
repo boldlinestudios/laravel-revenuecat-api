@@ -3,14 +3,17 @@
 namespace BoldlineStudios\RevenueCatApi\Services;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Http;
 
 class RevenueCatApiService
 {
     protected PendingRequest $http;
+
     protected string $apiKey;
+
     protected string $baseUrl;
+
     protected int $timeout;
 
     public function __construct(string $apiKey, string $baseUrl, int $timeout = 30)
@@ -18,9 +21,9 @@ class RevenueCatApiService
         $this->apiKey = $apiKey;
         $this->baseUrl = $baseUrl;
         $this->timeout = $timeout;
-        
+
         $this->http = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->apiKey,
+            'Authorization' => 'Bearer '.$this->apiKey,
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ])->timeout($this->timeout);
@@ -79,8 +82,8 @@ class RevenueCatApiService
      */
     public function request(string $method, string $endpoint, array $data = []): Response
     {
-        $url = $this->baseUrl . $endpoint;
-        
+        $url = $this->baseUrl.$endpoint;
+
         return match (strtoupper($method)) {
             'GET' => $this->http->get($url, $data),
             'POST' => $this->http->post($url, $data),
