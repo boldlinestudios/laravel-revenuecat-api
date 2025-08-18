@@ -36,6 +36,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Project ID (Required)
+    |--------------------------------------------------------------------------
+    |
+    | Your RevenueCat Project ID. Endpoints are scoped to a project and
+    | begin with /projects/{project_id}. This is required for API calls.
+    |
+    */
+    'project_id' => env('REVENUECAT_PROJECT_ID'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Timeout
     |--------------------------------------------------------------------------
     |

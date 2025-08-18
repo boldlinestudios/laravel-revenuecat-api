@@ -18,11 +18,15 @@ class RevenueCatApiServiceProvider extends ServiceProvider
 
         $this->app->singleton(RevenueCatClient::class, function ($app) {
             $apiKey = config('revenuecat-api.api_key');
+            $projectId = config('revenuecat-api.project_id');
             $baseUrl = config('revenuecat-api.base_url');
             $timeout = config('revenuecat-api.timeout');
 
             if (! is_string($apiKey) || $apiKey === '') {
                 throw new \InvalidArgumentException('REVENUECAT_API_KEY must be a non-empty string');
+            }
+            if (! is_string($projectId) || $projectId === '') {
+                throw new \InvalidArgumentException('REVENUECAT_PROJECT_ID must be a non-empty string');
             }
             if (! is_string($baseUrl) || $baseUrl === '') {
                 throw new \InvalidArgumentException('REVENUECAT_BASE_URL must be a non-empty string');
@@ -32,7 +36,7 @@ class RevenueCatApiServiceProvider extends ServiceProvider
             }
 
             return new RevenueCatClient(
-                $apiKey, $baseUrl, $timeout
+                $apiKey, $baseUrl, $projectId, $timeout
             );
         });
     }
