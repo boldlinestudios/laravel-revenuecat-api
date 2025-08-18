@@ -17,10 +17,27 @@ class RevenueCatApiServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(RevenueCatApiService::class, function ($app) {
+
+            $apiKey = config('revenuecat-api.api_key');
+            $baseUrl = config('revenuecat-api.base_url');
+            $timeout = config('revenuecat-api.timeout');
+
+            if (!is_string($apiKey) || empty($apiKey)) {
+                throw new \InvalidArgumentException('REVENUECAT_API_KEY must be a string and not empty');
+            }
+
+            if (!is_string($baseUrl) || empty($baseUrl)) {
+                throw new \InvalidArgumentException('REVENUECAT_BASE_URL must be a string and not empty');
+            }
+
+            if (!is_int($timeout) || empty($timeout)) {
+                throw new \InvalidArgumentException('REVENUECAT_TIMEOUT must be an integer and not empty');
+            }
+
             return new RevenueCatApiService(
-                config('revenuecat-api.api_key'),
-                config('revenuecat-api.base_url'),
-                config('revenuecat-api.timeout')
+                $apiKey,
+                $baseUrl,
+                $timeout
             );
         });
 

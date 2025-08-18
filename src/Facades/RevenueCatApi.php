@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \Illuminate\Http\Client\Response getSubscriber(string $appUserId)
  * @method static \Illuminate\Http\Client\Response getSubscriberEntitlements(string $appUserId)
- * @method static \Illuminate\Http\Client\Response grantPromotionalEntitlement(string $appUserId, array $data)
+ * @method static \Illuminate\Http\Client\Response grantPromotionalEntitlement(string $appUserId, array<string, mixed> $data)
  * @method static \Illuminate\Http\Client\Response revokePromotionalEntitlement(string $appUserId, string $entitlementId)
  * @method static \Illuminate\Http\Client\Response getProducts()
  * @method static \Illuminate\Http\Client\Response getOfferings()
- * @method static \Illuminate\Http\Client\Response request(string $method, string $endpoint, array $data = [])
+ * @method static \Illuminate\Http\Client\Response request(string $method, string $endpoint, array<string, mixed> $data = [])
  *
  * @see \BoldlineStudios\RevenueCatApi\Services\RevenueCatApiService
  */

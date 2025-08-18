@@ -12,6 +12,15 @@ class Entitlement
         public string $purchaseDate
     ) {}
 
+    /**
+     * @param array{
+     *   identifier?: string,
+     *   is_active?: bool,
+     *   expires_date?: string|null,
+     *   product_identifier?: string,
+     *   purchase_date?: string
+     * } $data
+    */
     public static function fromArray(array $data): self
     {
         return new self(
@@ -23,6 +32,15 @@ class Entitlement
         );
     }
 
+    /**
+     * @return array{
+     *   identifier: string,
+     *   is_active: bool,
+     *   expires_date: string|null,
+     *   product_identifier: string,
+     *   purchase_date: string
+     * }
+    */
     public function toArray(): array
     {
         return [
