@@ -3,6 +3,13 @@
 namespace BoldlineStudios\RevenueCatApi\Http;
 
 use BoldlineStudios\RevenueCatApi\Endpoints\App as Apps;
+use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
+use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
+use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
+use BoldlineStudios\RevenueCatApi\Endpoints\Package;
+use BoldlineStudios\RevenueCatApi\Endpoints\Product;
+use BoldlineStudios\RevenueCatApi\Endpoints\Project;
+use BoldlineStudios\RevenueCatApi\Endpoints\Purchase;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -33,11 +40,6 @@ class RevenueCatClient
         $this->http = $client;
     }
 
-    public function apps(): Apps
-    {
-        return new Apps($this);
-    }
-
     public function get(string $path, array $query = []): Response
     {
         return $this->http->get($this->prefixProject($path), $query);
@@ -61,6 +63,46 @@ class RevenueCatClient
         return $clone;
     }
 
+    public function apps(): Apps
+    {
+        return new Apps($this);
+    }
+
+    public function customers(): Customer
+    {
+        return new Customer($this);
+    }
+
+    public function entitlements(): Entitlement
+    {
+        return new Entitlement($this);
+    }
+
+    public function offerings(): Offering
+    {
+        return new Offering($this);
+    }
+
+    public function packages(): Package
+    {
+        return new Package($this);
+    }
+
+    public function products(): Product
+    {
+        return new Product($this);
+    }
+
+    public function projects(): Project
+    {
+        return new Project($this);
+    }
+
+    public function purchases(): Purchase
+    {
+        return new Purchase($this);
+    }
+
     private function normalizePath(string $path): string
     {
         return str_starts_with($path, '/') ? $path : '/'.$path;
@@ -68,6 +110,11 @@ class RevenueCatClient
 
     private function prefixProject(string $path): string
     {
+        // projects endpoint is not prefixed with the project id
+        if (str_starts_with($path, '/projects')) {
+            return $this->baseUrl.$this->normalizePath($path);
+        }
+
         return $this->baseUrl.'/projects/'.$this->projectId.$this->normalizePath($path);
     }
 }

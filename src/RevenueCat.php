@@ -8,6 +8,8 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
 use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
 use BoldlineStudios\RevenueCatApi\Endpoints\Package;
 use BoldlineStudios\RevenueCatApi\Endpoints\Product;
+use BoldlineStudios\RevenueCatApi\Endpoints\Project;
+use BoldlineStudios\RevenueCatApi\Endpoints\Purchase;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 final class RevenueCat
@@ -42,5 +44,15 @@ final class RevenueCat
     public function products(): Product
     {
         return new Product($this->client);
+    }
+
+    public function purchases(): Purchase
+    {
+        return new Purchase($this->client);
+    }
+
+    public function projects(): Project
+    {
+        return new Project($this->client);
     }
 }
