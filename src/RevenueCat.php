@@ -6,6 +6,8 @@ use BoldlineStudios\RevenueCatApi\Endpoints\App as AppEndpoint;
 use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
 use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
 use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
+use BoldlineStudios\RevenueCatApi\Endpoints\Package;
+use BoldlineStudios\RevenueCatApi\Endpoints\Product;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 final class RevenueCat
@@ -30,5 +32,15 @@ final class RevenueCat
     public function offerings(): Offering
     {
         return new Offering($this->client);
+    }
+
+    public function packages(): Package
+    {
+        return new Package($this->client);
+    }
+
+    public function products(): Product
+    {
+        return new Product($this->client);
     }
 }
