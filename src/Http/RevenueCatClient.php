@@ -10,6 +10,7 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Package;
 use BoldlineStudios\RevenueCatApi\Endpoints\Product;
 use BoldlineStudios\RevenueCatApi\Endpoints\Project;
 use BoldlineStudios\RevenueCatApi\Endpoints\Purchase;
+use BoldlineStudios\RevenueCatApi\Endpoints\Subscription;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
