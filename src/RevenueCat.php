@@ -10,6 +10,7 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Package;
 use BoldlineStudios\RevenueCatApi\Endpoints\Product;
 use BoldlineStudios\RevenueCatApi\Endpoints\Project;
 use BoldlineStudios\RevenueCatApi\Endpoints\Purchase;
+use BoldlineStudios\RevenueCatApi\Endpoints\Subscription;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 final class RevenueCat
@@ -54,5 +55,10 @@ final class RevenueCat
     public function projects(): Project
     {
         return new Project($this->client);
+    }
+
+    public function subscriptions(): Subscription
+    {
+        return new Subscription($this->client);
     }
 }

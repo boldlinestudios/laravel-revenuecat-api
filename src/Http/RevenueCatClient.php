@@ -103,6 +103,11 @@ class RevenueCatClient
         return new Purchase($this);
     }
 
+    public function subscriptions(): Subscription
+    {
+        return new Subscription($this);
+    }
+
     private function normalizePath(string $path): string
     {
         return str_starts_with($path, '/') ? $path : '/'.$path;
