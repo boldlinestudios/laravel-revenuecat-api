@@ -2,11 +2,12 @@
 
 namespace BoldlineStudios\RevenueCatApi\Http;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\App as Apps;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-final class RevenueCatClient
+class RevenueCatClient
 {
     private PendingRequest $http;
 
@@ -30,6 +31,11 @@ final class RevenueCatClient
         ])->timeout($timeout);
 
         $this->http = $client;
+    }
+
+    public function apps(): Apps
+    {
+        return new Apps($this);
     }
 
     public function get(string $path, array $query = []): Response

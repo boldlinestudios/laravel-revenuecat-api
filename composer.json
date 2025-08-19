@@ -39,7 +39,8 @@
                 "BoldlineStudios\\RevenueCatApi\\RevenueCatApiServiceProvider"
             ],
             "aliases": {
-                "RevenueCat": "BoldlineStudios\\RevenueCatApi\\Facades\\RevenueCatApi"
+                "RevenueCat": "BoldlineStudios\\RevenueCatApi\\Facades\\RevenueCatApi",
+                "RevenueCatClient": "BoldlineStudios\\RevenueCatApi\\Facades\\RevenueCatClient"
             }
         }
     },
