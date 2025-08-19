@@ -3,6 +3,7 @@
 namespace BoldlineStudios\RevenueCatApi;
 
 use BoldlineStudios\RevenueCatApi\Endpoints\App as AppEndpoint;
+use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 final class RevenueCat
@@ -12,5 +13,10 @@ final class RevenueCat
     public function apps(): AppEndpoint
     {
         return new AppEndpoint($this->client);
+    }
+
+    public function customers(): Customer
+    {
+        return new Customer($this->client);
     }
 }
