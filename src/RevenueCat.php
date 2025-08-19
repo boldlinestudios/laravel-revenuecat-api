@@ -5,6 +5,7 @@ namespace BoldlineStudios\RevenueCatApi;
 use BoldlineStudios\RevenueCatApi\Endpoints\App as AppEndpoint;
 use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
 use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
+use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 final class RevenueCat
@@ -24,5 +25,10 @@ final class RevenueCat
     public function entitlements(): Entitlement
     {
         return new Entitlement($this->client);
+    }
+
+    public function offerings(): Offering
+    {
+        return new Offering($this->client);
     }
 }
