@@ -20,12 +20,15 @@ use BoldlineStudios\RevenueCatApi\Exceptions\NotFoundException;
 use BoldlineStudios\RevenueCatApi\Exceptions\RateLimitException;
 use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;
 use BoldlineStudios\RevenueCatApi\Exceptions\ValidationException;
+use BoldlineStudios\RevenueCatApi\Traits\ConvenienceMethods;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 class RevenueCatClient
 {
+    use ConvenienceMethods;
+
     private PendingRequest $http;
 
     private string $baseUrl;
