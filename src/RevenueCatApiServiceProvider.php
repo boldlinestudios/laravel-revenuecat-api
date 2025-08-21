@@ -39,10 +39,6 @@ class RevenueCatApiServiceProvider extends ServiceProvider
                 $apiKey, $baseUrl, $projectId, $timeout
             );
         });
-
-        $this->app->singleton('revenuecat', function ($app) {
-            return new RevenueCat($app->make(RevenueCatClient::class));
-        });
     }
 
     /**
