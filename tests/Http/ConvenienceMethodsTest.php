@@ -96,7 +96,7 @@ describe('App Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getAppList(['limit' => 10]);
+        $response = $testClass->getAppList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -220,7 +220,7 @@ describe('Customer Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerList(['limit' => 10]);
+        $response = $testClass->getCustomerList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -401,7 +401,7 @@ describe('Entitlement Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getEntitlementList(['limit' => 10]);
+        $response = $testClass->getEntitlementList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -511,7 +511,7 @@ describe('Offering Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getOfferingList(['limit' => 10]);
+        $response = $testClass->getOfferingList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -602,7 +602,7 @@ describe('Package Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPackageList(['limit' => 10]);
+        $response = $testClass->getPackageList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -712,7 +712,7 @@ describe('Product Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getProductList(['limit' => 10]);
+        $response = $testClass->getProductList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -768,7 +768,7 @@ describe('Project Convenience Methods', function () {
         ]);
 
         $testClass = new TestConvenienceMethods;
-        $response = $testClass->getProjectList(['limit' => 10]);
+        $response = $testClass->getProjectList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -959,7 +959,7 @@ describe('Trait Integration', function () {
         $offeringResponse = $testClass->getOffering('test-id');
         $packageResponse = $testClass->getPackage('test-id');
         $productResponse = $testClass->getProduct('test-id');
-        $projectResponse = $testClass->getProjectList(['limit' => 1]);
+        $projectResponse = $testClass->getProjectList(1);
         $purchaseResponse = $testClass->getPurchase('test-id');
         $subscriptionResponse = $testClass->getSubscription('test-id');
 

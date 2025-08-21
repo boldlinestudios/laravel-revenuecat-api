@@ -6,30 +6,6 @@ use Illuminate\Http\Client\Response;
 
 trait ConvenienceMethods
 {
-    /**
-     * @param  array<string,mixed>  $query
-     * @return array{0:int,1:?string,2:array<string,mixed>}
-     */
-    private function normalizeListQuery(array $query): array
-    {
-        $limit = 20;
-        if (array_key_exists('limit', $query)) {
-            $limitValue = $query['limit'];
-            if (is_int($limitValue)) {
-                $limit = $limitValue;
-            } elseif (is_string($limitValue) && is_numeric($limitValue)) {
-                $limit = (int) $limitValue;
-            }
-        }
-
-        $startingAfter = $query['starting_after'] ?? null;
-        $startingAfter = is_string($startingAfter) && $startingAfter !== '' ? $startingAfter : null;
-
-        unset($query['limit'], $query['starting_after']);
-
-        return [$limit, $startingAfter, $query];
-    }
-
     // App convenience methods
     public function getApp(string $appId): Response
     {
@@ -37,12 +13,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getAppList(array $query = []): Response
+    public function getAppList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->apps()->list($limit, $startingAfter, $extra);
     }
 
@@ -84,12 +58,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getCustomerList(array $query = []): Response
+    public function getCustomerList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->customers()->list($limit, $startingAfter, $extra);
     }
 
@@ -143,12 +115,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getEntitlementList(array $query = []): Response
+    public function getEntitlementList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->entitlements()->list($limit, $startingAfter, $extra);
     }
 
@@ -185,12 +155,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getOfferingList(array $query = []): Response
+    public function getOfferingList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->offerings()->list($limit, $startingAfter, $extra);
     }
 
@@ -222,12 +190,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getPackageList(array $query = []): Response
+    public function getPackageList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->packages()->list($limit, $startingAfter, $extra);
     }
 
@@ -264,12 +230,10 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getProductList(array $query = []): Response
+    public function getProductList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->products()->list($limit, $startingAfter, $extra);
     }
 
@@ -288,12 +252,10 @@ trait ConvenienceMethods
 
     // Project convenience methods
     /**
-     * @param  array<string,mixed>  $query
+     * @param  array<string,mixed>  $extra
      */
-    public function getProjectList(array $query = []): Response
+    public function getProjectList(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
-        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
-
         return $this->projects()->list($limit, $startingAfter, $extra);
     }
 

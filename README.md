@@ -35,22 +35,22 @@ REVENUECAT_TIMEOUT=30
 
 #### 1) Endpoint-style (fluent)
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient as RevenueCat;
 
 // Apps
 $app = RevenueCat::apps()->get('app_id');
-$apps = RevenueCat::apps()->list(['limit' => 10]);
+$apps = RevenueCat::apps()->list(10); // (int $limit = 20, ?string $startingAfter = null, array $extra = [])
 
 // Customers
 $customer = RevenueCat::customers()->get('customer_id');
-$customers = RevenueCat::customers()->list(['limit' => 25]);
+$customers = RevenueCat::customers()->list(25);
 
 // Other endpoints
 $entitlements = RevenueCat::entitlements()->list();
 $offerings = RevenueCat::offerings()->list();
 $products = RevenueCat::products()->list();
 $packages = RevenueCat::packages()->list();
-$projects = RevenueCat::projects()->list(['limit' => 5]);
+$projects = RevenueCat::projects()->list(5);
 
 ```
 
@@ -62,14 +62,14 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient as RevenueCat;
 
 // Apps
 $app = RevenueCat::getApp('app_id');
-$apps = RevenueCat::getAppList(['limit' => 10]);
+$apps = RevenueCat::getAppList(10);
 $created = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']);
 RevenueCat::updateApp('app_id', ['name' => 'New Name']);
 RevenueCat::deleteApp('app_id');
 
 // Customers
 $customer = RevenueCat::getCustomer('customer_id');
-$customers = RevenueCat::getCustomerList(['limit' => 25]);
+$customers = RevenueCat::getCustomerList(25);
 $subs = RevenueCat::getCustomerSubscriptions('customer_id');
 ```
 
@@ -114,8 +114,8 @@ $r = RevenueCat::apps()->get('app_id');
 $r = RevenueCat::getApp('app_id');
 
 // List
-$r = RevenueCat::apps()->list(['limit' => 10]);
-$r = RevenueCat::getAppList(['limit' => 10]);
+$r = RevenueCat::apps()->list(10);
+$r = RevenueCat::getAppList(10);
 
 // Create
 $r = RevenueCat::apps()->create(['name' => 'My App', 'type' => 'app_store']);
@@ -145,8 +145,8 @@ $r = RevenueCat::customers()->get('customer_id');
 $r = RevenueCat::getCustomer('customer_id');
 
 // List
-$r = RevenueCat::customers()->list(['limit' => 25]);
-$r = RevenueCat::getCustomerList(['limit' => 25]);
+$r = RevenueCat::customers()->list(25);
+$r = RevenueCat::getCustomerList(25);
 
 // Create
 $r = RevenueCat::customers()->create(['name' => 'Jane']);
@@ -192,8 +192,8 @@ $r = RevenueCat::entitlements()->get('entitlement_id');
 $r = RevenueCat::getEntitlement('entitlement_id');
 
 // List
-$r = RevenueCat::entitlements()->list(['limit' => 10]);
-$r = RevenueCat::getEntitlementList(['limit' => 10]);
+$r = RevenueCat::entitlements()->list(10);
+$r = RevenueCat::getEntitlementList(10);
 
 // Create
 $r = RevenueCat::entitlements()->create(['identifier' => 'premium']);
@@ -219,8 +219,8 @@ $r = RevenueCat::offerings()->get('offering_id');
 $r = RevenueCat::getOffering('offering_id');
 
 // List
-$r = RevenueCat::offerings()->list(['limit' => 10]);
-$r = RevenueCat::getOfferingList(['limit' => 10]);
+$r = RevenueCat::offerings()->list(10);
+$r = RevenueCat::getOfferingList(10);
 
 // Create
 $r = RevenueCat::offerings()->create(['name' => 'Basic']);
@@ -242,8 +242,8 @@ $r = RevenueCat::packages()->get('package_id');
 $r = RevenueCat::getPackage('package_id');
 
 // List
-$r = RevenueCat::packages()->list(['limit' => 10]);
-$r = RevenueCat::getPackageList(['limit' => 10]);
+$r = RevenueCat::packages()->list(10);
+$r = RevenueCat::getPackageList(10);
 
 // Create
 $r = RevenueCat::packages()->create(['name' => 'Gold']);
@@ -269,8 +269,8 @@ $r = RevenueCat::products()->get('product_id');
 $r = RevenueCat::getProduct('product_id');
 
 // List
-$r = RevenueCat::products()->list(['limit' => 10]);
-$r = RevenueCat::getProductList(['limit' => 10]);
+$r = RevenueCat::products()->list(10);
+$r = RevenueCat::getProductList(10);
 
 // Create
 $r = RevenueCat::products()->create(['name' => 'Monthly']);
@@ -288,8 +288,8 @@ $r = RevenueCat::deleteProduct('product_id');
 ### Projects
 ```php
 // List projects (not project-scoped)
-$r = RevenueCat::projects()->list(['limit' => 5]);
-$r = RevenueCat::getProjectList(['limit' => 5]);
+$r = RevenueCat::projects()->list(5);
+$r = RevenueCat::getProjectList(5);
 ```
 
 ### Purchases
