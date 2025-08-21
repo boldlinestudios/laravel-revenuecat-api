@@ -2,62 +2,30 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Offering
 {
+    use Creatable;
+    use Deletable;
+    use Listable;
+    use Retrievable;
+    use Updatable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * List offerings
-     *
-     * @param  array<string, mixed>  $query
-     */
-    public function list(array $query = []): Response
+    protected function client(): RevenueCatClient
     {
-        return $this->client->get('/offerings', $query);
+        return $this->client;
     }
 
-    /**
-     * Create an offering
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function create(array $data): Response
+    protected function basePath(): string
     {
-        return $this->client->post('/offerings', $data);
-    }
-
-    /**
-     * Get a specific offering
-     */
-    public function get(string $offeringId): Response
-    {
-        $offeringId = rawurlencode($offeringId);
-
-        return $this->client->get("/offerings/{$offeringId}");
-    }
-
-    /**
-     * Update an offering
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(string $offeringId, array $data): Response
-    {
-        $offeringId = rawurlencode($offeringId);
-
-        return $this->client->post("/offerings/{$offeringId}", $data);
-    }
-
-    /**
-     * Delete an offering
-     */
-    public function delete(string $offeringId): Response
-    {
-        $offeringId = rawurlencode($offeringId);
-
-        return $this->client->delete("/offerings/{$offeringId}");
+        return '/offerings';
     }
 }

@@ -2,63 +2,32 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Package
 {
+    use Creatable;
+    use Deletable;
+    use Listable;
+    use Retrievable;
+    use Updatable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * List packages
-     *
-     * @param  array<string, mixed>  $query
-     */
-    public function list(array $query = []): Response
+    protected function client(): RevenueCatClient
     {
-        return $this->client->get('/packages', $query);
+        return $this->client;
     }
 
-    /**
-     * Create a package
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function create(array $data): Response
+    protected function basePath(): string
     {
-        return $this->client->post('/packages', $data);
-    }
-
-    /**
-     * Get a specific package
-     */
-    public function get(string $packageId): Response
-    {
-        $packageId = rawurlencode($packageId);
-
-        return $this->client->get("/packages/{$packageId}");
-    }
-
-    /**
-     * Update a package
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(string $packageId, array $data): Response
-    {
-        $packageId = rawurlencode($packageId);
-
-        return $this->client->post("/packages/{$packageId}", $data);
-    }
-
-    /**
-     * Delete a package
-     */
-    public function delete(string $packageId): Response
-    {
-        $packageId = rawurlencode($packageId);
-
-        return $this->client->delete("/packages/{$packageId}");
+        return '/packages';
     }
 
     /**

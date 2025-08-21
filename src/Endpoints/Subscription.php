@@ -2,22 +2,24 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Subscription
 {
+    use Retrievable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * Get a subscription
-     * This endpoint requires the following permission(s): customer_information:subscriptions:read
-     */
-    public function get(string $subscriptionId): Response
+    protected function client(): RevenueCatClient
     {
-        $subscriptionId = rawurlencode($subscriptionId);
+        return $this->client;
+    }
 
-        return $this->client->get("/subscriptions/{$subscriptionId}");
+    protected function basePath(): string
+    {
+        return '/subscriptions';
     }
 
     /**

@@ -24,8 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $query = ['limit' => 10];
-    $response = RevenueCatClient::packages()->list($query);
+    $response = RevenueCatClient::packages()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

@@ -24,8 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $query = ['limit' => 10];
-    $response = RevenueCatClient::customers()->list($query);
+    $response = RevenueCatClient::customers()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -64,24 +63,6 @@ test('get returns response from client with encoded customer id', function () {
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
     expect($response->json('id'))->toBe('test-customer-id');
-});
-
-test('update returns response from client', function () {
-    Http::fake([
-        'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([
-            'id' => 'test-customer-id',
-            'app_user_id' => 'test_user',
-            'email' => 'updated@example.com',
-        ], 200),
-    ]);
-
-    $customerId = 'test-customer-id';
-    $data = ['email' => 'updated@example.com'];
-    $response = RevenueCatClient::customers()->update($customerId, $data);
-
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('email'))->toBe('updated@example.com');
 });
 
 test('delete returns response from client', function () {

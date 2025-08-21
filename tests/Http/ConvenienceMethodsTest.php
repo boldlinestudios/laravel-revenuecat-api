@@ -1,7 +1,7 @@
 <?php
 
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
-use BoldlineStudios\RevenueCatApi\Traits\ConvenienceMethods;
+use BoldlineStudios\RevenueCatApi\Http\Concerns\ConvenienceMethods;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -243,24 +243,6 @@ describe('Customer Convenience Methods', function () {
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
         expect($response->json('id'))->toBe('new-customer-id');
-    });
-
-    test('updateCustomer calls customers()->update() with correct parameters', function () {
-        Http::fake([
-            'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([
-                'object' => 'customer',
-                'id' => 'test-customer-id',
-                'name' => 'Updated Customer',
-            ], 200),
-        ]);
-
-        $testClass = new TestConvenienceMethods;
-        $data = ['name' => 'Updated Customer'];
-        $response = $testClass->updateCustomer('test-customer-id', $data);
-
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('name'))->toBe('Updated Customer');
     });
 
     test('deleteCustomer calls customers()->delete() with correct parameters', function () {
@@ -755,24 +737,6 @@ describe('Product Convenience Methods', function () {
         expect($response->json('id'))->toBe('new-product-id');
     });
 
-    test('updateProduct calls products()->update() with correct parameters', function () {
-        Http::fake([
-            'https://api.example.com/v2/projects/test_project/products/test-product-id' => Http::response([
-                'object' => 'product',
-                'id' => 'test-product-id',
-                'name' => 'Updated Product',
-            ], 200),
-        ]);
-
-        $testClass = new TestConvenienceMethods;
-        $data = ['name' => 'Updated Product'];
-        $response = $testClass->updateProduct('test-product-id', $data);
-
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('name'))->toBe('Updated Product');
-    });
-
     test('deleteProduct calls products()->delete() with correct parameters', function () {
         Http::fake([
             'https://api.example.com/v2/projects/test_project/products/test-product-id' => Http::response([
@@ -964,7 +928,6 @@ describe('Trait Integration', function () {
         expect(method_exists($testClass, 'getApp'))->toBeTrue();
         expect(method_exists($testClass, 'getCustomer'))->toBeTrue();
         expect(method_exists($testClass, 'createApp'))->toBeTrue();
-        expect(method_exists($testClass, 'updateCustomer'))->toBeTrue();
         expect(method_exists($testClass, 'getEntitlement'))->toBeTrue();
         expect(method_exists($testClass, 'getOffering'))->toBeTrue();
         expect(method_exists($testClass, 'getPackage'))->toBeTrue();

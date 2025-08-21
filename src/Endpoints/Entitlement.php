@@ -2,63 +2,32 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Entitlement
 {
+    use Creatable;
+    use Deletable;
+    use Listable;
+    use Retrievable;
+    use Updatable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * List entitlements
-     *
-     * @param  array<string, mixed>  $query
-     */
-    public function list(array $query = []): Response
+    protected function client(): RevenueCatClient
     {
-        return $this->client->get('/entitlements', $query);
+        return $this->client;
     }
 
-    /**
-     * Create an entitlement
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function create(array $data): Response
+    protected function basePath(): string
     {
-        return $this->client->post('/entitlements', $data);
-    }
-
-    /**
-     * Get a specific entitlement
-     */
-    public function get(string $entitlementId): Response
-    {
-        $entitlementId = rawurlencode($entitlementId);
-
-        return $this->client->get("/entitlements/{$entitlementId}");
-    }
-
-    /**
-     * Update an entitlement
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(string $entitlementId, array $data): Response
-    {
-        $entitlementId = rawurlencode($entitlementId);
-
-        return $this->client->post("/entitlements/{$entitlementId}", $data);
-    }
-
-    /**
-     * Delete an entitlement
-     */
-    public function delete(string $entitlementId): Response
-    {
-        $entitlementId = rawurlencode($entitlementId);
-
-        return $this->client->delete("/entitlements/{$entitlementId}");
+        return '/entitlements';
     }
 
     /**

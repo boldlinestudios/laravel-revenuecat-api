@@ -1,11 +1,25 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Traits;
+namespace BoldlineStudios\RevenueCatApi\Http\Concerns;
 
 use Illuminate\Http\Client\Response;
 
 trait ConvenienceMethods
 {
+    /**
+     * @param  array<string,mixed>  $query
+     * @return array{0:int,1:?string,2:array<string,mixed>}
+     */
+    private function normalizeListQuery(array $query): array
+    {
+        $limit = isset($query['limit']) ? (int) $query['limit'] : 20;
+        $startingAfter = $query['starting_after'] ?? null;
+
+        unset($query['limit'], $query['starting_after']);
+
+        return [$limit, is_string($startingAfter) ? $startingAfter : null, $query];
+    }
+
     // App convenience methods
     public function getApp(string $appId): Response
     {
@@ -14,7 +28,9 @@ trait ConvenienceMethods
 
     public function getAppList(array $query = []): Response
     {
-        return $this->apps()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->apps()->list($limit, $startingAfter, $extra);
     }
 
     public function createApp(array $data): Response
@@ -50,17 +66,14 @@ trait ConvenienceMethods
 
     public function getCustomerList(array $query = []): Response
     {
-        return $this->customers()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->customers()->list($limit, $startingAfter, $extra);
     }
 
     public function createCustomer(array $data): Response
     {
         return $this->customers()->create($data);
-    }
-
-    public function updateCustomer(string $customerId, array $data): Response
-    {
-        return $this->customers()->update($customerId, $data);
     }
 
     public function deleteCustomer(string $customerId): Response
@@ -106,7 +119,9 @@ trait ConvenienceMethods
 
     public function getEntitlementList(array $query = []): Response
     {
-        return $this->entitlements()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->entitlements()->list($limit, $startingAfter, $extra);
     }
 
     public function createEntitlement(array $data): Response
@@ -137,7 +152,9 @@ trait ConvenienceMethods
 
     public function getOfferingList(array $query = []): Response
     {
-        return $this->offerings()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->offerings()->list($limit, $startingAfter, $extra);
     }
 
     public function createOffering(array $data): Response
@@ -163,7 +180,9 @@ trait ConvenienceMethods
 
     public function getPackageList(array $query = []): Response
     {
-        return $this->packages()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->packages()->list($limit, $startingAfter, $extra);
     }
 
     public function createPackage(array $data): Response
@@ -194,17 +213,14 @@ trait ConvenienceMethods
 
     public function getProductList(array $query = []): Response
     {
-        return $this->products()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->products()->list($limit, $startingAfter, $extra);
     }
 
     public function createProduct(array $data): Response
     {
         return $this->products()->create($data);
-    }
-
-    public function updateProduct(string $productId, array $data): Response
-    {
-        return $this->products()->update($productId, $data);
     }
 
     public function deleteProduct(string $productId): Response
@@ -215,7 +231,9 @@ trait ConvenienceMethods
     // Project convenience methods
     public function getProjectList(array $query = []): Response
     {
-        return $this->projects()->list($query);
+        [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
+
+        return $this->projects()->list($limit, $startingAfter, $extra);
     }
 
     // Purchase convenience methods

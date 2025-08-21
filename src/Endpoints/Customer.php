@@ -2,63 +2,30 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Customer
 {
+    use Creatable;
+    use Deletable;
+    use Listable;
+    use Retrievable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * List customers
-     *
-     * @param  array<string, mixed>  $query
-     */
-    public function list(array $query = []): Response
+    protected function client(): RevenueCatClient
     {
-        return $this->client->get('/customers', $query);
+        return $this->client;
     }
 
-    /**
-     * Get a specific customer
-     */
-    public function get(string $customerId): Response
+    protected function basePath(): string
     {
-        $customerId = rawurlencode($customerId);
-
-        return $this->client->get("/customers/{$customerId}");
-    }
-
-    /**
-     * Create a customer
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function create(array $data): Response
-    {
-        return $this->client->post('/customers', $data);
-    }
-
-    /**
-     * Update a customer
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(string $customerId, array $data): Response
-    {
-        $customerId = rawurlencode($customerId);
-
-        return $this->client->post("/customers/{$customerId}", $data);
-    }
-
-    /**
-     * Delete a customer
-     */
-    public function delete(string $customerId): Response
-    {
-        $customerId = rawurlencode($customerId);
-
-        return $this->client->delete("/customers/{$customerId}");
+        return '/customers';
     }
 
     /**

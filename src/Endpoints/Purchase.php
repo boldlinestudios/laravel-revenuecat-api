@@ -2,21 +2,24 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Purchase
 {
+    use Retrievable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * Get a specific purchase
-     */
-    public function get(string $purchaseId): Response
+    protected function client(): RevenueCatClient
     {
-        $purchaseId = rawurlencode($purchaseId);
+        return $this->client;
+    }
 
-        return $this->client->get("/purchases/{$purchaseId}");
+    protected function basePath(): string
+    {
+        return '/purchases';
     }
 
     /**

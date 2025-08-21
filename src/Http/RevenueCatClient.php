@@ -20,7 +20,7 @@ use BoldlineStudios\RevenueCatApi\Exceptions\NotFoundException;
 use BoldlineStudios\RevenueCatApi\Exceptions\RateLimitException;
 use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;
 use BoldlineStudios\RevenueCatApi\Exceptions\ValidationException;
-use BoldlineStudios\RevenueCatApi\Traits\ConvenienceMethods;
+use BoldlineStudios\RevenueCatApi\Http\Concerns\ConvenienceMethods;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;

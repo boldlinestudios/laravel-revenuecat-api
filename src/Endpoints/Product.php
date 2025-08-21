@@ -2,59 +2,28 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Product
 {
+    use Creatable;
+    use Deletable;
+    use Listable;
+    use Retrievable;
+
     public function __construct(private RevenueCatClient $client) {}
 
-    /**
-     * List products
-     *
-     * @param  array<string, mixed>  $query
-     */
-    public function list(array $query = []): Response
+    protected function client(): RevenueCatClient
     {
-        return $this->client->get('/products', $query);
+        return $this->client;
     }
 
-    /**
-     * Create a product
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function create(array $data): Response
+    protected function basePath(): string
     {
-        return $this->client->post('/products', $data);
-    }
-
-    /**
-     * Get a product
-     */
-    public function get(string $productId): Response
-    {
-        $productId = rawurlencode($productId);
-
-        return $this->client->get("/products/{$productId}");
-    }
-
-    /**
-     * Update a product
-     *
-     * @param  array<string, mixed>  $data
-     */
-    public function update(string $productId, array $data): Response
-    {
-        $productId = rawurlencode($productId);
-
-        return $this->client->post("/products/{$productId}", $data);
-    }
-
-    public function delete(string $productId): Response
-    {
-        $productId = rawurlencode($productId);
-
-        return $this->client->delete("/products/{$productId}");
+        return '/products';
     }
 }
