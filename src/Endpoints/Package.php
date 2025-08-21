@@ -11,6 +11,8 @@ class Package
 
     /**
      * List packages
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -19,6 +21,8 @@ class Package
 
     /**
      * Create a package
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -37,6 +41,8 @@ class Package
 
     /**
      * Update a package
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $packageId, array $data): Response
     {

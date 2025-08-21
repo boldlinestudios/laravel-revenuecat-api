@@ -11,6 +11,8 @@ class Product
 
     /**
      * List products
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -19,6 +21,8 @@ class Product
 
     /**
      * Create a product
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -37,6 +41,8 @@ class Product
 
     /**
      * Update a product
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $productId, array $data): Response
     {

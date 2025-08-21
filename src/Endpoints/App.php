@@ -18,6 +18,8 @@ class App
 
     /**
      * List apps
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -26,6 +28,8 @@ class App
 
     /**
      * Create an app
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -44,6 +48,8 @@ class App
 
     /**
      * Update an app
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $appId, array $data): Response
     {

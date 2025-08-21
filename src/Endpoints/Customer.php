@@ -11,6 +11,8 @@ class Customer
 
     /**
      * List customers
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -29,6 +31,8 @@ class Customer
 
     /**
      * Create a customer
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -37,6 +41,8 @@ class Customer
 
     /**
      * Update a customer
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $customerId, array $data): Response
     {

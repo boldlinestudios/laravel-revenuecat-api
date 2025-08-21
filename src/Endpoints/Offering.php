@@ -11,6 +11,8 @@ class Offering
 
     /**
      * List offerings
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -19,6 +21,8 @@ class Offering
 
     /**
      * Create an offering
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -37,6 +41,8 @@ class Offering
 
     /**
      * Update an offering
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $offeringId, array $data): Response
     {

@@ -11,6 +11,8 @@ class Entitlement
 
     /**
      * List entitlements
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
@@ -19,6 +21,8 @@ class Entitlement
 
     /**
      * Create an entitlement
+     *
+     * @param  array<string, mixed>  $data
      */
     public function create(array $data): Response
     {
@@ -37,6 +41,8 @@ class Entitlement
 
     /**
      * Update an entitlement
+     *
+     * @param  array<string, mixed>  $data
      */
     public function update(string $entitlementId, array $data): Response
     {

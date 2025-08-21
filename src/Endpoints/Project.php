@@ -11,6 +11,8 @@ class Project
 
     /**
      * List projects
+     *
+     * @param  array<string, mixed>  $query
      */
     public function list(array $query = []): Response
     {
