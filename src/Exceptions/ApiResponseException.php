@@ -10,6 +10,7 @@ class ApiResponseException extends RevenueCatException
         private ?string $errorCode = null,
         private ?string $errorType = null,
         private ?string $docsUrl = null,
+        /** @var array<string, mixed>|null */
         private ?array $details = null,
         ?\Throwable $previous = null,
     ) {
@@ -36,6 +37,9 @@ class ApiResponseException extends RevenueCatException
         return $this->docsUrl;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getDetails(): ?array
     {
         return $this->details;

@@ -12,12 +12,22 @@ trait ConvenienceMethods
      */
     private function normalizeListQuery(array $query): array
     {
-        $limit = isset($query['limit']) ? (int) $query['limit'] : 20;
+        $limit = 20;
+        if (array_key_exists('limit', $query)) {
+            $limitValue = $query['limit'];
+            if (is_int($limitValue)) {
+                $limit = $limitValue;
+            } elseif (is_string($limitValue) && is_numeric($limitValue)) {
+                $limit = (int) $limitValue;
+            }
+        }
+
         $startingAfter = $query['starting_after'] ?? null;
+        $startingAfter = is_string($startingAfter) && $startingAfter !== '' ? $startingAfter : null;
 
         unset($query['limit'], $query['starting_after']);
 
-        return [$limit, is_string($startingAfter) ? $startingAfter : null, $query];
+        return [$limit, $startingAfter, $query];
     }
 
     // App convenience methods
@@ -26,6 +36,9 @@ trait ConvenienceMethods
         return $this->apps()->get($appId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getAppList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -33,11 +46,17 @@ trait ConvenienceMethods
         return $this->apps()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createApp(array $data): Response
     {
         return $this->apps()->create($data);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function updateApp(string $appId, array $data): Response
     {
         return $this->apps()->update($appId, $data);
@@ -64,6 +83,9 @@ trait ConvenienceMethods
         return $this->customers()->get($customerId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getCustomerList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -71,6 +93,9 @@ trait ConvenienceMethods
         return $this->customers()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createCustomer(array $data): Response
     {
         return $this->customers()->create($data);
@@ -117,6 +142,9 @@ trait ConvenienceMethods
         return $this->entitlements()->get($entitlementId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getEntitlementList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -124,11 +152,17 @@ trait ConvenienceMethods
         return $this->entitlements()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createEntitlement(array $data): Response
     {
         return $this->entitlements()->create($data);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function updateEntitlement(string $entitlementId, array $data): Response
     {
         return $this->entitlements()->update($entitlementId, $data);
@@ -150,6 +184,9 @@ trait ConvenienceMethods
         return $this->offerings()->get($offeringId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getOfferingList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -157,11 +194,17 @@ trait ConvenienceMethods
         return $this->offerings()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createOffering(array $data): Response
     {
         return $this->offerings()->create($data);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function updateOffering(string $offeringId, array $data): Response
     {
         return $this->offerings()->update($offeringId, $data);
@@ -178,6 +221,9 @@ trait ConvenienceMethods
         return $this->packages()->get($packageId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getPackageList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -185,11 +231,17 @@ trait ConvenienceMethods
         return $this->packages()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createPackage(array $data): Response
     {
         return $this->packages()->create($data);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function updatePackage(string $packageId, array $data): Response
     {
         return $this->packages()->update($packageId, $data);
@@ -211,6 +263,9 @@ trait ConvenienceMethods
         return $this->products()->get($productId);
     }
 
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getProductList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);
@@ -218,6 +273,9 @@ trait ConvenienceMethods
         return $this->products()->list($limit, $startingAfter, $extra);
     }
 
+    /**
+     * @param  array<string,mixed>  $data
+     */
     public function createProduct(array $data): Response
     {
         return $this->products()->create($data);
@@ -229,6 +287,9 @@ trait ConvenienceMethods
     }
 
     // Project convenience methods
+    /**
+     * @param  array<string,mixed>  $query
+     */
     public function getProjectList(array $query = []): Response
     {
         [$limit, $startingAfter, $extra] = $this->normalizeListQuery($query);

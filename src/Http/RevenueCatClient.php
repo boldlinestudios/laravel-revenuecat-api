@@ -53,6 +53,9 @@ class RevenueCatClient
         $this->http = $client;
     }
 
+    /**
+     * @param  array<string, mixed>  $query
+     */
     public function get(string $path, array $query = []): Response
     {
         $response = $this->http->get($this->prefixProject($path), $query);
@@ -60,6 +63,9 @@ class RevenueCatClient
         return $this->handleResponse($response);
     }
 
+    /**
+     * @param  array<string, mixed>  $body
+     */
     public function post(string $path, array $body = []): Response
     {
         $response = $this->http->post($this->prefixProject($path), $body);
@@ -67,6 +73,9 @@ class RevenueCatClient
         return $this->handleResponse($response);
     }
 
+    /**
+     * @param  array<string, mixed>  $body
+     */
     public function delete(string $path, array $body = []): Response
     {
         $response = $this->http->delete($this->prefixProject($path), $body);
@@ -158,14 +167,27 @@ class RevenueCatClient
         $status = $response->status();
 
         $payload = $response->json();
+        /** @var array<string, mixed> $payload */
         $payload = is_array($payload) ? $payload : [];
 
-        $message = $payload['message']
-            ?? ($payload['error']['message'] ?? 'RevenueCat API error');
-        $errorCode = $payload['code']
-            ?? ($payload['error']['code'] ?? null);
-        $errorType = $payload['type']
-            ?? ($payload['error']['type'] ?? null);
+        $error = $payload['error'] ?? null;
+        /** @var array<string, mixed> $error */
+        $error = is_array($error) ? $error : [];
+
+        $message = $payload['message'] ?? ($error['message'] ?? 'RevenueCat API error');
+        if (! is_string($message) || $message === '') {
+            $message = 'RevenueCat API error';
+        }
+
+        $errorCode = $payload['code'] ?? ($error['code'] ?? null);
+        if (! is_string($errorCode)) {
+            $errorCode = null;
+        }
+
+        $errorType = $payload['type'] ?? ($error['type'] ?? null);
+        if (! is_string($errorType)) {
+            $errorType = null;
+        }
 
         // Rate limit details (if present)
         if ($status === 429) {
