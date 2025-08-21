@@ -150,6 +150,13 @@ class RevenueCatClient
             return $response;
         }
 
+        $this->handleErrorResponse($response);
+    }
+
+    private function handleErrorResponse(Response $response): never
+    {
+        $status = $response->status();
+
         $payload = $response->json();
         $payload = is_array($payload) ? $payload : [];
 
@@ -183,25 +190,17 @@ class RevenueCatClient
             );
         }
 
-        switch ($status) {
-            case 400:
-                throw new BadRequestException($message, $status, $errorCode, $errorType, null, $payload);
-            case 401:
-                throw new AuthenticationException($message, $status, $errorCode, $errorType, null, $payload);
-            case 403:
-                throw new AuthorizationException($message, $status, $errorCode, $errorType, null, $payload);
-            case 404:
-                throw new NotFoundException($message, $status, $errorCode, $errorType, null, $payload);
-            case 409:
-                throw new ConflictException($message, $status, $errorCode, $errorType, null, $payload);
-            case 422:
-                throw new ValidationException($message, $status, $errorCode, $errorType, null, $payload);
-            default:
-                if ($status >= 500 && $status < 600) {
-                    throw new ServerErrorException($message, $status, $errorCode, $errorType, null, $payload);
-                }
+        $exceptionClass = match ($status) {
+            400 => BadRequestException::class,
+            401 => AuthenticationException::class,
+            403 => AuthorizationException::class,
+            404 => NotFoundException::class,
+            409 => ConflictException::class,
+            422 => ValidationException::class,
+            500, 502, 503, 504 => ServerErrorException::class,
+            default => ApiResponseException::class,
+        };
 
-                throw new ApiResponseException($message, $status, $errorCode, $errorType, null, $payload);
-        }
+        throw new $exceptionClass($message, $status, $errorCode, $errorType, null, $payload);
     }
 }
