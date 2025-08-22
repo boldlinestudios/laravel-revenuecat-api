@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -71,7 +71,7 @@ test('list returns response from client', function () use ($sampleApp) {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::apps()->list(10);
+    $response = RevenueCat::apps()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -105,7 +105,7 @@ test('create returns response from client', function () use ($sampleApp) {
             'subscription_key_issuer' => '5a049d62-1b9b-453c-b605-1988189d8129',
         ],
     ];
-    $response = RevenueCatClient::apps()->create($data);
+    $response = RevenueCat::apps()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -120,7 +120,7 @@ test('get returns response from client with encoded app id', function () use ($s
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCatClient::apps()->get($appId);
+    $response = RevenueCat::apps()->get($appId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -147,7 +147,7 @@ test('update returns response from client', function () use ($sampleApp) {
 
     $appId = 'test-app-id';
     $data = ['name' => 'Updated App Name'];
-    $response = RevenueCatClient::apps()->update($appId, $data);
+    $response = RevenueCat::apps()->update($appId, $data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -168,7 +168,7 @@ test('delete returns response from client', function () {
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCatClient::apps()->delete($appId);
+    $response = RevenueCat::apps()->delete($appId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -185,7 +185,7 @@ test('storeKitConfig returns response from client', function () {
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCatClient::apps()->storeKitConfig($appId);
+    $response = RevenueCat::apps()->storeKitConfig($appId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -212,7 +212,7 @@ test('listOfPublicKeys returns response from client', function () {
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCatClient::apps()->listOfPublicKeys($appId);
+    $response = RevenueCat::apps()->listOfPublicKeys($appId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -237,7 +237,7 @@ test('get method properly encodes special characters in app id', function () use
     ]);
 
     $appId = 'test app with spaces & special chars';
-    $response = RevenueCatClient::apps()->get($appId);
+    $response = RevenueCat::apps()->get($appId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -256,7 +256,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::apps()->list();
+    $response = RevenueCat::apps()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

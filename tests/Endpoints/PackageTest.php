@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::packages()->list(10);
+    $response = RevenueCat::packages()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -41,7 +41,7 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['identifier' => 'new_package', 'description' => 'New package'];
-    $response = RevenueCatClient::packages()->create($data);
+    $response = RevenueCat::packages()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -58,7 +58,7 @@ test('get returns response from client with encoded package id', function () {
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCatClient::packages()->get($packageId);
+    $response = RevenueCat::packages()->get($packageId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -76,7 +76,7 @@ test('update returns response from client', function () {
 
     $packageId = 'test-package-id';
     $data = ['description' => 'Updated premium package'];
-    $response = RevenueCatClient::packages()->update($packageId, $data);
+    $response = RevenueCat::packages()->update($packageId, $data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -89,7 +89,7 @@ test('delete returns response from client', function () {
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCatClient::packages()->delete($packageId);
+    $response = RevenueCat::packages()->delete($packageId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -106,7 +106,7 @@ test('listOfProducts returns response from client', function () {
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCatClient::packages()->listOfProducts($packageId);
+    $response = RevenueCat::packages()->listOfProducts($packageId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -122,7 +122,7 @@ test('get method properly encodes special characters in package id', function ()
     ]);
 
     $packageId = 'test package with spaces & special chars';
-    $response = RevenueCatClient::packages()->get($packageId);
+    $response = RevenueCat::packages()->get($packageId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -137,7 +137,7 @@ test('listOfProducts method properly encodes special characters in package id', 
     ]);
 
     $packageId = 'test package with spaces & special chars';
-    $response = RevenueCatClient::packages()->listOfProducts($packageId);
+    $response = RevenueCat::packages()->listOfProducts($packageId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -151,7 +151,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::packages()->list();
+    $response = RevenueCat::packages()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

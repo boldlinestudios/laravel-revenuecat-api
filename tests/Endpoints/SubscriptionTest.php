@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -25,7 +25,7 @@ test('get returns response from client with encoded subscription id', function (
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->get($subscriptionId);
+    $response = RevenueCat::subscriptions()->get($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -43,7 +43,7 @@ test('listOfEntitlements returns response from client', function () {
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->listOfEntitlements($subscriptionId);
+    $response = RevenueCat::subscriptions()->listOfEntitlements($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -61,7 +61,7 @@ test('listOfTransactions returns response from client', function () {
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->listOfTransactions($subscriptionId);
+    $response = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -77,7 +77,7 @@ test('getCustomerPortalUrl returns response from client', function () {
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->getCustomerPortalUrl($subscriptionId);
+    $response = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -94,7 +94,7 @@ test('cancelWebBillingSubscription returns response from client', function () {
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->cancelWebBillingSubscription($subscriptionId);
+    $response = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -111,7 +111,7 @@ test('refundWebBillingSubscription returns response from client', function () {
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCatClient::subscriptions()->refundWebBillingSubscription($subscriptionId);
+    $response = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -127,7 +127,7 @@ test('get method properly encodes special characters in subscription id', functi
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->get($subscriptionId);
+    $response = RevenueCat::subscriptions()->get($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -142,7 +142,7 @@ test('listOfEntitlements method properly encodes special characters in subscript
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->listOfEntitlements($subscriptionId);
+    $response = RevenueCat::subscriptions()->listOfEntitlements($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -157,7 +157,7 @@ test('listOfTransactions method properly encodes special characters in subscript
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->listOfTransactions($subscriptionId);
+    $response = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -172,7 +172,7 @@ test('getCustomerPortalUrl method properly encodes special characters in subscri
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->getCustomerPortalUrl($subscriptionId);
+    $response = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -188,7 +188,7 @@ test('cancelWebBillingSubscription method properly encodes special characters in
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->cancelWebBillingSubscription($subscriptionId);
+    $response = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -204,7 +204,7 @@ test('refundWebBillingSubscription method properly encodes special characters in
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCatClient::subscriptions()->refundWebBillingSubscription($subscriptionId);
+    $response = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

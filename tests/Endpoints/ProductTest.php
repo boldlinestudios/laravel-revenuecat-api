@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::products()->list(10);
+    $response = RevenueCat::products()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -41,7 +41,7 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['identifier' => 'new_product', 'description' => 'New product'];
-    $response = RevenueCatClient::products()->create($data);
+    $response = RevenueCat::products()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -58,7 +58,7 @@ test('get returns response from client with encoded product id', function () {
     ]);
 
     $productId = 'test-product-id';
-    $response = RevenueCatClient::products()->get($productId);
+    $response = RevenueCat::products()->get($productId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -71,7 +71,7 @@ test('delete returns response from client', function () {
     ]);
 
     $productId = 'test-product-id';
-    $response = RevenueCatClient::products()->delete($productId);
+    $response = RevenueCat::products()->delete($productId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -86,7 +86,7 @@ test('get method properly encodes special characters in product id', function ()
     ]);
 
     $productId = 'test product with spaces & special chars';
-    $response = RevenueCatClient::products()->get($productId);
+    $response = RevenueCat::products()->get($productId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -99,7 +99,7 @@ test('delete method properly encodes special characters in product id', function
     ]);
 
     $productId = 'test product with spaces & special chars';
-    $response = RevenueCatClient::products()->delete($productId);
+    $response = RevenueCat::products()->delete($productId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -112,7 +112,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::products()->list();
+    $response = RevenueCat::products()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

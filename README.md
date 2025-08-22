@@ -35,7 +35,7 @@ REVENUECAT_TIMEOUT=30
 
 #### 1) Endpoint-style (fluent)
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient as RevenueCat;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Apps
 $app = RevenueCat::apps()->get('app_id');
@@ -58,7 +58,7 @@ $projects = RevenueCat::projects()->list(5);
 These map 1:1 to common operations and return `Illuminate\Http\Client\Response`.
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient as RevenueCat;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Apps
 $app = RevenueCat::getApp('app_id');
@@ -98,13 +98,13 @@ class SubscriptionController extends Controller
 ## Endpoint Examples
 
 Below are examples for each endpoint using both styles:
-- Endpoint-style: `RevenueCatClient::apps()->get('app_id')`
-- Convenience-style: `RevenueCatClient::getApp('app_id')`
+- Endpoint-style: `RevenueCat::apps()->get('app_id')`
+- Convenience-style: `RevenueCat::getApp('app_id')`
 
 All examples use the facade alias for brevity:
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient as RevenueCat;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 ```
 
 ### Apps
@@ -151,10 +151,6 @@ $r = RevenueCat::getCustomerList(25);
 // Create
 $r = RevenueCat::customers()->create(['name' => 'Jane']);
 $r = RevenueCat::createCustomer(['name' => 'Jane']);
-
-// Update
-$r = RevenueCat::customers()->update('customer_id', ['name' => 'Jane D.']);
-$r = RevenueCat::updateCustomer('customer_id', ['name' => 'Jane D.']);
 
 // Delete
 $r = RevenueCat::customers()->delete('customer_id');
@@ -276,10 +272,6 @@ $r = RevenueCat::getProductList(10);
 $r = RevenueCat::products()->create(['name' => 'Monthly']);
 $r = RevenueCat::createProduct(['name' => 'Monthly']);
 
-// Update
-$r = RevenueCat::products()->update('product_id', ['name' => 'Annual']);
-$r = RevenueCat::updateProduct('product_id', ['name' => 'Annual']);
-
 // Delete
 $r = RevenueCat::products()->delete('product_id');
 $r = RevenueCat::deleteProduct('product_id');
@@ -335,7 +327,7 @@ $r = RevenueCat::refundWebBillingSubscription('subscription_id');
 All methods return an `Illuminate\Http\Client\Response` object, which provides methods like:
 
 ```php
-$response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient::getCustomer('customer_id');
+$response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
 
 if ($response->successful()) {
     $data = $response->json();
@@ -362,7 +354,7 @@ use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;      // 5xx
 use BoldlineStudios\RevenueCatApi\Exceptions\ApiResponseException;      // fallback
 
 try {
-    $response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient::getCustomer('customer_id');
+    $response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
     $data = $response->json();
 } catch (RateLimitException $e) {
     // Inspect rate limit headers

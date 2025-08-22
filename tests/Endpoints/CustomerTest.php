@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::customers()->list(10);
+    $response = RevenueCat::customers()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -41,7 +41,7 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['app_user_id' => 'new_user', 'email' => 'test@example.com'];
-    $response = RevenueCatClient::customers()->create($data);
+    $response = RevenueCat::customers()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -58,7 +58,7 @@ test('get returns response from client with encoded customer id', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->get($customerId);
+    $response = RevenueCat::customers()->get($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -71,7 +71,7 @@ test('delete returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->delete($customerId);
+    $response = RevenueCat::customers()->delete($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -88,7 +88,7 @@ test('listOfSubscriptions returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfSubscriptions($customerId);
+    $response = RevenueCat::customers()->listOfSubscriptions($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -106,7 +106,7 @@ test('listOfPurchases returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfPurchases($customerId);
+    $response = RevenueCat::customers()->listOfPurchases($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -124,7 +124,7 @@ test('listOfActiveEntitlements returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfActiveEntitlements($customerId);
+    $response = RevenueCat::customers()->listOfActiveEntitlements($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -142,7 +142,7 @@ test('listOfAliases returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfAliases($customerId);
+    $response = RevenueCat::customers()->listOfAliases($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -160,7 +160,7 @@ test('listOfVirtualCurrencyBalances returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfVirtualCurrencyBalances($customerId);
+    $response = RevenueCat::customers()->listOfVirtualCurrencyBalances($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -178,7 +178,7 @@ test('listOfAttributes returns response from client', function () {
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCatClient::customers()->listOfAttributes($customerId);
+    $response = RevenueCat::customers()->listOfAttributes($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -194,7 +194,7 @@ test('get method properly encodes special characters in customer id', function (
     ]);
 
     $customerId = 'test customer with spaces & special chars';
-    $response = RevenueCatClient::customers()->get($customerId);
+    $response = RevenueCat::customers()->get($customerId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -208,7 +208,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::customers()->list();
+    $response = RevenueCat::customers()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

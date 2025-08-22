@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::entitlements()->list(10);
+    $response = RevenueCat::entitlements()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -41,7 +41,7 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['identifier' => 'new_premium', 'type' => 'subscription'];
-    $response = RevenueCatClient::entitlements()->create($data);
+    $response = RevenueCat::entitlements()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -58,7 +58,7 @@ test('get returns response from client with encoded entitlement id', function ()
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $response = RevenueCatClient::entitlements()->get($entitlementId);
+    $response = RevenueCat::entitlements()->get($entitlementId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -76,7 +76,7 @@ test('update returns response from client', function () {
 
     $entitlementId = 'test-entitlement-id';
     $data = ['identifier' => 'premium_plus'];
-    $response = RevenueCatClient::entitlements()->update($entitlementId, $data);
+    $response = RevenueCat::entitlements()->update($entitlementId, $data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -89,7 +89,7 @@ test('delete returns response from client', function () {
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $response = RevenueCatClient::entitlements()->delete($entitlementId);
+    $response = RevenueCat::entitlements()->delete($entitlementId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -106,7 +106,7 @@ test('listOfProducts returns response from client', function () {
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $response = RevenueCatClient::entitlements()->listOfProducts($entitlementId);
+    $response = RevenueCat::entitlements()->listOfProducts($entitlementId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -122,7 +122,7 @@ test('get method properly encodes special characters in entitlement id', functio
     ]);
 
     $entitlementId = 'test entitlement with spaces & special chars';
-    $response = RevenueCatClient::entitlements()->get($entitlementId);
+    $response = RevenueCat::entitlements()->get($entitlementId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -136,7 +136,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::entitlements()->list();
+    $response = RevenueCat::entitlements()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

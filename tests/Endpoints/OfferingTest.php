@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
@@ -24,7 +24,7 @@ test('list returns response from client', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::offerings()->list(10);
+    $response = RevenueCat::offerings()->list(10);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -41,7 +41,7 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['identifier' => 'new_premium', 'description' => 'Premium offering'];
-    $response = RevenueCatClient::offerings()->create($data);
+    $response = RevenueCat::offerings()->create($data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -58,7 +58,7 @@ test('get returns response from client with encoded offering id', function () {
     ]);
 
     $offeringId = 'test-offering-id';
-    $response = RevenueCatClient::offerings()->get($offeringId);
+    $response = RevenueCat::offerings()->get($offeringId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -76,7 +76,7 @@ test('update returns response from client', function () {
 
     $offeringId = 'test-offering-id';
     $data = ['description' => 'Updated premium offering'];
-    $response = RevenueCatClient::offerings()->update($offeringId, $data);
+    $response = RevenueCat::offerings()->update($offeringId, $data);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -89,7 +89,7 @@ test('delete returns response from client', function () {
     ]);
 
     $offeringId = 'test-offering-id';
-    $response = RevenueCatClient::offerings()->delete($offeringId);
+    $response = RevenueCat::offerings()->delete($offeringId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->status())->toBe(204);
@@ -104,7 +104,7 @@ test('get method properly encodes special characters in offering id', function (
     ]);
 
     $offeringId = 'test offering with spaces & special chars';
-    $response = RevenueCatClient::offerings()->get($offeringId);
+    $response = RevenueCat::offerings()->get($offeringId);
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
@@ -118,7 +118,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCatClient::offerings()->list();
+    $response = RevenueCat::offerings()->list();
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

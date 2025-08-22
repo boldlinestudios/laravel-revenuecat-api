@@ -1,60 +1,8 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCatClient;
-use BoldlineStudios\RevenueCatApi\Http\Concerns\ConvenienceMethods;
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-
-// Create a test class that uses the trait
-class TestConvenienceMethods
-{
-    use ConvenienceMethods;
-
-    public function apps()
-    {
-        return RevenueCatClient::apps();
-    }
-
-    public function customers()
-    {
-        return RevenueCatClient::customers();
-    }
-
-    public function entitlements()
-    {
-        return RevenueCatClient::entitlements();
-    }
-
-    public function offerings()
-    {
-        return RevenueCatClient::offerings();
-    }
-
-    public function packages()
-    {
-        return RevenueCatClient::packages();
-    }
-
-    public function products()
-    {
-        return RevenueCatClient::products();
-    }
-
-    public function projects()
-    {
-        return RevenueCatClient::projects();
-    }
-
-    public function purchases()
-    {
-        return RevenueCatClient::purchases();
-    }
-
-    public function subscriptions()
-    {
-        return RevenueCatClient::subscriptions();
-    }
-}
 
 beforeEach(function () {
     // Override config for example domain to avoid hitting real endpoints
@@ -76,8 +24,7 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getApp('test-app-id');
+        $response = RevenueCat::getApp('test-app-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -95,8 +42,7 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getAppList(10);
+        $response = RevenueCat::getAppList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -112,9 +58,8 @@ describe('App Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'New App', 'type' => 'app_store'];
-        $response = $testClass->createApp($data);
+        $response = RevenueCat::createApp($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -130,9 +75,8 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'Updated App'];
-        $response = $testClass->updateApp('test-app-id', $data);
+        $response = RevenueCat::updateApp('test-app-id', $data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -148,8 +92,7 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deleteApp('test-app-id');
+        $response = RevenueCat::deleteApp('test-app-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -163,8 +106,7 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getAppStoreKitConfig('test-app-id');
+        $response = RevenueCat::getAppStoreKitConfig('test-app-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -181,8 +123,7 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getAppPublicKeys('test-app-id');
+        $response = RevenueCat::getAppPublicKeys('test-app-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -200,8 +141,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomer('test-customer-id');
+        $response = RevenueCat::getCustomer('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -219,8 +159,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerList(10);
+        $response = RevenueCat::getCustomerList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -236,9 +175,8 @@ describe('Customer Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'New Customer', 'email' => 'test@example.com'];
-        $response = $testClass->createCustomer($data);
+        $response = RevenueCat::createCustomer($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -254,8 +192,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deleteCustomer('test-customer-id');
+        $response = RevenueCat::deleteCustomer('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -272,8 +209,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerSubscriptions('test-customer-id');
+        $response = RevenueCat::getCustomerSubscriptions('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -290,8 +226,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerPurchases('test-customer-id');
+        $response = RevenueCat::getCustomerPurchases('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -308,8 +243,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerActiveEntitlements('test-customer-id');
+        $response = RevenueCat::getCustomerActiveEntitlements('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -326,8 +260,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerAliases('test-customer-id');
+        $response = RevenueCat::getCustomerAliases('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -344,8 +277,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerVirtualCurrencyBalances('test-customer-id');
+        $response = RevenueCat::getCustomerVirtualCurrencyBalances('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -362,8 +294,7 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getCustomerAttributes('test-customer-id');
+        $response = RevenueCat::getCustomerAttributes('test-customer-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -381,8 +312,7 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getEntitlement('test-entitlement-id');
+        $response = RevenueCat::getEntitlement('test-entitlement-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -400,8 +330,7 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getEntitlementList(10);
+        $response = RevenueCat::getEntitlementList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -417,9 +346,8 @@ describe('Entitlement Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['identifier' => 'premium', 'name' => 'Premium Access'];
-        $response = $testClass->createEntitlement($data);
+        $response = RevenueCat::createEntitlement($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -435,9 +363,8 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['identifier' => 'updated_premium'];
-        $response = $testClass->updateEntitlement('test-entitlement-id', $data);
+        $response = RevenueCat::updateEntitlement('test-entitlement-id', $data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -453,8 +380,7 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deleteEntitlement('test-entitlement-id');
+        $response = RevenueCat::deleteEntitlement('test-entitlement-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -472,8 +398,7 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getEntitlementProducts('test-entitlement-id');
+        $response = RevenueCat::getEntitlementProducts('test-entitlement-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -491,8 +416,7 @@ describe('Offering Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getOffering('test-offering-id');
+        $response = RevenueCat::getOffering('test-offering-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -510,8 +434,7 @@ describe('Offering Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getOfferingList(10);
+        $response = RevenueCat::getOfferingList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -527,9 +450,8 @@ describe('Offering Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'New Plan', 'description' => 'A new offering'];
-        $response = $testClass->createOffering($data);
+        $response = RevenueCat::createOffering($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -545,9 +467,8 @@ describe('Offering Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'Updated Plan'];
-        $response = $testClass->updateOffering('test-offering-id', $data);
+        $response = RevenueCat::updateOffering('test-offering-id', $data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -563,8 +484,7 @@ describe('Offering Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deleteOffering('test-offering-id');
+        $response = RevenueCat::deleteOffering('test-offering-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -582,8 +502,7 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPackage('test-package-id');
+        $response = RevenueCat::getPackage('test-package-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -601,8 +520,7 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPackageList(10);
+        $response = RevenueCat::getPackageList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -618,9 +536,8 @@ describe('Package Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'New Package', 'description' => 'A new package'];
-        $response = $testClass->createPackage($data);
+        $response = RevenueCat::createPackage($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -636,9 +553,8 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'Updated Package'];
-        $response = $testClass->updatePackage('test-package-id', $data);
+        $response = RevenueCat::updatePackage('test-package-id', $data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -654,8 +570,7 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deletePackage('test-package-id');
+        $response = RevenueCat::deletePackage('test-package-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -673,8 +588,7 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPackageProducts('test-package-id');
+        $response = RevenueCat::getPackageProducts('test-package-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -692,8 +606,7 @@ describe('Product Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getProduct('test-product-id');
+        $response = RevenueCat::getProduct('test-product-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -711,8 +624,7 @@ describe('Product Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getProductList(10);
+        $response = RevenueCat::getProductList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -728,9 +640,8 @@ describe('Product Convenience Methods', function () {
             ], 201),
         ]);
 
-        $testClass = new TestConvenienceMethods;
         $data = ['name' => 'New Product', 'description' => 'A new product'];
-        $response = $testClass->createProduct($data);
+        $response = RevenueCat::createProduct($data);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -746,8 +657,7 @@ describe('Product Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->deleteProduct('test-product-id');
+        $response = RevenueCat::deleteProduct('test-product-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -767,8 +677,7 @@ describe('Project Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getProjectList(10);
+        $response = RevenueCat::getProjectList(10);
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -786,8 +695,7 @@ describe('Purchase Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPurchase('test-purchase-id');
+        $response = RevenueCat::getPurchase('test-purchase-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -805,8 +713,7 @@ describe('Purchase Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getPurchaseEntitlements('test-purchase-id');
+        $response = RevenueCat::getPurchaseEntitlements('test-purchase-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -824,8 +731,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getSubscription('test-subscription-id');
+        $response = RevenueCat::getSubscription('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -843,8 +749,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getSubscriptionEntitlements('test-subscription-id');
+        $response = RevenueCat::getSubscriptionEntitlements('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -862,8 +767,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getSubscriptionTransactions('test-subscription-id');
+        $response = RevenueCat::getSubscriptionTransactions('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -877,8 +781,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->getSubscriptionCustomerPortalUrl('test-subscription-id');
+        $response = RevenueCat::getSubscriptionCustomerPortalUrl('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -894,8 +797,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->cancelWebBillingSubscription('test-subscription-id');
+        $response = RevenueCat::cancelWebBillingSubscription('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -911,8 +813,7 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-        $response = $testClass->refundWebBillingSubscription('test-subscription-id');
+        $response = RevenueCat::refundWebBillingSubscription('test-subscription-id');
 
         expect($response)->toBeInstanceOf(Response::class);
         expect($response->successful())->toBeTrue();
@@ -921,23 +822,7 @@ describe('Subscription Convenience Methods', function () {
 });
 
 describe('Trait Integration', function () {
-    test('trait methods are available on classes that use it', function () {
-        $testClass = new TestConvenienceMethods;
-
-        // Verify the trait methods exist
-        expect(method_exists($testClass, 'getApp'))->toBeTrue();
-        expect(method_exists($testClass, 'getCustomer'))->toBeTrue();
-        expect(method_exists($testClass, 'createApp'))->toBeTrue();
-        expect(method_exists($testClass, 'getEntitlement'))->toBeTrue();
-        expect(method_exists($testClass, 'getOffering'))->toBeTrue();
-        expect(method_exists($testClass, 'getPackage'))->toBeTrue();
-        expect(method_exists($testClass, 'getProduct'))->toBeTrue();
-        expect(method_exists($testClass, 'getProjectList'))->toBeTrue();
-        expect(method_exists($testClass, 'getPurchase'))->toBeTrue();
-        expect(method_exists($testClass, 'getSubscription'))->toBeTrue();
-    });
-
-    test('trait methods delegate to the correct endpoint methods', function () {
+    test('convenience methods delegate to the correct endpoint methods', function () {
         Http::fake([
             'https://api.example.com/v2/projects/test_project/apps/test-id' => Http::response(['id' => 'test-id'], 200),
             'https://api.example.com/v2/projects/test_project/customers/test-id' => Http::response(['id' => 'test-id'], 200),
@@ -950,18 +835,16 @@ describe('Trait Integration', function () {
             'https://api.example.com/v2/projects/test_project/subscriptions/test-id' => Http::response(['id' => 'test-id'], 200),
         ]);
 
-        $testClass = new TestConvenienceMethods;
-
-        // Test that all endpoint methods work
-        $appResponse = $testClass->getApp('test-id');
-        $customerResponse = $testClass->getCustomer('test-id');
-        $entitlementResponse = $testClass->getEntitlement('test-id');
-        $offeringResponse = $testClass->getOffering('test-id');
-        $packageResponse = $testClass->getPackage('test-id');
-        $productResponse = $testClass->getProduct('test-id');
-        $projectResponse = $testClass->getProjectList(1);
-        $purchaseResponse = $testClass->getPurchase('test-id');
-        $subscriptionResponse = $testClass->getSubscription('test-id');
+        // Test that all endpoint methods work via facade
+        $appResponse = RevenueCat::getApp('test-id');
+        $customerResponse = RevenueCat::getCustomer('test-id');
+        $entitlementResponse = RevenueCat::getEntitlement('test-id');
+        $offeringResponse = RevenueCat::getOffering('test-id');
+        $packageResponse = RevenueCat::getPackage('test-id');
+        $productResponse = RevenueCat::getProduct('test-id');
+        $projectResponse = RevenueCat::getProjectList(1);
+        $purchaseResponse = RevenueCat::getPurchase('test-id');
+        $subscriptionResponse = RevenueCat::getSubscription('test-id');
 
         expect($appResponse->successful())->toBeTrue();
         expect($customerResponse->successful())->toBeTrue();

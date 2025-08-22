@@ -32,7 +32,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response getCustomer(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerList(array<string,mixed> $query = [])
  * @method static \Illuminate\Http\Client\Response createCustomer(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updateCustomer(string $customerId, array<string,mixed> $data)
  * @method static \Illuminate\Http\Client\Response deleteCustomer(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerSubscriptions(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerPurchases(string $customerId)
@@ -68,7 +67,6 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response getProduct(string $productId)
  * @method static \Illuminate\Http\Client\Response getProductList(array<string,mixed> $query = [])
  * @method static \Illuminate\Http\Client\Response createProduct(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updateProduct(string $productId, array<string,mixed> $data)
  * @method static \Illuminate\Http\Client\Response deleteProduct(string $productId)
  *
  * Projects
@@ -86,12 +84,10 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response cancelWebBillingSubscription(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response refundWebBillingSubscription(string $subscriptionId)
  */
-class RevenueCatClient extends Facade
+class RevenueCat extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        // Resolve the HTTP client directly so both endpoint-style and convenience
-        // methods are available on the same class surface.
         return \BoldlineStudios\RevenueCatApi\Http\RevenueCatClient::class;
     }
 }
