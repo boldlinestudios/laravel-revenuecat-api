@@ -1,7 +1,8 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\OfferingData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -14,113 +15,122 @@ beforeEach(function () {
     ]);
 });
 
-test('list returns response from client', function () {
+test('list returns ListPage of OfferingData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
-            'offerings' => [
-                ['id' => 'offering1', 'identifier' => 'default'],
-                ['id' => 'offering2', 'identifier' => 'premium'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'offering1', 'lookup_key' => 'default', 'display_name' => 'Default'],
+                ['id' => 'offering2', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/offerings',
         ], 200),
     ]);
 
-    $response = RevenueCat::offerings()->list(10);
+    $offerings = RevenueCat::offerings()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('offerings'))->toHaveCount(2);
+    expect($offerings)->toBeInstanceOf(ListPage::class);
+    expect(count($offerings->items()))->toBe(2);
 });
 
-test('create returns response from client', function () {
+test('create returns OfferingData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings' => Http::response([
+            'object' => 'offering',
             'id' => 'new_offering_id',
-            'identifier' => 'new_premium',
-            'created_at' => '2024-01-01T00:00:00Z',
+            'lookup_key' => 'new_premium',
+            'display_name' => 'New Premium',
+            'created_at' => 1704067200000,
         ], 201),
     ]);
 
-    $data = ['identifier' => 'new_premium', 'description' => 'Premium offering'];
-    $response = RevenueCat::offerings()->create($data);
+    $data = ['lookup_key' => 'new_premium', 'display_name' => 'New Premium'];
+    $offering = RevenueCat::offerings()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('new_offering_id');
+    expect($offering)->toBeInstanceOf(OfferingData::class);
+    expect($offering->getId())->toBe('new_offering_id');
 });
 
-test('get returns response from client with encoded offering id', function () {
+test('get returns OfferingData with encoded offering id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([
+            'object' => 'offering',
             'id' => 'test-offering-id',
-            'identifier' => 'premium',
-            'description' => 'Premium offering',
+            'lookup_key' => 'premium',
+            'display_name' => 'Premium offering',
         ], 200),
     ]);
 
     $offeringId = 'test-offering-id';
-    $response = RevenueCat::offerings()->get($offeringId);
+    $offering = RevenueCat::offerings()->get($offeringId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-offering-id');
+    expect($offering)->toBeInstanceOf(OfferingData::class);
+    expect($offering->getId())->toBe('test-offering-id');
 });
 
-test('update returns response from client', function () {
+test('update returns OfferingData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([
+            'object' => 'offering',
             'id' => 'test-offering-id',
-            'identifier' => 'premium_plus',
-            'description' => 'Updated premium offering',
+            'lookup_key' => 'premium_plus',
+            'display_name' => 'Updated premium offering',
         ], 200),
     ]);
 
     $offeringId = 'test-offering-id';
-    $data = ['description' => 'Updated premium offering'];
-    $response = RevenueCat::offerings()->update($offeringId, $data);
+    $data = ['lookup_key' => 'premium_plus', 'display_name' => 'Updated premium offering'];
+    $offering = RevenueCat::offerings()->update($offeringId, $data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('description'))->toBe('Updated premium offering');
+    expect($offering)->toBeInstanceOf(OfferingData::class);
+    expect($offering->getDisplayName())->toBe('Updated premium offering');
 });
 
-test('delete returns response from client', function () {
+test('delete returns true when deletion succeeds', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([
+            'object' => 'offering',
+            'id' => 'test-offering-id',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $offeringId = 'test-offering-id';
-    $response = RevenueCat::offerings()->delete($offeringId);
+    $deleted = RevenueCat::offerings()->delete($offeringId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('get method properly encodes special characters in offering id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings/test%20offering%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'offering',
             'id' => 'test offering with spaces & special chars',
-            'identifier' => 'special_offering',
+            'lookup_key' => 'special_offering',
+            'display_name' => 'Special Offering',
         ], 200),
     ]);
 
     $offeringId = 'test offering with spaces & special chars';
-    $response = RevenueCat::offerings()->get($offeringId);
+    $offering = RevenueCat::offerings()->get($offeringId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test offering with spaces & special chars');
+    expect($offering)->toBeInstanceOf(OfferingData::class);
+    expect($offering->getId())->toBe('test offering with spaces & special chars');
 });
 
 test('list method works with empty query array', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings' => Http::response([
-            'offerings' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/offerings',
         ], 200),
     ]);
 
     $response = RevenueCat::offerings()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('offerings'))->toBe([]);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(0);
 });

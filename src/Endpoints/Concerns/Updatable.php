@@ -12,11 +12,11 @@ trait Updatable
     abstract protected function basePath(): string;
 
     /**
-     * Update a resource by id.
+     * Update a resource by id (raw Response).
      *
      * @param  array<string, mixed>  $data
      */
-    public function update(string $id, array $data): Response
+    public function updateRaw(string $id, array $data): Response
     {
         $id = rawurlencode($id);
 

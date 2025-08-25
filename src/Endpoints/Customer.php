@@ -2,6 +2,8 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\CustomerData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
@@ -26,6 +28,33 @@ class Customer
     protected function basePath(): string
     {
         return '/customers';
+    }
+
+    /**
+     * Create a customer.
+     *
+     * @param array{
+     *   id: string,
+     *   attributes: list<array{name: string, value: string}>
+     * } $data Customer payload with ID and attributes.
+     */
+    public function create(array $data): CustomerData
+    {
+        return CustomerData::fromResponse($this->createRaw($data));
+    }
+
+    public function get(string $customerId): CustomerData
+    {
+        return CustomerData::fromResponse($this->getRaw($customerId));
+    }
+
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<CustomerData>
+     */
+    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    {
+        return $this->listAsDto(CustomerData::class, $limit, $startingAfter, $extra);
     }
 
     /**

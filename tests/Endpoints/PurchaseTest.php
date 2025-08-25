@@ -1,5 +1,6 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -24,11 +25,10 @@ test('get returns response from client with encoded purchase id', function () {
     ]);
 
     $purchaseId = 'test-purchase-id';
-    $response = RevenueCat::purchases()->get($purchaseId);
+    $purchase = RevenueCat::purchases()->get($purchaseId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-purchase-id');
+    expect($purchase)->toBeInstanceOf(PurchaseData::class);
+    expect($purchase->getId())->toBe('test-purchase-id');
 });
 
 test('listOfEntitlements returns response from client', function () {
@@ -58,11 +58,10 @@ test('get method properly encodes special characters in purchase id', function (
     ]);
 
     $purchaseId = 'test purchase with spaces & special chars';
-    $response = RevenueCat::purchases()->get($purchaseId);
+    $purchase = RevenueCat::purchases()->get($purchaseId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test purchase with spaces & special chars');
+    expect($purchase)->toBeInstanceOf(PurchaseData::class);
+    expect($purchase->getId())->toBe('test purchase with spaces & special chars');
 });
 
 test('listOfEntitlements method properly encodes special characters in purchase id', function () {

@@ -1,7 +1,8 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -17,18 +18,20 @@ beforeEach(function () {
 test('list returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/products?limit=10' => Http::response([
-            'products' => [
-                ['id' => 'product1', 'identifier' => 'monthly_subscription'],
-                ['id' => 'product2', 'identifier' => 'yearly_subscription'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'product1', 'store_identifier' => 'rc_1w_199'],
+                ['id' => 'product2', 'store_identifier' => 'rc_1w_100'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/products',
         ], 200),
     ]);
 
-    $response = RevenueCat::products()->list(10);
+    $products = RevenueCat::products()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('products'))->toHaveCount(2);
+    expect($products)->toBeInstanceOf(ListPage::class);
+    expect(count($products->items()))->toBe(2);
 });
 
 test('create returns response from client', function () {
@@ -41,11 +44,10 @@ test('create returns response from client', function () {
     ]);
 
     $data = ['identifier' => 'new_product', 'description' => 'New product'];
-    $response = RevenueCat::products()->create($data);
+    $product = RevenueCat::products()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('new_product_id');
+    expect($product)->toBeInstanceOf(ProductData::class);
+    expect($product->getId())->toBe('new_product_id');
 });
 
 test('get returns response from client with encoded product id', function () {
@@ -58,23 +60,25 @@ test('get returns response from client with encoded product id', function () {
     ]);
 
     $productId = 'test-product-id';
-    $response = RevenueCat::products()->get($productId);
+    $product = RevenueCat::products()->get($productId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-product-id');
+    expect($product)->toBeInstanceOf(ProductData::class);
+    expect($product->getId())->toBe('test-product-id');
 });
 
 test('delete returns response from client', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/products/test-product-id' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/products/test-product-id' => Http::response([
+            'object' => 'app',
+            'id' => 'test-product-id',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $productId = 'test-product-id';
-    $response = RevenueCat::products()->delete($productId);
+    $deleted = RevenueCat::products()->delete($productId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('get method properly encodes special characters in product id', function () {
@@ -86,23 +90,25 @@ test('get method properly encodes special characters in product id', function ()
     ]);
 
     $productId = 'test product with spaces & special chars';
-    $response = RevenueCat::products()->get($productId);
+    $product = RevenueCat::products()->get($productId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test product with spaces & special chars');
+    expect($product)->toBeInstanceOf(ProductData::class);
+    expect($product->getId())->toBe('test product with spaces & special chars');
 });
 
 test('delete method properly encodes special characters in product id', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/products/test%20product%20with%20spaces%20%26%20special%20chars' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/products/test%20product%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'app',
+            'id' => 'test product with spaces & special chars',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $productId = 'test product with spaces & special chars';
-    $response = RevenueCat::products()->delete($productId);
+    $deleted = RevenueCat::products()->delete($productId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('list method works with empty query array', function () {
@@ -112,9 +118,8 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::products()->list();
+    $products = RevenueCat::products()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('products'))->toBe([]);
+    expect($products)->toBeInstanceOf(ListPage::class);
+    expect(count($products->items()))->toBe(0);
 });

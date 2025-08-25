@@ -1,5 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -14,94 +16,103 @@ beforeEach(function () {
     ]);
 });
 
-test('list returns response from client', function () {
+test('list returns ListPage of EntitlementData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
-            'entitlements' => [
-                ['id' => 'ent1', 'identifier' => 'premium'],
-                ['id' => 'ent2', 'identifier' => 'pro'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'ent1', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
+                ['id' => 'ent2', 'lookup_key' => 'pro', 'display_name' => 'Pro'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/entitlements',
         ], 200),
     ]);
 
     $response = RevenueCat::entitlements()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('entitlements'))->toHaveCount(2);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(2);
 });
 
-test('create returns response from client', function () {
+test('create returns EntitlementData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements' => Http::response([
+            'object' => 'entitlement',
             'id' => 'new_entitlement_id',
-            'identifier' => 'new_premium',
-            'created_at' => '2024-01-01T00:00:00Z',
+            'lookup_key' => 'new_premium',
+            'display_name' => 'New Premium',
+            'created_at' => 1704067200000,
         ], 201),
     ]);
 
-    $data = ['identifier' => 'new_premium', 'type' => 'subscription'];
-    $response = RevenueCat::entitlements()->create($data);
+    $data = ['lookup_key' => 'new_premium', 'display_name' => 'New Premium'];
+    $entitlement = RevenueCat::entitlements()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('new_entitlement_id');
+    expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+    expect($entitlement->getId())->toBe('new_entitlement_id');
 });
 
-test('get returns response from client with encoded entitlement id', function () {
+test('get returns EntitlementData with encoded entitlement id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
+            'object' => 'entitlement',
             'id' => 'test-entitlement-id',
-            'identifier' => 'premium',
-            'type' => 'subscription',
+            'lookup_key' => 'premium',
+            'display_name' => 'Premium',
         ], 200),
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $response = RevenueCat::entitlements()->get($entitlementId);
+    $entitlement = RevenueCat::entitlements()->get($entitlementId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-entitlement-id');
+    expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+    expect($entitlement->getId())->toBe('test-entitlement-id');
 });
 
-test('update returns response from client', function () {
+test('update returns EntitlementData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
+            'object' => 'entitlement',
             'id' => 'test-entitlement-id',
-            'identifier' => 'premium_plus',
-            'type' => 'subscription',
+            'lookup_key' => 'premium_plus',
+            'display_name' => 'Updated Premium',
         ], 200),
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $data = ['identifier' => 'premium_plus'];
-    $response = RevenueCat::entitlements()->update($entitlementId, $data);
+    $data = ['lookup_key' => 'premium_plus', 'display_name' => 'Updated Premium'];
+    $entitlement = RevenueCat::entitlements()->update($entitlementId, $data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('identifier'))->toBe('premium_plus');
+    expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+    expect($entitlement->getDisplayName())->toBe('Updated Premium');
 });
 
-test('delete returns response from client', function () {
+test('delete returns true when deletion succeeds', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
+            'object' => 'entitlement',
+            'id' => 'test-entitlement-id',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $response = RevenueCat::entitlements()->delete($entitlementId);
+    $deleted = RevenueCat::entitlements()->delete($entitlementId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('listOfProducts returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/products' => Http::response([
-            'products' => [
-                ['id' => 'prod1', 'identifier' => 'premium_monthly'],
-                ['id' => 'prod2', 'identifier' => 'premium_yearly'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'prod1', 'store_identifier' => 'sku_monthly', 'type' => 'subscription'],
+                ['id' => 'prod2', 'store_identifier' => 'sku_yearly', 'type' => 'subscription'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/entitlements/test-entitlement-id/products',
         ], 200),
     ]);
 
@@ -110,35 +121,38 @@ test('listOfProducts returns response from client', function () {
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
-    expect($response->json('products'))->toHaveCount(2);
+    expect($response->json('items'))->toHaveCount(2);
 });
 
 test('get method properly encodes special characters in entitlement id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test%20entitlement%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'entitlement',
             'id' => 'test entitlement with spaces & special chars',
-            'identifier' => 'special_entitlement',
+            'lookup_key' => 'special_entitlement',
+            'display_name' => 'Special Entitlement',
         ], 200),
     ]);
 
     $entitlementId = 'test entitlement with spaces & special chars';
-    $response = RevenueCat::entitlements()->get($entitlementId);
+    $entitlement = RevenueCat::entitlements()->get($entitlementId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test entitlement with spaces & special chars');
+    expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+    expect($entitlement->getId())->toBe('test entitlement with spaces & special chars');
 });
 
 test('list method works with empty query array', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements' => Http::response([
-            'entitlements' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/entitlements',
         ], 200),
     ]);
 
     $response = RevenueCat::entitlements()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('entitlements'))->toBe([]);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(0);
 });

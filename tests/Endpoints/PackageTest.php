@@ -1,5 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\PackageData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -14,93 +16,103 @@ beforeEach(function () {
     ]);
 });
 
-test('list returns response from client', function () {
+test('list returns ListPage of PackageData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
-            'packages' => [
-                ['id' => 'package1', 'identifier' => 'basic_package'],
-                ['id' => 'package2', 'identifier' => 'premium_package'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
+                ['id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/packages',
         ], 200),
     ]);
 
-    $response = RevenueCat::packages()->list(10);
+    $list = RevenueCat::packages()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('packages'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
-test('create returns response from client', function () {
+test('create returns PackageData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages' => Http::response([
             'id' => 'new_package_id',
-            'identifier' => 'new_package',
-            'created_at' => '2024-01-01T00:00:00Z',
+            'lookup_key' => 'new_package',
+            'display_name' => 'New package',
+            'position' => 1,
         ], 201),
     ]);
 
-    $data = ['identifier' => 'new_package', 'description' => 'New package'];
-    $response = RevenueCat::packages()->create($data);
+    $data = ['lookup_key' => 'new_package', 'display_name' => 'New package', 'position' => 1];
+    $package = RevenueCat::packages()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('new_package_id');
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('new_package_id');
 });
 
-test('get returns response from client with encoded package id', function () {
+test('get returns PackageData with encoded package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
             'id' => 'test-package-id',
-            'identifier' => 'premium_package',
-            'description' => 'Premium package',
+            'lookup_key' => 'premium_package',
+            'display_name' => 'Premium package',
+            'position' => 1,
         ], 200),
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCat::packages()->get($packageId);
+    $package = RevenueCat::packages()->get($packageId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-package-id');
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test-package-id');
 });
 
-test('update returns response from client', function () {
+test('update returns PackageData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
             'id' => 'test-package-id',
-            'identifier' => 'premium_plus_package',
-            'description' => 'Updated premium package',
+            'lookup_key' => 'premium_plus_package',
+            'display_name' => 'Updated premium package',
+            'position' => 2,
         ], 200),
     ]);
 
     $packageId = 'test-package-id';
-    $data = ['description' => 'Updated premium package'];
-    $response = RevenueCat::packages()->update($packageId, $data);
+    $data = ['display_name' => 'Updated premium package', 'position' => 2];
+    $package = RevenueCat::packages()->update($packageId, $data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('description'))->toBe('Updated premium package');
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getDisplayName())->toBe('Updated premium package');
 });
 
-test('delete returns response from client', function () {
+test('delete returns true when deletion succeeds', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
+            'object' => 'package',
+            'id' => 'test-package-id',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCat::packages()->delete($packageId);
+    $deleted = RevenueCat::packages()->delete($packageId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('listOfProducts returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
             'products' => [
-                ['id' => 'product1', 'identifier' => 'monthly_sub'],
-                ['id' => 'product2', 'identifier' => 'yearly_sub'],
+                'object' => 'list',
+                'items' => [
+                    ['id' => 'product1', 'store_identifier' => 'rc_1w_199'],
+                    ['id' => 'product2', 'store_identifier' => 'rc_1w_100'],
+                ],
+                'next_page' => null,
+                'url' => '/v2/projects/test_project/packages/test-package-id/products',
             ],
         ], 200),
     ]);
@@ -110,23 +122,24 @@ test('listOfProducts returns response from client', function () {
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
-    expect($response->json('products'))->toHaveCount(2);
+    expect($response->json('products')['items'])->toHaveCount(2);
 });
 
 test('get method properly encodes special characters in package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars' => Http::response([
             'id' => 'test package with spaces & special chars',
-            'identifier' => 'special_package',
+            'lookup_key' => 'special_package',
+            'display_name' => 'Special package',
+            'position' => 1,
         ], 200),
     ]);
 
     $packageId = 'test package with spaces & special chars';
-    $response = RevenueCat::packages()->get($packageId);
+    $package = RevenueCat::packages()->get($packageId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test package with spaces & special chars');
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test package with spaces & special chars');
 });
 
 test('listOfProducts method properly encodes special characters in package id', function () {
@@ -147,13 +160,15 @@ test('listOfProducts method properly encodes special characters in package id', 
 test('list method works with empty query array', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages' => Http::response([
-            'packages' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/packages',
         ], 200),
     ]);
 
-    $response = RevenueCat::packages()->list();
+    $list = RevenueCat::packages()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('packages'))->toBe([]);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(0);
 });

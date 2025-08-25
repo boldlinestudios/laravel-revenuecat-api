@@ -1,5 +1,14 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\CustomerData;
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\OfferingData;
+use BoldlineStudios\RevenueCatApi\Data\PackageData;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
+use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -26,9 +35,8 @@ describe('App Convenience Methods', function () {
 
         $response = RevenueCat::getApp('test-app-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-app-id');
+        expect($response)->toBeInstanceOf(AppData::class);
+        expect($response->getId())->toBe('test-app-id');
     });
 
     test('getAppList calls apps()->list() with correct parameters', function () {
@@ -44,9 +52,8 @@ describe('App Convenience Methods', function () {
 
         $response = RevenueCat::getAppList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(2);
     });
 
     test('createApp calls apps()->create() with correct parameters', function () {
@@ -59,11 +66,10 @@ describe('App Convenience Methods', function () {
         ]);
 
         $data = ['name' => 'New App', 'type' => 'app_store'];
-        $response = RevenueCat::createApp($data);
+        $app = RevenueCat::createApp($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-app-id');
+        expect($app)->toBeInstanceOf(AppData::class);
+        expect($app->getId())->toBe('new-app-id');
     });
 
     test('updateApp calls apps()->update() with correct parameters', function () {
@@ -76,11 +82,10 @@ describe('App Convenience Methods', function () {
         ]);
 
         $data = ['name' => 'Updated App'];
-        $response = RevenueCat::updateApp('test-app-id', $data);
+        $app = RevenueCat::updateApp('test-app-id', $data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('name'))->toBe('Updated App');
+        expect($app)->toBeInstanceOf(AppData::class);
+        expect($app->getName())->toBe('Updated App');
     });
 
     test('deleteApp calls apps()->delete() with correct parameters', function () {
@@ -92,11 +97,9 @@ describe('App Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deleteApp('test-app-id');
+        $deleted = RevenueCat::deleteApp('test-app-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 
     test('getAppStoreKitConfig calls apps()->storeKitConfig() with correct parameters', function () {
@@ -137,15 +140,13 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([
                 'object' => 'customer',
                 'id' => 'test-customer-id',
-                'name' => 'Test Customer',
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomer('test-customer-id');
+        $customer = RevenueCat::getCustomer('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-customer-id');
+        expect($customer)->toBeInstanceOf(CustomerData::class);
+        expect($customer->getId())->toBe('test-customer-id');
     });
 
     test('getCustomerList calls customers()->list() with correct parameters', function () {
@@ -153,17 +154,16 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'customer1', 'name' => 'Customer 1'],
-                    ['id' => 'customer2', 'name' => 'Customer 2'],
+                    ['id' => 'customer1'],
+                    ['id' => 'customer2'],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerList(10);
+        $list = RevenueCat::getCustomerList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
     });
 
     test('createCustomer calls customers()->create() with correct parameters', function () {
@@ -171,16 +171,19 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers' => Http::response([
                 'object' => 'customer',
                 'id' => 'new-customer-id',
-                'name' => 'New Customer',
             ], 201),
         ]);
 
-        $data = ['name' => 'New Customer', 'email' => 'test@example.com'];
-        $response = RevenueCat::createCustomer($data);
+        $data = [
+            'id' => 'new-customer-id',
+            'attributes' => [
+                ['name' => '$email', 'value' => 'test@example.com'],
+            ],
+        ];
+        $customer = RevenueCat::createCustomer($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-customer-id');
+        expect($customer)->toBeInstanceOf(CustomerData::class);
+        expect($customer->getId())->toBe('new-customer-id');
     });
 
     test('deleteCustomer calls customers()->delete() with correct parameters', function () {
@@ -192,11 +195,9 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deleteCustomer('test-customer-id');
+        $deleted = RevenueCat::deleteCustomer('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 
     test('getCustomerSubscriptions calls customers()->listOfSubscriptions() with correct parameters', function () {
@@ -308,15 +309,13 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
                 'object' => 'entitlement',
                 'id' => 'test-entitlement-id',
-                'identifier' => 'premium',
             ], 200),
         ]);
 
-        $response = RevenueCat::getEntitlement('test-entitlement-id');
+        $entitlement = RevenueCat::getEntitlement('test-entitlement-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-entitlement-id');
+        expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+        expect($entitlement->getId())->toBe('test-entitlement-id');
     });
 
     test('getEntitlementList calls entitlements()->list() with correct parameters', function () {
@@ -324,17 +323,16 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'ent1', 'identifier' => 'premium'],
-                    ['id' => 'ent2', 'identifier' => 'basic'],
+                    ['id' => 'ent1'],
+                    ['id' => 'ent2'],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getEntitlementList(10);
+        $list = RevenueCat::getEntitlementList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
     });
 
     test('createEntitlement calls entitlements()->create() with correct parameters', function () {
@@ -342,16 +340,14 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements' => Http::response([
                 'object' => 'entitlement',
                 'id' => 'new-entitlement-id',
-                'identifier' => 'premium',
             ], 201),
         ]);
 
-        $data = ['identifier' => 'premium', 'name' => 'Premium Access'];
-        $response = RevenueCat::createEntitlement($data);
+        $data = ['lookup_key' => 'premium', 'display_name' => 'Premium'];
+        $entitlement = RevenueCat::createEntitlement($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-entitlement-id');
+        expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+        expect($entitlement->getId())->toBe('new-entitlement-id');
     });
 
     test('updateEntitlement calls entitlements()->update() with correct parameters', function () {
@@ -359,16 +355,15 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
                 'object' => 'entitlement',
                 'id' => 'test-entitlement-id',
-                'identifier' => 'updated_premium',
+                'display_name' => 'Updated',
             ], 200),
         ]);
 
-        $data = ['identifier' => 'updated_premium'];
-        $response = RevenueCat::updateEntitlement('test-entitlement-id', $data);
+        $data = ['display_name' => 'Updated'];
+        $entitlement = RevenueCat::updateEntitlement('test-entitlement-id', $data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('identifier'))->toBe('updated_premium');
+        expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+        expect($entitlement->getDisplayName())->toBe('Updated');
     });
 
     test('deleteEntitlement calls entitlements()->delete() with correct parameters', function () {
@@ -380,11 +375,9 @@ describe('Entitlement Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deleteEntitlement('test-entitlement-id');
+        $deleted = RevenueCat::deleteEntitlement('test-entitlement-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 
     test('getEntitlementProducts calls entitlements()->listOfProducts() with correct parameters', function () {
@@ -412,15 +405,15 @@ describe('Offering Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([
                 'object' => 'offering',
                 'id' => 'test-offering-id',
-                'name' => 'Basic Plan',
+                'lookup_key' => 'basic',
+                'display_name' => 'Basic Plan',
             ], 200),
         ]);
 
         $response = RevenueCat::getOffering('test-offering-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-offering-id');
+        expect($response)->toBeInstanceOf(OfferingData::class);
+        expect($response->getId())->toBe('test-offering-id');
     });
 
     test('getOfferingList calls offerings()->list() with correct parameters', function () {
@@ -428,17 +421,16 @@ describe('Offering Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'off1', 'name' => 'Basic Plan'],
-                    ['id' => 'off2', 'name' => 'Premium Plan'],
+                    ['id' => 'off1', 'lookup_key' => 'basic', 'display_name' => 'Basic Plan'],
+                    ['id' => 'off2', 'lookup_key' => 'pro', 'display_name' => 'Pro Plan'],
                 ],
             ], 200),
         ]);
 
         $response = RevenueCat::getOfferingList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(2);
     });
 
     test('createOffering calls offerings()->create() with correct parameters', function () {
@@ -446,16 +438,16 @@ describe('Offering Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/offerings' => Http::response([
                 'object' => 'offering',
                 'id' => 'new-offering-id',
-                'name' => 'New Plan',
+                'lookup_key' => 'basic',
+                'display_name' => 'New Plan',
             ], 201),
         ]);
 
-        $data = ['name' => 'New Plan', 'description' => 'A new offering'];
+        $data = ['lookup_key' => 'basic', 'display_name' => 'New Plan'];
         $response = RevenueCat::createOffering($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-offering-id');
+        expect($response)->toBeInstanceOf(OfferingData::class);
+        expect($response->getId())->toBe('new-offering-id');
     });
 
     test('updateOffering calls offerings()->update() with correct parameters', function () {
@@ -463,16 +455,16 @@ describe('Offering Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/offerings/test-offering-id' => Http::response([
                 'object' => 'offering',
                 'id' => 'test-offering-id',
-                'name' => 'Updated Plan',
+                'lookup_key' => 'basic',
+                'display_name' => 'Updated Plan',
             ], 200),
         ]);
 
-        $data = ['name' => 'Updated Plan'];
-        $response = RevenueCat::updateOffering('test-offering-id', $data);
+        $data = ['lookup_key' => 'basic', 'display_name' => 'Updated Plan'];
+        $offering = RevenueCat::updateOffering('test-offering-id', $data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('name'))->toBe('Updated Plan');
+        expect($offering)->toBeInstanceOf(OfferingData::class);
+        expect($offering->getDisplayName())->toBe('Updated Plan');
     });
 
     test('deleteOffering calls offerings()->delete() with correct parameters', function () {
@@ -484,11 +476,9 @@ describe('Offering Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deleteOffering('test-offering-id');
+        $deleted = RevenueCat::deleteOffering('test-offering-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 });
 
@@ -498,15 +488,16 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
                 'object' => 'package',
                 'id' => 'test-package-id',
-                'name' => 'Premium Package',
+                'lookup_key' => 'monthly',
+                'display_name' => 'Monthly',
+                'position' => 1,
             ], 200),
         ]);
 
-        $response = RevenueCat::getPackage('test-package-id');
+        $package = RevenueCat::getPackage('test-package-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-package-id');
+        expect($package)->toBeInstanceOf(PackageData::class);
+        expect($package->getId())->toBe('test-package-id');
     });
 
     test('getPackageList calls packages()->list() with correct parameters', function () {
@@ -514,17 +505,16 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'pkg1', 'name' => 'Basic Package'],
-                    ['id' => 'pkg2', 'name' => 'Premium Package'],
+                    ['id' => 'pkg1', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'position' => 1],
+                    ['id' => 'pkg2', 'lookup_key' => 'pro', 'display_name' => 'Pro', 'position' => 2],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getPackageList(10);
+        $list = RevenueCat::getPackageList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
     });
 
     test('createPackage calls packages()->create() with correct parameters', function () {
@@ -532,16 +522,17 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages' => Http::response([
                 'object' => 'package',
                 'id' => 'new-package-id',
-                'name' => 'New Package',
+                'lookup_key' => 'monthly',
+                'display_name' => 'Monthly',
+                'position' => 1,
             ], 201),
         ]);
 
-        $data = ['name' => 'New Package', 'description' => 'A new package'];
-        $response = RevenueCat::createPackage($data);
+        $data = ['lookup_key' => 'monthly', 'display_name' => 'Monthly', 'position' => 1];
+        $package = RevenueCat::createPackage($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-package-id');
+        expect($package)->toBeInstanceOf(PackageData::class);
+        expect($package->getId())->toBe('new-package-id');
     });
 
     test('updatePackage calls packages()->update() with correct parameters', function () {
@@ -549,16 +540,16 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
                 'object' => 'package',
                 'id' => 'test-package-id',
-                'name' => 'Updated Package',
+                'display_name' => 'Updated Package',
+                'position' => 2,
             ], 200),
         ]);
 
-        $data = ['name' => 'Updated Package'];
-        $response = RevenueCat::updatePackage('test-package-id', $data);
+        $data = ['display_name' => 'Updated Package', 'position' => 2];
+        $package = RevenueCat::updatePackage('test-package-id', $data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('name'))->toBe('Updated Package');
+        expect($package)->toBeInstanceOf(PackageData::class);
+        expect($package->getDisplayName())->toBe('Updated Package');
     });
 
     test('deletePackage calls packages()->delete() with correct parameters', function () {
@@ -570,11 +561,9 @@ describe('Package Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deletePackage('test-package-id');
+        $deleted = RevenueCat::deletePackage('test-package-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 
     test('getPackageProducts calls packages()->listOfProducts() with correct parameters', function () {
@@ -582,8 +571,8 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'name' => 'Product 1'],
-                    ['id' => 'prod2', 'name' => 'Product 2'],
+                    ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription'],
+                    ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time'],
                 ],
             ], 200),
         ]);
@@ -602,15 +591,15 @@ describe('Product Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/products/test-product-id' => Http::response([
                 'object' => 'product',
                 'id' => 'test-product-id',
-                'name' => 'Test Product',
+                'store_identifier' => 'sku',
+                'type' => 'subscription',
             ], 200),
         ]);
 
-        $response = RevenueCat::getProduct('test-product-id');
+        $product = RevenueCat::getProduct('test-product-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-product-id');
+        expect($product)->toBeInstanceOf(ProductData::class);
+        expect($product->getId())->toBe('test-product-id');
     });
 
     test('getProductList calls products()->list() with correct parameters', function () {
@@ -618,17 +607,16 @@ describe('Product Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/products?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'name' => 'Product 1'],
-                    ['id' => 'prod2', 'name' => 'Product 2'],
+                    ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription'],
+                    ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time'],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getProductList(10);
+        $list = RevenueCat::getProductList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
     });
 
     test('createProduct calls products()->create() with correct parameters', function () {
@@ -636,16 +624,21 @@ describe('Product Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/products' => Http::response([
                 'object' => 'product',
                 'id' => 'new-product-id',
-                'name' => 'New Product',
+                'store_identifier' => 'sku',
+                'type' => 'subscription',
             ], 201),
         ]);
 
-        $data = ['name' => 'New Product', 'description' => 'A new product'];
-        $response = RevenueCat::createProduct($data);
+        $data = [
+            'store_identifier' => 'sku',
+            'app_id' => 'app123',
+            'type' => 'subscription',
+            'display_name' => 'Premium',
+        ];
+        $product = RevenueCat::createProduct($data);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('new-product-id');
+        expect($product)->toBeInstanceOf(ProductData::class);
+        expect($product->getId())->toBe('new-product-id');
     });
 
     test('deleteProduct calls products()->delete() with correct parameters', function () {
@@ -657,11 +650,9 @@ describe('Product Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::deleteProduct('test-product-id');
+        $deleted = RevenueCat::deleteProduct('test-product-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('deleted_at'))->toBe(1658399423658);
+        expect($deleted)->toBeTrue();
     });
 });
 
@@ -670,18 +661,18 @@ describe('Project Convenience Methods', function () {
         Http::fake([
             'https://api.example.com/v2/projects?limit=10' => Http::response([
                 'object' => 'list',
-                'items' => [
+                'projects' => [
                     ['id' => 'proj1', 'name' => 'Project 1'],
                     ['id' => 'proj2', 'name' => 'Project 2'],
                 ],
+                'url' => '/v2/projects',
             ], 200),
         ]);
 
-        $response = RevenueCat::getProjectList(10);
+        $list = RevenueCat::getProjectList(10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
     });
 });
 
@@ -691,15 +682,16 @@ describe('Purchase Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/purchases/test-purchase-id' => Http::response([
                 'object' => 'purchase',
                 'id' => 'test-purchase-id',
-                'amount' => 9.99,
+                'customer_id' => 'cust',
+                'product_id' => 'prod',
+                'purchased_at' => 1658399423658,
             ], 200),
         ]);
 
-        $response = RevenueCat::getPurchase('test-purchase-id');
+        $purchase = RevenueCat::getPurchase('test-purchase-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-purchase-id');
+        expect($purchase)->toBeInstanceOf(PurchaseData::class);
+        expect($purchase->getId())->toBe('test-purchase-id');
     });
 
     test('getPurchaseEntitlements calls purchases()->listOfEntitlements() with correct parameters', function () {
@@ -731,11 +723,10 @@ describe('Subscription Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getSubscription('test-subscription-id');
+        $sub = RevenueCat::getSubscription('test-subscription-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('id'))->toBe('test-subscription-id');
+        expect($sub)->toBeInstanceOf(SubscriptionData::class);
+
     });
 
     test('getSubscriptionEntitlements calls subscriptions()->listOfEntitlements() with correct parameters', function () {
@@ -824,15 +815,15 @@ describe('Subscription Convenience Methods', function () {
 describe('Trait Integration', function () {
     test('convenience methods delegate to the correct endpoint methods', function () {
         Http::fake([
-            'https://api.example.com/v2/projects/test_project/apps/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/customers/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/entitlements/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/offerings/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/packages/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/products/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects*' => Http::response(['object' => 'list', 'items' => []], 200),
-            'https://api.example.com/v2/projects/test_project/purchases/test-id' => Http::response(['id' => 'test-id'], 200),
-            'https://api.example.com/v2/projects/test_project/subscriptions/test-id' => Http::response(['id' => 'test-id'], 200),
+            'https://api.example.com/v2/projects/test_project/apps/test-id' => Http::response(['object' => 'app', 'id' => 'test-id'], 200),
+            'https://api.example.com/v2/projects/test_project/customers/test-id' => Http::response(['object' => 'customer', 'id' => 'test-id'], 200),
+            'https://api.example.com/v2/projects/test_project/entitlements/test-id' => Http::response(['object' => 'entitlement', 'id' => 'test-id'], 200),
+            'https://api.example.com/v2/projects/test_project/offerings/test-id' => Http::response(['object' => 'offering', 'id' => 'test-id', 'lookup_key' => 'lk', 'display_name' => 'dn'], 200),
+            'https://api.example.com/v2/projects/test_project/packages/test-id' => Http::response(['object' => 'package', 'id' => 'test-id', 'lookup_key' => 'lk', 'display_name' => 'dn', 'position' => 1], 200),
+            'https://api.example.com/v2/projects/test_project/products/test-id' => Http::response(['object' => 'product', 'id' => 'test-id', 'store_identifier' => 'sku', 'type' => 'subscription'], 200),
+            'https://api.example.com/v2/projects?limit=1' => Http::response(['object' => 'list', 'projects' => [], 'url' => '/v2/projects'], 200),
+            'https://api.example.com/v2/projects/test_project/purchases/test-id' => Http::response(['object' => 'purchase', 'id' => 'test-id', 'customer_id' => 'c', 'product_id' => 'p', 'purchased_at' => 1], 200),
+            'https://api.example.com/v2/projects/test_project/subscriptions/test-id' => Http::response(['object' => 'subscription', 'id' => 'test-id'], 200),
         ]);
 
         // Test that all endpoint methods work via facade
@@ -846,14 +837,14 @@ describe('Trait Integration', function () {
         $purchaseResponse = RevenueCat::getPurchase('test-id');
         $subscriptionResponse = RevenueCat::getSubscription('test-id');
 
-        expect($appResponse->successful())->toBeTrue();
-        expect($customerResponse->successful())->toBeTrue();
-        expect($entitlementResponse->successful())->toBeTrue();
-        expect($offeringResponse->successful())->toBeTrue();
-        expect($packageResponse->successful())->toBeTrue();
-        expect($productResponse->successful())->toBeTrue();
-        expect($projectResponse->successful())->toBeTrue();
-        expect($purchaseResponse->successful())->toBeTrue();
-        expect($subscriptionResponse->successful())->toBeTrue();
+        expect($appResponse)->toBeInstanceOf(AppData::class);
+        expect($customerResponse)->toBeInstanceOf(CustomerData::class);
+        expect($entitlementResponse)->toBeInstanceOf(EntitlementData::class);
+        expect($offeringResponse)->toBeInstanceOf(OfferingData::class);
+        expect($packageResponse)->toBeInstanceOf(PackageData::class);
+        expect($productResponse)->toBeInstanceOf(ProductData::class);
+        expect($projectResponse)->toBeInstanceOf(ListPage::class);
+        expect($purchaseResponse)->toBeInstanceOf(PurchaseData::class);
+        expect($subscriptionResponse)->toBeInstanceOf(SubscriptionData::class);
     });
 });

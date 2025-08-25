@@ -1,5 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\CustomerData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -14,67 +16,68 @@ beforeEach(function () {
     ]);
 });
 
-test('list returns response from client', function () {
+test('list returns ListPage of CustomerData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers?limit=10' => Http::response([
-            'customers' => [
-                ['id' => 'customer1', 'app_user_id' => 'user1'],
-                ['id' => 'customer2', 'app_user_id' => 'user2'],
+            'object' => 'list',
+            'items' => [
+                ['id' => 'customer1'],
+                ['id' => 'customer2'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/customers',
         ], 200),
     ]);
 
-    $response = RevenueCat::customers()->list(10);
+    $list = RevenueCat::customers()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('customers'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
-test('create returns response from client', function () {
+test('create returns CustomerData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers' => Http::response([
+            'object' => 'customer',
             'id' => 'new_customer_id',
-            'app_user_id' => 'new_user',
-            'created_at' => '2024-01-01T00:00:00Z',
         ], 201),
     ]);
 
-    $data = ['app_user_id' => 'new_user', 'email' => 'test@example.com'];
-    $response = RevenueCat::customers()->create($data);
+    $data = ['id' => 'new_customer_id', 'attributes' => [['name' => '$email', 'value' => 'test@example.com']]];
+    $customer = RevenueCat::customers()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('new_customer_id');
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('new_customer_id');
 });
 
-test('get returns response from client with encoded customer id', function () {
+test('get returns CustomerData with encoded customer id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([
+            'object' => 'customer',
             'id' => 'test-customer-id',
-            'app_user_id' => 'test_user',
-            'email' => 'test@example.com',
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->get($customerId);
+    $customer = RevenueCat::customers()->get($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-customer-id');
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test-customer-id');
 });
 
-test('delete returns response from client', function () {
+test('delete returns true when deletion succeeds', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([], 204),
+        'https://api.example.com/v2/projects/test_project/customers/test-customer-id' => Http::response([
+            'object' => 'customer',
+            'id' => 'test-customer-id',
+            'deleted_at' => 1658399423658,
+        ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->delete($customerId);
+    $deleted = RevenueCat::customers()->delete($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->status())->toBe(204);
+    expect($deleted)->toBeTrue();
 });
 
 test('listOfSubscriptions returns response from client', function () {
@@ -188,29 +191,30 @@ test('listOfAttributes returns response from client', function () {
 test('get method properly encodes special characters in customer id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test%20customer%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'customer',
             'id' => 'test customer with spaces & special chars',
-            'app_user_id' => 'special_user',
         ], 200),
     ]);
 
     $customerId = 'test customer with spaces & special chars';
-    $response = RevenueCat::customers()->get($customerId);
+    $customer = RevenueCat::customers()->get($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test customer with spaces & special chars');
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test customer with spaces & special chars');
 });
 
 test('list method works with empty query array', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers' => Http::response([
-            'customers' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/customers',
         ], 200),
     ]);
 
-    $response = RevenueCat::customers()->list();
+    $list = RevenueCat::customers()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('customers'))->toBe([]);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(0);
 });

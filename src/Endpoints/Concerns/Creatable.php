@@ -12,11 +12,11 @@ trait Creatable
     abstract protected function basePath(): string;
 
     /**
-     * Create a resource.
+     * Create a resource (raw Response).
      *
      * @param  array<string, mixed>  $data
      */
-    public function create(array $data): Response
+    public function createRaw(array $data): Response
     {
         return $this->client()->post($this->basePath(), $data);
     }

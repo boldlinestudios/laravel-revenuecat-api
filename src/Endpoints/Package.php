@@ -2,6 +2,8 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\PackageData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
@@ -31,6 +33,38 @@ class Package
     }
 
     /**
+     * Create a package.
+     *
+     * @param array{
+     *   lookup_key: string,
+     *   display_name: string,
+     *   position: int,
+     * } $data Package payload with lookup key, display name, and position.
+     */
+    public function create(array $data): PackageData
+    {
+        return PackageData::fromResponse($this->createRaw($data));
+    }
+
+    public function get(string $appId): PackageData
+    {
+        return PackageData::fromResponse($this->getRaw($appId));
+    }
+
+    /**
+     * Update a package.
+     *
+     * @param array{
+     *   display_name: string,
+     *   position: int,
+     * } $data Package payload with display name and position.
+     */
+    public function update(string $id, array $data): PackageData
+    {
+        return PackageData::fromResponse($this->updateRaw($id, $data));
+    }
+
+    /**
      * Get a list of products attached to a given package of an offering
      */
     public function listOfProducts(string $packageId): Response
@@ -38,5 +72,14 @@ class Package
         $packageId = rawurlencode($packageId);
 
         return $this->client->get("/packages/{$packageId}/products");
+    }
+
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<PackageData>
+     */
+    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    {
+        return $this->listAsDto(PackageData::class, $limit, $startingAfter, $extra);
     }
 }

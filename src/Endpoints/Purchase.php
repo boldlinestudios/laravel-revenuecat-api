@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
@@ -20,6 +21,11 @@ class Purchase
     protected function basePath(): string
     {
         return '/purchases';
+    }
+
+    public function get(string $purchaseId): PurchaseData
+    {
+        return PurchaseData::fromResponse($this->getRaw($purchaseId));
     }
 
     /**

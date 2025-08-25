@@ -12,9 +12,9 @@ trait Retrievable
     abstract protected function basePath(): string;
 
     /**
-     * Get a resource by id.
+     * Get a resource by id (raw Response).
      */
-    public function get(string $id): Response
+    public function getRaw(string $id): Response
     {
         $id = rawurlencode($id);
 

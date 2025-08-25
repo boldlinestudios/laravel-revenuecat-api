@@ -1,7 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -14,67 +14,75 @@ beforeEach(function () {
     ]);
 });
 
-test('list returns response from client', function () {
+test('list returns ListPage of ProjectData', function () {
     Http::fake([
         'https://api.example.com/v2/projects?limit=10' => Http::response([
+            'object' => 'list',
             'projects' => [
                 ['id' => 'project1', 'name' => 'Test Project 1'],
                 ['id' => 'project2', 'name' => 'Test Project 2'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects',
         ], 200),
     ]);
 
-    $response = RevenueCat::projects()->list(10);
+    $list = RevenueCat::projects()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('projects'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
 test('list method works with empty query array', function () {
     Http::fake([
         'https://api.example.com/v2/projects' => Http::response([
+            'object' => 'list',
             'projects' => [],
+            'next_page' => null,
+            'url' => '/v2/projects',
         ], 200),
     ]);
 
-    $response = RevenueCat::projects()->list();
+    $list = RevenueCat::projects()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('projects'))->toBe([]);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(0);
 });
 
 test('list method works with no parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects' => Http::response([
+            'object' => 'list',
             'projects' => [
                 ['id' => 'project1', 'name' => 'Test Project 1'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects',
         ], 200),
     ]);
 
-    $response = RevenueCat::projects()->list();
+    $list = RevenueCat::projects()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('projects'))->toHaveCount(1);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(1);
 });
 
 test('list method works with no parameters using class method', function () {
     Http::fake([
         'https://api.example.com/v2/projects' => Http::response([
+            'object' => 'list',
             'projects' => [
                 ['id' => 'project1', 'name' => 'Test Project 1'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects',
         ], 200),
     ]);
 
     $client = app(\BoldlineStudios\RevenueCatApi\Http\RevenueCatClient::class);
 
-    $response = $client->projects()->list();
+    $list = $client->projects()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('projects'))->toHaveCount(1);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(1);
 });

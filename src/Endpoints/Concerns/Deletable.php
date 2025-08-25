@@ -14,7 +14,20 @@ trait Deletable
     /**
      * Delete a resource by id.
      */
-    public function delete(string $id): Response
+    public function delete(string $id): bool
+    {
+        $response = $this->deleteRaw($id);
+        $payload = $response->json();
+
+        return is_array($payload)
+            && array_key_exists('deleted_at', $payload)
+            && is_numeric($payload['deleted_at']);
+    }
+
+    /**
+     * Delete a resource by id (raw Response).
+     */
+    public function deleteRaw(string $id): Response
     {
         $id = rawurlencode($id);
 

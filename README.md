@@ -33,44 +33,48 @@ REVENUECAT_TIMEOUT=30
 
 ### Using the Facade
 
-#### 1) Endpoint-style (fluent)
+#### 1) Endpoint-style (fluent, returns DTOs)
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Apps
-$app = RevenueCat::apps()->get('app_id');
-$apps = RevenueCat::apps()->list(10); // (int $limit = 20, ?string $startingAfter = null, array $extra = [])
+$app = RevenueCat::apps()->get('app_id'); // AppData
+$appsPage = RevenueCat::apps()->list(10); // ListPage<AppData>
+
+// Access DTO fields
+$app->getId();
+$app->getName();
+foreach ($appsPage->items() as $a) { /* $a is AppData */ }
 
 // Customers
-$customer = RevenueCat::customers()->get('customer_id');
-$customers = RevenueCat::customers()->list(25);
+$customer = RevenueCat::customers()->get('customer_id'); // CustomerData
+$customers = RevenueCat::customers()->list(25); // ListPage<CustomerData>
 
 // Other endpoints
-$entitlements = RevenueCat::entitlements()->list();
-$offerings = RevenueCat::offerings()->list();
-$products = RevenueCat::products()->list();
-$packages = RevenueCat::packages()->list();
-$projects = RevenueCat::projects()->list(5);
-
+$entitlements = RevenueCat::entitlements()->list(); // ListPage<EntitlementData>
+$offerings = RevenueCat::offerings()->list(); // ListPage<OfferingData>
+$products = RevenueCat::products()->list(); // ListPage<ProductData>
+$packages = RevenueCat::packages()->list(); // ListPage<PackageData>
+$projects = RevenueCat::projects()->list(5); // ListPage<ProjectData>
 ```
 
-#### 2) Convenience-style (direct)
-These map 1:1 to common operations and return `Illuminate\Http\Client\Response`.
+#### 2) Convenience-style (direct, returns DTOs/ListPage where applicable)
+These map 1:1 to common operations and generally return DTOs. Some non-resource calls still return `Illuminate\Http\Client\Response`.
 
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Apps
-$app = RevenueCat::getApp('app_id');
-$apps = RevenueCat::getAppList(10);
-$created = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']);
-RevenueCat::updateApp('app_id', ['name' => 'New Name']);
-RevenueCat::deleteApp('app_id');
+$app = RevenueCat::getApp('app_id'); // AppData
+$apps = RevenueCat::getAppList(10); // ListPage<AppData>
+$created = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']); // AppData
+$updated = RevenueCat::updateApp('app_id', ['name' => 'New Name']); // AppData
+$deleted = RevenueCat::deleteApp('app_id'); // bool
 
 // Customers
-$customer = RevenueCat::getCustomer('customer_id');
-$customers = RevenueCat::getCustomerList(25);
-$subs = RevenueCat::getCustomerSubscriptions('customer_id');
+$customer = RevenueCat::getCustomer('customer_id'); // CustomerData
+// Note: for typed customer list, prefer endpoint style
+$subs = RevenueCat::getCustomerSubscriptions('customer_id'); // Response
 ```
 
 ### Using Dependency Injection
@@ -84,24 +88,22 @@ class SubscriptionController extends Controller
 
     public function show(string $userId)
     {
-        // Endpoint-style
+        // Endpoint-style (CustomerData)
         $customer = $this->client->customers()->get($userId);
 
-        // Or convenience-style
+        // Or convenience-style (CustomerData)
         $customer2 = $this->client->getCustomer($userId);
 
-        return response()->json($customer->json());
+        return response()->json($customer->toArray());
     }
 }
 ```
 
-## Endpoint Examples
+## Endpoint Examples (DTOs)
 
-Below are examples for each endpoint using both styles:
-- Endpoint-style: `RevenueCat::apps()->get('app_id')`
-- Convenience-style: `RevenueCat::getApp('app_id')`
-
-All examples use the facade alias for brevity:
+Below are examples for each endpoint using both styles with DTOs:
+- Endpoint-style: returns DTOs/ListPage
+- Convenience-style: returns DTOs/ListPage for common operations; some utility endpoints return Response
 
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
@@ -109,236 +111,200 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 ### Apps
 ```php
-// Get
-$r = RevenueCat::apps()->get('app_id');
-$r = RevenueCat::getApp('app_id');
+// Get (AppData)
+$app = RevenueCat::apps()->get('app_id');
+$app = RevenueCat::getApp('app_id');
 
-// List
-$r = RevenueCat::apps()->list(10);
-$r = RevenueCat::getAppList(10);
+// List (ListPage<AppData>)
+$apps = RevenueCat::apps()->list(10);
+$apps = RevenueCat::getAppList(10);
 
-// Create
-$r = RevenueCat::apps()->create(['name' => 'My App', 'type' => 'app_store']);
-$r = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']);
+// Create (AppData)
+$created = RevenueCat::apps()->create(['name' => 'My App', 'type' => 'app_store']);
+$created = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']);
 
-// Update
-$r = RevenueCat::apps()->update('app_id', ['name' => 'New Name']);
-$r = RevenueCat::updateApp('app_id', ['name' => 'New Name']);
+// Update (AppData)
+$updated = RevenueCat::apps()->update('app_id', ['name' => 'New Name']);
+$updated = RevenueCat::updateApp('app_id', ['name' => 'New Name']);
 
-// Delete
-$r = RevenueCat::apps()->delete('app_id');
-$r = RevenueCat::deleteApp('app_id');
+// Delete (bool)
+$deleted = RevenueCat::apps()->delete('app_id');
+$deleted = RevenueCat::deleteApp('app_id');
 
-// StoreKit config
-$r = RevenueCat::apps()->storeKitConfig('app_id');
-$r = RevenueCat::getAppStoreKitConfig('app_id');
+// StoreKit config (Response)
+$resp = RevenueCat::apps()->storeKitConfig('app_id');
+$resp = RevenueCat::getAppStoreKitConfig('app_id');
 
-// Public API keys
-$r = RevenueCat::apps()->listOfPublicKeys('app_id');
-$r = RevenueCat::getAppPublicKeys('app_id');
+// Public API keys (Response)
+$resp = RevenueCat::apps()->listOfPublicKeys('app_id');
+$resp = RevenueCat::getAppPublicKeys('app_id');
 ```
 
 ### Customers
 ```php
-// Get
-$r = RevenueCat::customers()->get('customer_id');
-$r = RevenueCat::getCustomer('customer_id');
+// Get (CustomerData)
+$customer = RevenueCat::customers()->get('customer_id');
+$customer = RevenueCat::getCustomer('customer_id');
 
-// List
-$r = RevenueCat::customers()->list(25);
-$r = RevenueCat::getCustomerList(25);
+// List (ListPage<CustomerData>)
+$customers = RevenueCat::customers()->list(25);
 
-// Create
-$r = RevenueCat::customers()->create(['name' => 'Jane']);
-$r = RevenueCat::createCustomer(['name' => 'Jane']);
+// Create (CustomerData)
+$created = RevenueCat::customers()->create([
+  'id' => 'customer_id',
+  'attributes' => [['name' => '$email', 'value' => 'me@example.com']],
+]);
 
-// Delete
-$r = RevenueCat::customers()->delete('customer_id');
-$r = RevenueCat::deleteCustomer('customer_id');
+// Delete (bool)
+$deleted = RevenueCat::customers()->delete('customer_id');
+$deleted = RevenueCat::deleteCustomer('customer_id');
 
-// Subscriptions
-$r = RevenueCat::customers()->listOfSubscriptions('customer_id');
-$r = RevenueCat::getCustomerSubscriptions('customer_id');
-
-// Purchases
-$r = RevenueCat::customers()->listOfPurchases('customer_id');
-$r = RevenueCat::getCustomerPurchases('customer_id');
-
-// Active entitlements
-$r = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
-$r = RevenueCat::getCustomerActiveEntitlements('customer_id');
-
-// Aliases
-$r = RevenueCat::customers()->listOfAliases('customer_id');
-$r = RevenueCat::getCustomerAliases('customer_id');
-
-// Virtual currency balances
-$r = RevenueCat::customers()->listOfVirtualCurrencyBalances('customer_id');
-$r = RevenueCat::getCustomerVirtualCurrencyBalances('customer_id');
-
-// Attributes
-$r = RevenueCat::customers()->listOfAttributes('customer_id');
-$r = RevenueCat::getCustomerAttributes('customer_id');
+// Subscriptions (Response)
+$resp = RevenueCat::customers()->listOfSubscriptions('customer_id');
+$resp = RevenueCat::getCustomerSubscriptions('customer_id');
 ```
 
 ### Entitlements
 ```php
-// Get
-$r = RevenueCat::entitlements()->get('entitlement_id');
-$r = RevenueCat::getEntitlement('entitlement_id');
+// Get (EntitlementData)
+$ent = RevenueCat::entitlements()->get('entitlement_id');
+$ent = RevenueCat::getEntitlement('entitlement_id');
 
-// List
-$r = RevenueCat::entitlements()->list(10);
-$r = RevenueCat::getEntitlementList(10);
+// List (ListPage<EntitlementData>)
+$ents = RevenueCat::entitlements()->list(10);
+$ents = RevenueCat::getEntitlementList(10);
 
-// Create
-$r = RevenueCat::entitlements()->create(['identifier' => 'premium']);
-$r = RevenueCat::createEntitlement(['identifier' => 'premium']);
+// Create/Update (EntitlementData)
+$created = RevenueCat::entitlements()->create(['lookup_key' => 'premium', 'display_name' => 'Premium']);
+$updated = RevenueCat::entitlements()->update('entitlement_id', ['display_name' => 'Pro']);
 
-// Update
-$r = RevenueCat::entitlements()->update('entitlement_id', ['identifier' => 'pro']);
-$r = RevenueCat::updateEntitlement('entitlement_id', ['identifier' => 'pro']);
+// Delete (bool)
+$deleted = RevenueCat::entitlements()->delete('entitlement_id');
+$deleted = RevenueCat::deleteEntitlement('entitlement_id');
 
-// Delete
-$r = RevenueCat::entitlements()->delete('entitlement_id');
-$r = RevenueCat::deleteEntitlement('entitlement_id');
-
-// Products for entitlement
-$r = RevenueCat::entitlements()->listOfProducts('entitlement_id');
-$r = RevenueCat::getEntitlementProducts('entitlement_id');
+// Products for entitlement (Response)
+$resp = RevenueCat::entitlements()->listOfProducts('entitlement_id');
+$resp = RevenueCat::getEntitlementProducts('entitlement_id');
 ```
 
 ### Offerings
 ```php
-// Get
-$r = RevenueCat::offerings()->get('offering_id');
-$r = RevenueCat::getOffering('offering_id');
+// Get (OfferingData)
+$offering = RevenueCat::offerings()->get('offering_id');
+$offering = RevenueCat::getOffering('offering_id');
 
-// List
-$r = RevenueCat::offerings()->list(10);
-$r = RevenueCat::getOfferingList(10);
+// List (ListPage<OfferingData>)
+$offerings = RevenueCat::offerings()->list(10);
+$offerings = RevenueCat::getOfferingList(10);
 
-// Create
-$r = RevenueCat::offerings()->create(['name' => 'Basic']);
-$r = RevenueCat::createOffering(['name' => 'Basic']);
+// Create/Update (OfferingData)
+$created = RevenueCat::offerings()->create(['lookup_key' => 'basic', 'display_name' => 'Basic']);
+$updated = RevenueCat::offerings()->update('offering_id', ['display_name' => 'Pro']);
 
-// Update
-$r = RevenueCat::offerings()->update('offering_id', ['name' => 'Pro']);
-$r = RevenueCat::updateOffering('offering_id', ['name' => 'Pro']);
-
-// Delete
-$r = RevenueCat::offerings()->delete('offering_id');
-$r = RevenueCat::deleteOffering('offering_id');
+// Delete (bool)
+$deleted = RevenueCat::offerings()->delete('offering_id');
+$deleted = RevenueCat::deleteOffering('offering_id');
 ```
 
 ### Packages
 ```php
-// Get
-$r = RevenueCat::packages()->get('package_id');
-$r = RevenueCat::getPackage('package_id');
+// Get (PackageData)
+$pkg = RevenueCat::packages()->get('package_id');
+$pkg = RevenueCat::getPackage('package_id');
 
-// List
-$r = RevenueCat::packages()->list(10);
-$r = RevenueCat::getPackageList(10);
+// List (ListPage<PackageData>)
+$pkgs = RevenueCat::packages()->list(10);
+$pkgs = RevenueCat::getPackageList(10);
 
-// Create
-$r = RevenueCat::packages()->create(['name' => 'Gold']);
-$r = RevenueCat::createPackage(['name' => 'Gold']);
+// Create/Update (PackageData)
+$created = RevenueCat::packages()->create(['lookup_key' => 'gold', 'display_name' => 'Gold', 'position' => 1]);
+$updated = RevenueCat::packages()->update('package_id', ['display_name' => 'Platinum', 'position' => 2]);
 
-// Update
-$r = RevenueCat::packages()->update('package_id', ['name' => 'Platinum']);
-$r = RevenueCat::updatePackage('package_id', ['name' => 'Platinum']);
+// Delete (bool)
+$deleted = RevenueCat::packages()->delete('package_id');
+$deleted = RevenueCat::deletePackage('package_id');
 
-// Delete
-$r = RevenueCat::packages()->delete('package_id');
-$r = RevenueCat::deletePackage('package_id');
-
-// Products in a package
-$r = RevenueCat::packages()->listOfProducts('package_id');
-$r = RevenueCat::getPackageProducts('package_id');
+// Products in a package (Response)
+$resp = RevenueCat::packages()->listOfProducts('package_id');
+$resp = RevenueCat::getPackageProducts('package_id');
 ```
 
 ### Products
 ```php
-// Get
-$r = RevenueCat::products()->get('product_id');
-$r = RevenueCat::getProduct('product_id');
+// Get (ProductData)
+$product = RevenueCat::products()->get('product_id');
+$product = RevenueCat::getProduct('product_id');
 
-// List
-$r = RevenueCat::products()->list(10);
-$r = RevenueCat::getProductList(10);
+// List (ListPage<ProductData>)
+$products = RevenueCat::products()->list(10);
+$products = RevenueCat::getProductList(10);
 
-// Create
-$r = RevenueCat::products()->create(['name' => 'Monthly']);
-$r = RevenueCat::createProduct(['name' => 'Monthly']);
+// Create (ProductData)
+$created = RevenueCat::products()->create([
+  'store_identifier' => 'rc_1w_199',
+  'app_id' => 'app_id',
+  'type' => 'subscription',
+]);
 
-// Delete
-$r = RevenueCat::products()->delete('product_id');
-$r = RevenueCat::deleteProduct('product_id');
+// Delete (bool)
+$deleted = RevenueCat::products()->delete('product_id');
+$deleted = RevenueCat::deleteProduct('product_id');
 ```
 
 ### Projects
 ```php
-// List projects (not project-scoped)
-$r = RevenueCat::projects()->list(5);
-$r = RevenueCat::getProjectList(5);
+// List projects (ListPage<ProjectData>, not project-scoped)
+$projects = RevenueCat::projects()->list(5);
+$projects = RevenueCat::getProjectList(5);
 ```
 
 ### Purchases
 ```php
-// Get purchase
-$r = RevenueCat::purchases()->get('purchase_id');
-$r = RevenueCat::getPurchase('purchase_id');
+// Get purchase (PurchaseData)
+$purchase = RevenueCat::purchases()->get('purchase_id');
+$purchase = RevenueCat::getPurchase('purchase_id');
 
-// Entitlements for a purchase
-$r = RevenueCat::purchases()->listOfEntitlements('purchase_id');
-$r = RevenueCat::getPurchaseEntitlements('purchase_id');
+// Entitlements for a purchase (Response)
+$resp = RevenueCat::purchases()->listOfEntitlements('purchase_id');
+$resp = RevenueCat::getPurchaseEntitlements('purchase_id');
 ```
 
 ### Subscriptions
 ```php
-// Get subscription
-$r = RevenueCat::subscriptions()->get('subscription_id');
-$r = RevenueCat::getSubscription('subscription_id');
+// Get subscription (SubscriptionData)
+$sub = RevenueCat::subscriptions()->get('subscription_id');
+$sub = RevenueCat::getSubscription('subscription_id');
 
-// Entitlements for a subscription
-$r = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
-$r = RevenueCat::getSubscriptionEntitlements('subscription_id');
+// Entitlements for a subscription (Response)
+$resp = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
+$resp = RevenueCat::getSubscriptionEntitlements('subscription_id');
 
-// Transactions for a subscription
-$r = RevenueCat::subscriptions()->listOfTransactions('subscription_id');
-$r = RevenueCat::getSubscriptionTransactions('subscription_id');
+// Transactions for a subscription (Response)
+$resp = RevenueCat::subscriptions()->listOfTransactions('subscription_id');
+$resp = RevenueCat::getSubscriptionTransactions('subscription_id');
 
-// Customer portal URL
-$r = RevenueCat::subscriptions()->getCustomerPortalUrl('subscription_id');
-$r = RevenueCat::getSubscriptionCustomerPortalUrl('subscription_id');
+// Customer portal URL (Response)
+$resp = RevenueCat::subscriptions()->getCustomerPortalUrl('subscription_id');
+$resp = RevenueCat::getSubscriptionCustomerPortalUrl('subscription_id');
 
-// Cancel web billing subscription
-$r = RevenueCat::subscriptions()->cancelWebBillingSubscription('subscription_id');
-$r = RevenueCat::cancelWebBillingSubscription('subscription_id');
+// Cancel web billing subscription (Response)
+$resp = RevenueCat::subscriptions()->cancelWebBillingSubscription('subscription_id');
+$resp = RevenueCat::cancelWebBillingSubscription('subscription_id');
 
-// Refund web billing subscription
-$r = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
-$r = RevenueCat::refundWebBillingSubscription('subscription_id');
+// Refund web billing subscription (Response)
+$resp = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
+$resp = RevenueCat::refundWebBillingSubscription('subscription_id');
 ```
 
-## Response Handling
+## Response and DTO Handling
 
-All methods return an `Illuminate\Http\Client\Response` object, which provides methods like:
+- Endpoint-style returns DTOs like `AppData`, `CustomerData`, etc., or `ListPage<T>` for paginated lists.
+- Convenience-style returns DTOs/ListPage for common operations; some utility endpoints return `Response`.
+- DTOs expose typed getters and `toArray()`. Access the raw payload via `getRaw()`.
+- `ListPage<T>` exposes `items(): array<int,T>`, `nextCursor()`, `url()`, and `raw(): Response`.
+- Need the raw response? Use the raw methods on endpoints (e.g., `getRaw`, `listRaw`, `createRaw`, `updateRaw`, `deleteRaw`).
 
-```php
-$response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
-
-if ($response->successful()) {
-    $data = $response->json();
-    // Process the data
-} else {
-    $error = $response->json();
-    // Handle the error (custom exceptions are thrown on non-2xx responses if you use the client directly)
-}
-```
-
-### Error Handling
+## Error Handling
 
 This package throws descriptive exceptions for non-2xx responses based on RevenueCat’s error model. Catch specific types when you need granular handling, or the base type to handle all:
 
@@ -354,19 +320,17 @@ use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;      // 5xx
 use BoldlineStudios\RevenueCatApi\Exceptions\ApiResponseException;      // fallback
 
 try {
-    $response = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
-    $data = $response->json();
+    $customer = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
+    // work with the CustomerData DTO
 } catch (RateLimitException $e) {
     // Inspect rate limit headers
     $retryAt = $e->getReset();
-    // sleep/retry logic here
 } catch (ApiResponseException $e) {
     // Common fields from RevenueCat error payload
     $status = $e->getStatusCode();
     $type = $e->getErrorType();         // e.g. authentication_error, resource_missing
     $docs = $e->getDocsUrl();           // e.g. https://errors.rev.cat/authentication-error
     $details = $e->getDetails();        // full error payload as array
-    // handle/log as needed
 }
 ```
 
@@ -377,7 +341,17 @@ Notes:
 ## Testing
 
 ```bash
-composer test
+./vendor/bin/pest
+```
+
+## Linting
+```bash
+./vendor/bin/pint
+```
+
+## Static Analysis
+```bash
+./vendor/bin/phpstan analyze
 ```
 
 ## Contributing

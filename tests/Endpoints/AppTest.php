@@ -1,5 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -55,7 +57,7 @@ $sampleApp = [
     ],
 ];
 
-test('list returns response from client', function () use ($sampleApp) {
+test('list returns ListPage of AppData', function () use ($sampleApp) {
     $secondApp = array_merge($sampleApp, [
         'id' => 'app2b3c4d5',
         'name' => 'Test App 2',
@@ -71,19 +73,13 @@ test('list returns response from client', function () use ($sampleApp) {
         ], 200),
     ]);
 
-    $response = RevenueCat::apps()->list(10);
+    $list = RevenueCat::apps()->list(10);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('object'))->toBe('list');
-    expect($response->json('items'))->toHaveCount(2);
-    expect($response->json('items.0.object'))->toBe('app');
-    expect($response->json('items.1.type'))->toBe('play_store');
-    expect($response->json('next_page'))->toBe('/v2/projects/test_project/apps?starting_after=app2b3c4d5');
-    expect($response->json('url'))->toBe('/v2/projects/test_project/apps');
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
-test('create returns response from client', function () use ($sampleApp) {
+test('create returns AppData DTO', function () use ($sampleApp) {
     $newApp = array_merge($sampleApp, [
         'id' => 'app_new12345',
         'name' => 'My App Store App',
@@ -105,34 +101,30 @@ test('create returns response from client', function () use ($sampleApp) {
             'subscription_key_issuer' => '5a049d62-1b9b-453c-b605-1988189d8129',
         ],
     ];
-    $response = RevenueCat::apps()->create($data);
+    $app = RevenueCat::apps()->create($data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('app_new12345');
-    expect($response->json('object'))->toBe('app');
-    expect($response->json('type'))->toBe('app_store');
+    expect($app)->toBeInstanceOf(AppData::class);
+    expect($app->getId())->toBe('app_new12345');
+    expect($app->getType())->toBe('app_store');
 });
 
-test('get returns response from client with encoded app id', function () use ($sampleApp) {
+test('get returns AppData with encoded app id', function () use ($sampleApp) {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/apps/test-app-id' => Http::response($sampleApp, 200),
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCat::apps()->get($appId);
+    $app = RevenueCat::apps()->get($appId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('app1a2b3c4');
-    expect($response->json('object'))->toBe('app');
-    expect($response->json('type'))->toBe('app_store');
-    expect($response->json('project_id'))->toBe('proj1a2b3c4');
-    expect($response->json('app_store.bundle_id'))->toBe('com.example.iosapp');
-    expect($response->json('rc_billing.default_currency'))->toBe('USD');
+    expect($app)->toBeInstanceOf(AppData::class);
+    expect($app->getId())->toBe('app1a2b3c4');
+    expect($app->getType())->toBe('app_store');
+    expect($app->getProjectId())->toBe('proj1a2b3c4');
+    expect(($app->getAppStore() ?? [])['bundle_id'] ?? null)->toBe('com.example.iosapp');
+    expect(($app->getRcBilling() ?? [])['default_currency'] ?? null)->toBe('USD');
 });
 
-test('update returns response from client', function () use ($sampleApp) {
+test('update returns AppData DTO', function () use ($sampleApp) {
     $updatedApp = array_merge($sampleApp, [
         'id' => 'test-app-id',
         'name' => 'Updated App Name',
@@ -147,16 +139,14 @@ test('update returns response from client', function () use ($sampleApp) {
 
     $appId = 'test-app-id';
     $data = ['name' => 'Updated App Name'];
-    $response = RevenueCat::apps()->update($appId, $data);
+    $app = RevenueCat::apps()->update($appId, $data);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('name'))->toBe('Updated App Name');
-    expect($response->json('object'))->toBe('app');
-    expect($response->json('app_store.bundle_id'))->toBe('com.example.updatedapp');
+    expect($app)->toBeInstanceOf(AppData::class);
+    expect($app->getName())->toBe('Updated App Name');
+    expect(($app->getAppStore() ?? [])['bundle_id'] ?? null)->toBe('com.example.updatedapp');
 });
 
-test('delete returns response from client', function () {
+test('delete returns true when deletion succeeds', function () {
     $deletedApp = [
         'object' => 'app',
         'id' => 'test-app-id',
@@ -168,13 +158,9 @@ test('delete returns response from client', function () {
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCat::apps()->delete($appId);
+    $deleted = RevenueCat::apps()->delete($appId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('object'))->toBe('app');
-    expect($response->json('id'))->toBe('test-app-id');
-    expect($response->json('deleted_at'))->toBe(1658399423658);
+    expect($deleted)->toBeTrue();
 });
 
 test('storeKitConfig returns response from client', function () {
@@ -237,13 +223,11 @@ test('get method properly encodes special characters in app id', function () use
     ]);
 
     $appId = 'test app with spaces & special chars';
-    $response = RevenueCat::apps()->get($appId);
+    $app = RevenueCat::apps()->get($appId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test app with spaces & special chars');
-    expect($response->json('object'))->toBe('app');
-    expect($response->json('type'))->toBe('app_store');
+    expect($app)->toBeInstanceOf(AppData::class);
+    expect($app->getId())->toBe('test app with spaces & special chars');
+    expect($app->getType())->toBe('app_store');
 });
 
 test('list method works with empty query array', function () {
@@ -256,11 +240,8 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::apps()->list();
+    $list = RevenueCat::apps()->list();
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('object'))->toBe('list');
-    expect($response->json('items'))->toBe([]);
-    expect($response->json('url'))->toBe('/v2/projects/test_project/apps');
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(0);
 });

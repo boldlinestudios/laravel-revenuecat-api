@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
@@ -20,6 +21,11 @@ class Subscription
     protected function basePath(): string
     {
         return '/subscriptions';
+    }
+
+    public function get(string $subscriptionId): SubscriptionData
+    {
+        return SubscriptionData::fromResponse($this->getRaw($subscriptionId));
     }
 
     /**

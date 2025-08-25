@@ -1,5 +1,6 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -25,11 +26,10 @@ test('get returns response from client with encoded subscription id', function (
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCat::subscriptions()->get($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->get($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test-subscription-id');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test-subscription-id');
 });
 
 test('listOfEntitlements returns response from client', function () {
@@ -127,11 +127,10 @@ test('get method properly encodes special characters in subscription id', functi
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCat::subscriptions()->get($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->get($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('id'))->toBe('test subscription with spaces & special chars');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test subscription with spaces & special chars');
 });
 
 test('listOfEntitlements method properly encodes special characters in subscription id', function () {
