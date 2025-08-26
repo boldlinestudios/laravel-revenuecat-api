@@ -43,8 +43,9 @@ test('create returns CustomerData DTO', function () {
         ], 201),
     ]);
 
-    $data = ['id' => 'new_customer_id', 'attributes' => [['name' => '$email', 'value' => 'test@example.com']]];
-    $customer = RevenueCat::customers()->create($data);
+    $customer = RevenueCat::customers()->create('new_customer_id', [
+        ['name' => '$email', 'value' => 'test@example.com'],
+    ]);
 
     expect($customer)->toBeInstanceOf(CustomerData::class);
     expect($customer->getId())->toBe('new_customer_id');
@@ -217,4 +218,11 @@ test('list method works with empty query array', function () {
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(0);
+});
+
+test('create throws if attributes is not a list', function () {
+    expect(fn () => RevenueCat::customers()->create('bad_id', [
+        'name' => '$email',
+        'value' => 'test@example.com',
+    ]))->toThrow(\InvalidArgumentException::class, 'Attributes must be a list of {name, value} items.');
 });

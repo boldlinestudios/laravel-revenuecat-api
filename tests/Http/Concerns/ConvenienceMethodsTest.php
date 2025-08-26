@@ -174,13 +174,9 @@ describe('Customer Convenience Methods', function () {
             ], 201),
         ]);
 
-        $data = [
-            'id' => 'new-customer-id',
-            'attributes' => [
-                ['name' => '$email', 'value' => 'test@example.com'],
-            ],
-        ];
-        $customer = RevenueCat::createCustomer($data);
+        $customer = RevenueCat::createCustomer('new-customer-id', [
+            ['name' => '$email', 'value' => 'test@example.com'],
+        ]);
 
         expect($customer)->toBeInstanceOf(CustomerData::class);
         expect($customer->getId())->toBe('new-customer-id');

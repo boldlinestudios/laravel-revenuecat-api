@@ -99,14 +99,11 @@ trait ConvenienceMethods
     /**
      * Create a customer.
      *
-     * @param array{
-     *   id: string,
-     *   attributes: list<array{name: string, value: string}>
-     * } $data Customer payload with ID and attributes.
+     * @param  list<array{name: string, value: string}>  $attributes
      */
-    public function createCustomer(array $data): CustomerData
+    public function createCustomer(string $id, array $attributes): CustomerData
     {
-        return $this->customers()->create($data);
+        return $this->customers()->create($id, $attributes);
     }
 
     public function deleteCustomer(string $customerId): bool

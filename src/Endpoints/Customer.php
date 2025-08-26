@@ -31,16 +31,42 @@ class Customer
     }
 
     /**
+     * @param  array<int|string, mixed>  $attributes
+     * @return list<array{name: string, value: string}>
+     */
+    private function validateAttributes(array $attributes): array
+    {
+        if (! array_is_list($attributes)) {
+            throw new \InvalidArgumentException('Attributes must be a list of {name, value} items.');
+        }
+
+        foreach ($attributes as $item) {
+            if (! is_array($item)
+                || ! array_key_exists('name', $item)
+                || ! array_key_exists('value', $item)
+                || ! is_string($item['name'])
+                || ! is_string($item['value'])
+            ) {
+                throw new \InvalidArgumentException('Each attribute must be an array with string keys "name" and "value".');
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Create a customer.
      *
-     * @param array{
-     *   id: string,
-     *   attributes: list<array{name: string, value: string}>
-     * } $data Customer payload with ID and attributes.
+     * @param  list<array{name: string, value: string}>  $attributes
      */
-    public function create(array $data): CustomerData
+    public function create(string $id, array $attributes): CustomerData
     {
-        return CustomerData::fromResponse($this->createRaw($data));
+        return CustomerData::fromResponse(
+            $this->createRaw([
+                'id' => $id,
+                'attributes' => $this->validateAttributes($attributes),
+            ])
+        );
     }
 
     public function get(string $customerId): CustomerData
