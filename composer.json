@@ -1,6 +1,6 @@
 {
     "name": "boldlinestudios/laravel-revenuecat-api",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Laravel wrapper for the RevenueCat API 2.0",
     "type": "library",
     "license": "MIT",
@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "illuminate/support": "^11.0 || ^12.0"
     },
     "require-dev": {
