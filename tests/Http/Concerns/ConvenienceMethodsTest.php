@@ -468,14 +468,17 @@ describe('Offering Convenience Methods', function () {
                 'id' => 'test-offering-id',
                 'lookup_key' => 'basic',
                 'display_name' => 'Updated Plan',
+                'is_current' => true,
+                'metadata' => ['color' => 'red'],
             ], 200),
         ]);
 
-        $data = ['lookup_key' => 'basic', 'display_name' => 'Updated Plan'];
-        $offering = RevenueCat::updateOffering('test-offering-id', $data);
+        $offering = RevenueCat::updateOffering('test-offering-id', 'Updated Plan', true, ['color' => 'red']);
 
         expect($offering)->toBeInstanceOf(OfferingData::class);
         expect($offering->getDisplayName())->toBe('Updated Plan');
+        expect($offering->isCurrent())->toBeTrue();
+        expect($offering->getMetadata())->toBe(['color' => 'red']);
     });
 
     test('deleteOffering calls offerings()->delete() with correct parameters', function () {

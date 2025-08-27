@@ -83,15 +83,23 @@ test('update returns OfferingData DTO', function () {
             'id' => 'test-offering-id',
             'lookup_key' => 'premium_plus',
             'display_name' => 'Updated premium offering',
+            'is_current' => true,
+            'metadata' => ['color' => 'red'],
         ], 200),
     ]);
 
     $offeringId = 'test-offering-id';
-    $data = ['lookup_key' => 'premium_plus', 'display_name' => 'Updated premium offering'];
-    $offering = RevenueCat::offerings()->update($offeringId, $data);
+    $offering = RevenueCat::offerings()->update(
+        $offeringId,
+        'Updated premium offering',
+        true,
+        ['color' => 'red']
+    );
 
     expect($offering)->toBeInstanceOf(OfferingData::class);
     expect($offering->getDisplayName())->toBe('Updated premium offering');
+    expect($offering->isCurrent())->toBeTrue();
+    expect($offering->getMetadata())->toBe(['color' => 'red']);
 });
 
 test('delete returns true when deletion succeeds', function () {

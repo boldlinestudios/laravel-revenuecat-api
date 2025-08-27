@@ -60,14 +60,25 @@ class Offering
     }
 
     /**
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   metadata?: array<string, mixed>
-     * } $data Offering payload with lookup key, display name, and metadata.
+     *  Update an offering.
+     *
+     * @param  array<string, mixed>|null  $metadata
+     *
+     * Note: any null values will be ignored and not updated
      */
-    public function update(string $offeringId, array $data): OfferingData
+    public function update(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata = []): OfferingData
     {
+        $data = [];
+        if ($displayName) {
+            $data['display_name'] = $displayName;
+        }
+        if ($isCurrent) {
+            $data['is_current'] = $isCurrent;
+        }
+        if ($metadata) {
+            $data['metadata'] = $metadata;
+        }
+
         return OfferingData::fromResponse($this->updateRaw($offeringId, $data));
     }
 }

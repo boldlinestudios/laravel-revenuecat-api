@@ -202,15 +202,13 @@ trait ConvenienceMethods
     /**
      * Update an offering.
      *
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   metadata?: array<string, mixed>
-     * } $data Offering payload with lookup key, display name, and metadata.
+     * @param  array<string, mixed>|null  $metadata
+     *
+     * Note: any null values will be ignored and not updated
      */
-    public function updateOffering(string $offeringId, array $data): OfferingData
+    public function updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata = []): OfferingData
     {
-        return $this->offerings()->update($offeringId, $data);
+        return $this->offerings()->update($offeringId, $displayName, $isCurrent, $metadata);
     }
 
     public function deleteOffering(string $offeringId): bool
