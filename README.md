@@ -1,20 +1,37 @@
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/boldlinestudios/laravel-revenuecat-api.svg)](https://packagist.org/packages/boldlinestudios/laravel-revenuecat-api)
+
+
 # Laravel RevenueCat API
 
-A Laravel package that provides a clean, fully-typed wrapper for the RevenueCat API v2.  
-Built for production apps, using DTOs, exceptions, and first-class Laravel integration.
+A package that provides a clean, fully-typed wrapper for the RevenueCat API v2.
+It provides typed DTOs, exceptions, and is designed for Laravel apps.
 
 > **Note:** This is not an official package of RevenueCat or Laravel.
+
+## Why use this package?
+
+- This package gives you typed objects so your IDE and static analysis can help.  
+
+- Common operations are available as simple methods
+
+- Error handling follows RevenueCat’s own model 
+
+- The underlying response is available if you need full control.
 
 ## Quick Example
 
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
-$customer = RevenueCat::getCustomer('cust_123');
+$subscription = RevenueCat::getSubscription('sub1ab2c3d4e5');
 
-echo $customer->getId();    // "cust_123"
-echo $customer->getEmail(); // "me@example.com"
+echo $subscription->getCustomerId();    // "19b8de26-77c1-49f1-aa18-019a391603e2"
+echo $subscription->getProductId();     // "prod_1ab2c3d4e5"
+echo $subscription->givesAccess();      // true
 ```
+
+For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
 
 ## Installation
 
@@ -23,6 +40,11 @@ You can install the package via composer:
 ```bash
 composer require boldlinestudios/laravel-revenuecat-api
 ```
+
+## Requirements
+
+- PHP 8.2+
+- Laravel 11+
 
 ## Configuration
 
@@ -43,119 +65,81 @@ REVENUECAT_TIMEOUT=30
 
 ## Usage
 
-### Using the Facade
+You can call methods in two ways. Both return the same results, so use whichever feels clearer.
 
 #### 1) Endpoint-style
+Organized by resource, similar to the REST API.
+
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
-// Apps
-$app = RevenueCat::apps()->get('app_id'); // AppData
-$appsPage = RevenueCat::apps()->list(10); // ListPage<AppData>
-
-// Access DTO fields
-$app->getId();
-$app->getName();
-foreach ($appsPage->items() as $a) { /* $a is AppData */ }
-
-// Customers
 $customer = RevenueCat::customers()->get('customer_id'); // CustomerData
 $customers = RevenueCat::customers()->list(25); // ListPage<CustomerData>
 
-// Other endpoints
-$entitlements = RevenueCat::entitlements()->list(); // ListPage<EntitlementData>
-$offerings = RevenueCat::offerings()->list(); // ListPage<OfferingData>
-$products = RevenueCat::products()->list(); // ListPage<ProductData>
-$packages = RevenueCat::packages()->list(); // ListPage<PackageData>
-$projects = RevenueCat::projects()->list(5); // ListPage<ProjectData>
+foreach ($customers->items() as $c) { /* $c is CustomerData */ }
 ```
 
 #### 2) Convenience-style
-These map 1:1 to common operations and generally return DTOs. Some non-resource calls still return `Illuminate\Http\Client\Response`.
+Direct shortcut methods for common operations.
 
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
-// Apps
-$app = RevenueCat::getApp('app_id'); // AppData
-$apps = RevenueCat::getAppList(10); // ListPage<AppData>
-$created = RevenueCat::createApp(['name' => 'My App', 'type' => 'app_store']); // AppData
-$updated = RevenueCat::updateApp('app_id', ['name' => 'New Name']); // AppData
-$deleted = RevenueCat::deleteApp('app_id'); // bool
-
-// Customers
-$customer = RevenueCat::getCustomer('customer_id'); // CustomerData
-// Note: for typed customer list, prefer endpoint style
-$subs = RevenueCat::getCustomerSubscriptions('customer_id'); // Response
+$entitlement = RevenueCat::getEntitlement('entitlement_id'); // EntitlementData
+$entitlements = RevenueCat::getEntitlementList(10); // ListPage<EntitlementData>
+$newEntitlement = RevenueCat::createEntitlement('premium', 'Premium access to all features'); // EntitlementData
 ```
+## Endpoints
 
-### Using Dependency Injection
+Available endpoints:
 
-```php
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient; // Single surface: endpoint + convenience
+- Apps
+- Customers
+- Entitlements
+- Offerings
+- Packages
+- Products
+- Projects
+- Purchases
+- Subscriptions
 
-class SubscriptionController extends Controller
-{
-    public function __construct(private RevenueCatClient $client) {}
-
-    public function show(string $userId)
-    {
-        // Endpoint-style (CustomerData)
-        $customer = $this->client->customers()->get($userId);
-
-        // Or convenience-style (CustomerData)
-        $customer2 = $this->client->getCustomer($userId);
-
-        return response()->json($customer->toArray());
-    }
-}
-```
-
-## Endpoint Examples
-
-For the full catalog of examples, see [ENDPOINTS.md](ENDPOINTS.md).
+For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
 
 ## Response and DTO Handling
 
-- Endpoint-style returns DTOs like `AppData`, `CustomerData`, etc., or `ListPage<T>` for paginated lists.
-- Convenience-style returns DTOs/ListPage for common operations; some utility endpoints return `Response`.
-- DTOs expose typed getters and `toArray()`. Access the raw payload via `getRaw()`.
-- `ListPage<T>` exposes `items(): array<int,T>`, `nextCursor()`, `url()`, and `raw(): Response`.
-- Need the raw response? Use the raw methods on endpoints (e.g., `getRaw`, `listRaw`, `createRaw`, `updateRaw`, `deleteRaw`).
+- Most methods return **DTOs** (`AppData`, `CustomerData`, etc.).  
+- List endpoints return a **`ListPage<T>`** wrapper for pagination.  
+- Some utility endpoints return the raw **`Response`**.
 
-## Error Handling
-
-This package throws descriptive exceptions for non-2xx responses based on RevenueCat’s error model. Catch specific types when you need granular handling, or the base type to handle all:
+DTOs expose typed getters and a `toArray()` method:
 
 ```php
-use BoldlineStudios\RevenueCatApi\Exceptions\BadRequestException;       // 400
-use BoldlineStudios\RevenueCatApi\Exceptions\AuthenticationException;   // 401
-use BoldlineStudios\RevenueCatApi\Exceptions\AuthorizationException;    // 403
-use BoldlineStudios\RevenueCatApi\Exceptions\NotFoundException;         // 404
-use BoldlineStudios\RevenueCatApi\Exceptions\ConflictException;         // 409
-use BoldlineStudios\RevenueCatApi\Exceptions\ValidationException;       // 422
-use BoldlineStudios\RevenueCatApi\Exceptions\RateLimitException;        // 429
-use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;      // 5xx
-use BoldlineStudios\RevenueCatApi\Exceptions\ApiResponseException;      // fallback
+$product = RevenueCat::getProduct('prod_123');
 
-try {
-    $customer = \BoldlineStudios\RevenueCatApi\Facades\RevenueCat::getCustomer('customer_id');
-    // work with the CustomerData DTO
-} catch (RateLimitException $e) {
-    // Inspect rate limit headers
-    $retryAt = $e->getReset();
-} catch (ApiResponseException $e) {
-    // Common fields from RevenueCat error payload
-    $status = $e->getStatusCode();
-    $type = $e->getErrorType();         // e.g. authentication_error, resource_missing
-    $docs = $e->getDocsUrl();           // e.g. https://errors.rev.cat/authentication-error
-    $details = $e->getDetails();        // full error payload as array
-}
+echo $product->getId();
+echo $product->getType();
+
+return $product->toArray();
 ```
 
-Notes:
-- 429 errors expose `getLimit()`, `getRemaining()`, and `getReset()` on the exception.
-- Error payload fields follow RevenueCat docs: `object`, `type`, `message`, `retryable`, `doc_url`, `param`, `backoff_ms`.
+`ListPage<T>` exposes `items(): array<int,T>`, `nextCursor()`, `url()`, and `raw(): Response`.
+
+```php
+$subscriptions = RevenueCat::getSubscriptionList(10);
+```
+## Error Handling
+
+Non-2xx responses throw typed exceptions matching RevenueCat’s error model:
+
+- `BadRequestException` (400)  
+- `AuthenticationException` (401)  
+- `AuthorizationException` (403)  
+- `NotFoundException` (404)  
+- `ConflictException` (409)  
+- `ValidationException` (422)  
+- `RateLimitException` (429)  
+- `ServerErrorException` (5xx)  
+- `ApiResponseException` (fallback for other errors)
 
 ## Testing
 
@@ -179,4 +163,4 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+Released under the [MIT license](LICENSE.md).
