@@ -34,14 +34,14 @@ class Entitlement
 
     /**
      * Create an entitlement.
-     *
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     * } $data Entitlement payload with lookup key and display name.
      */
-    public function create(array $data): EntitlementData
+    public function create(string $lookupKey, string $displayName): EntitlementData
     {
+        $data = [
+            'lookup_key' => $lookupKey,
+            'display_name' => $displayName,
+        ];
+
         return EntitlementData::fromResponse($this->createRaw($data));
     }
 

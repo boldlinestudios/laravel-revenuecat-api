@@ -156,17 +156,9 @@ trait ConvenienceMethods
         return $this->entitlements()->list($limit, $startingAfter, $extra);
     }
 
-    /**
-     * Create an entitlement.
-     *
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     * } $data Entitlement payload with lookup key and display name.
-     */
-    public function createEntitlement(array $data): EntitlementData
+    public function createEntitlement(string $lookupKey, string $displayName): EntitlementData
     {
-        return $this->entitlements()->create($data);
+        return $this->entitlements()->create($lookupKey, $displayName);
     }
 
     /**

@@ -46,11 +46,12 @@ test('create returns EntitlementData DTO', function () {
         ], 201),
     ]);
 
-    $data = ['lookup_key' => 'new_premium', 'display_name' => 'New Premium'];
-    $entitlement = RevenueCat::entitlements()->create($data);
+    $entitlement = RevenueCat::entitlements()->create('premium', 'New Premium');
 
     expect($entitlement)->toBeInstanceOf(EntitlementData::class);
     expect($entitlement->getId())->toBe('new_entitlement_id');
+    expect($entitlement->getLookupKey())->toBe('new_premium');
+    expect($entitlement->getDisplayName())->toBe('New Premium');
 });
 
 test('get returns EntitlementData with encoded entitlement id', function () {

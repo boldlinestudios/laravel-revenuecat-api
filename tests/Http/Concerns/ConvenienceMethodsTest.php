@@ -335,15 +335,20 @@ describe('Entitlement Convenience Methods', function () {
         Http::fake([
             'https://api.example.com/v2/projects/test_project/entitlements' => Http::response([
                 'object' => 'entitlement',
-                'id' => 'new-entitlement-id',
+                'project_id' => 'proj1ab2c3d4',
+                'id' => 'entla1b2c3d4e5',
+                'lookup_key' => 'premium',
+                'display_name' => 'Premium',
+                'created_at' => 1658399423658,
             ], 201),
         ]);
 
-        $data = ['lookup_key' => 'premium', 'display_name' => 'Premium'];
-        $entitlement = RevenueCat::createEntitlement($data);
+        $entitlement = RevenueCat::createEntitlement('premium', 'Premium');
 
         expect($entitlement)->toBeInstanceOf(EntitlementData::class);
-        expect($entitlement->getId())->toBe('new-entitlement-id');
+        expect($entitlement->getId())->toBe('entla1b2c3d4e5');
+        expect($entitlement->getLookupKey())->toBe('premium');
+        expect($entitlement->getDisplayName())->toBe('Premium');
     });
 
     test('updateEntitlement calls entitlements()->update() with correct parameters', function () {
