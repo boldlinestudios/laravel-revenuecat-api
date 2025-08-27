@@ -88,14 +88,24 @@ describe('App Convenience Methods', function () {
                 'object' => 'app',
                 'id' => 'test-app-id',
                 'name' => 'Updated App',
+                'play_store' => [
+                    'package_name' => 'com.example.app',
+                ],
+                'type' => 'play_store',
+                'project_id' => 'proj1a2b3c4',
+                'created_at' => 1658399423660,
             ], 200),
         ]);
 
-        $data = ['name' => 'Updated App'];
-        $app = RevenueCat::updateApp('test-app-id', $data);
+        $storeConfig = ['play_store' => ['package_name' => 'com.example.app']];
+        $app = RevenueCat::updateApp('test-app-id', 'Updated App', $storeConfig);
 
         expect($app)->toBeInstanceOf(AppData::class);
         expect($app->getName())->toBe('Updated App');
+        expect($app->getType())->toBe('play_store');
+        expect($app->getProjectId())->toBe('proj1a2b3c4');
+        expect(($app->getPlayStore() ?? [])['package_name'] ?? null)->toBe('com.example.app');
+        expect($app->getCreatedAtMs())->toBe(1658399423660);
     });
 
     test('deleteApp calls apps()->delete() with correct parameters', function () {

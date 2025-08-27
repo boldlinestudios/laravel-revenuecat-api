@@ -81,6 +81,7 @@ test('list returns ListPage of AppData', function () use ($sampleApp) {
 
 test('create returns AppData DTO', function () use ($sampleApp) {
     $newApp = array_merge($sampleApp, [
+        'object' => 'app',
         'id' => 'app_new12345',
         'name' => 'My App Store App',
         'created_at' => 1658399423660,
@@ -132,8 +133,11 @@ test('get returns AppData with encoded app id', function () use ($sampleApp) {
 
 test('update returns AppData DTO', function () use ($sampleApp) {
     $updatedApp = array_merge($sampleApp, [
+        'object' => 'app',
         'id' => 'test-app-id',
         'name' => 'Updated App Name',
+        'type' => 'app_store',
+        'project_id' => 'proj1a2b3c4',
         'app_store' => [
             'bundle_id' => 'com.example.updatedapp',
         ],
@@ -145,11 +149,13 @@ test('update returns AppData DTO', function () use ($sampleApp) {
 
     $appId = 'test-app-id';
     $data = ['name' => 'Updated App Name'];
-    $app = RevenueCat::apps()->update($appId, $data);
+    $app = RevenueCat::apps()->update($appId, 'Updated App Name', $data);
 
     expect($app)->toBeInstanceOf(AppData::class);
     expect($app->getName())->toBe('Updated App Name');
     expect(($app->getAppStore() ?? [])['bundle_id'] ?? null)->toBe('com.example.updatedapp');
+    expect($app->getType())->toBe('app_store');
+    expect($app->getProjectId())->toBe('proj1a2b3c4');
 });
 
 test('delete returns true when deletion succeeds', function () {

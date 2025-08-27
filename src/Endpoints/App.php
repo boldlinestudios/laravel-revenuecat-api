@@ -105,17 +105,29 @@ class App
     /**
      * Update an app.
      *
-     * @param  array{name: string} & array<string, mixed>  $data
+     * @param  array<string, array<string, mixed>>  $storeConfig
      *
-     * Example payload:
+     * Example payload for $storeConfig:
      * [
-     *   'name' => 'My App',
-     *   'app_store' => ['bundle_id' => 'com.example.app', ...],
+     *   'play_store' => [
+     *     'bundle_id' => 'com.example.app',
+     *     'shared_secret' => '1234567890',
+     *   ],
      * ]
      */
-    public function update(string $id, array $data): AppData
+    public function update(string $id, ?string $name, array $storeConfig): AppData
     {
-        return AppData::fromResponse($this->updateRaw($id, $data));
+        // if name is null, it will not be included in the payload
+        if ($name) {
+            return AppData::fromResponse($this->updateRaw($id, [
+                'name' => $name,
+                ...$storeConfig,
+            ]));
+        }
+
+        return AppData::fromResponse($this->updateRaw($id, [
+            ...$storeConfig,
+        ]));
     }
 
     /**

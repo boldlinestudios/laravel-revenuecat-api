@@ -53,17 +53,19 @@ trait ConvenienceMethods
     /**
      * Update an app.
      *
-     * @param  array{name: string} & array<string, mixed>  $data
+     * @param  array<string, array<string, mixed>>  $storeConfig
      *
-     * Example payload:
+     * Example payload for $storeConfig:
      * [
-     *   'name' => 'My App',
-     *   'app_store' => ['bundle_id' => 'com.example.app', ...],
+     *   'play_store' => [
+     *     'bundle_id' => 'com.example.app',
+     *     'shared_secret' => '1234567890abcdef1234567890abcdef',
+     *   ],
      * ]
      */
-    public function updateApp(string $appId, array $data): AppData
+    public function updateApp(string $appId, ?string $name, array $storeConfig): AppData
     {
-        return $this->apps()->update($appId, $data);
+        return $this->apps()->update($appId, $name, $storeConfig);
     }
 
     public function deleteApp(string $appId): bool
