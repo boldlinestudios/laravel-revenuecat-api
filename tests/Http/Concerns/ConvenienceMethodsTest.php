@@ -62,14 +62,24 @@ describe('App Convenience Methods', function () {
                 'object' => 'app',
                 'id' => 'new-app-id',
                 'name' => 'New App',
+                'type' => 'app_store',
+                'project_id' => 'proj1a2b3c4',
+                'app_store' => [
+                    'bundle_id' => 'com.example.app',
+                ],
+                'created_at' => 1658399423660,
             ], 201),
         ]);
 
-        $data = ['name' => 'New App', 'type' => 'app_store'];
-        $app = RevenueCat::createApp($data);
+        $storeConfig = ['app_store' => ['bundle_id' => 'com.example.app']];
+        $app = RevenueCat::createApp('New App', 'app_store', $storeConfig);
 
         expect($app)->toBeInstanceOf(AppData::class);
         expect($app->getId())->toBe('new-app-id');
+        expect($app->getType())->toBe('app_store');
+        expect($app->getProjectId())->toBe('proj1a2b3c4');
+        expect(($app->getAppStore() ?? [])['bundle_id'] ?? null)->toBe('com.example.app');
+        expect($app->getCreatedAtMs())->toBe(1658399423660);
     });
 
     test('updateApp calls apps()->update() with correct parameters', function () {

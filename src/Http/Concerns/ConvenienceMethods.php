@@ -36,18 +36,18 @@ trait ConvenienceMethods
      *
      * Provider-specific config lives under a key matching `type`.
      *
-     * Example payload:
+     * storeconfig top level must match the type. Example payload for $storeConfig:
      * [
-     *   'name' => 'My App',
-     *   'type' => 'app_store',
-     *   'app_store' => ['bundle_id' => 'com.example.app', ...],
+     *   'play_store' => [
+     *     'package_name' => 'com.example.app',
+     *   ],
      * ]
      *
-     * @param  array{name: string, type: string} & array<string, mixed>  $data
+     * @param  array<string, array<string, mixed>>  $storeConfig
      */
-    public function createApp(array $data): AppData
+    public function createApp(string $name, string $type, array $storeConfig): AppData
     {
-        return $this->apps()->create($data);
+        return $this->apps()->create($name, $type, $storeConfig);
     }
 
     /**

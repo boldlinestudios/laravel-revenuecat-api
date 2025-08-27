@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Facade;
  * Apps
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData getApp(string $appId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\AppData> getAppList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
- * @method static \BoldlineStudios\RevenueCatApi\Data\AppData createApp(array{name: string, type: string} & array<string, mixed> $data)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\AppData createApp(string $name, string $type, array<string, array<string, mixed>> $storeConfig)
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, array{name: string} & array<string, mixed> $data)
  * @method static bool deleteApp(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppStoreKitConfig(string $appId)

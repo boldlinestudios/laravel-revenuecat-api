@@ -196,11 +196,13 @@ describe('Client Error Exceptions', function () {
             ], 409),
         ]);
 
-        expect(fn () => RevenueCat::apps()->create(['name' => 'Duplicate App']))
+        $storeConfig = ['app_store' => ['bundle_id' => 'com.example.app']];
+
+        expect(fn () => RevenueCat::apps()->create('Duplicate App', 'app_store', $storeConfig))
             ->toThrow(ConflictException::class, 'Resource already exists');
 
         try {
-            RevenueCat::apps()->create(['name' => 'Duplicate App']);
+            RevenueCat::apps()->create('Duplicate App', 'app_store', $storeConfig);
         } catch (ConflictException $e) {
             expect($e->getStatusCode())->toBe(409);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -223,11 +225,13 @@ describe('Client Error Exceptions', function () {
             ], 422),
         ]);
 
-        expect(fn () => RevenueCat::apps()->create([]))
+        $storeConfig = ['app_store' => ['bundle_id' => 'com.example.app']];
+
+        expect(fn () => RevenueCat::apps()->create('Duplicate App', 'app_store', $storeConfig))
             ->toThrow(ValidationException::class, 'id is too long');
 
         try {
-            RevenueCat::apps()->create([]);
+            RevenueCat::apps()->create('Duplicate App', 'app_store', $storeConfig);
         } catch (ValidationException $e) {
             expect($e->getStatusCode())->toBe(422);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field

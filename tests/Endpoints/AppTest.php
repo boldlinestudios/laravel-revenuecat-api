@@ -84,15 +84,18 @@ test('create returns AppData DTO', function () use ($sampleApp) {
         'id' => 'app_new12345',
         'name' => 'My App Store App',
         'created_at' => 1658399423660,
+        'type' => 'app_store',
+        'project_id' => 'proj1a2b3c4',
+        'app_store' => [
+            'bundle_id' => 'com.apple.Pages',
+        ],
     ]);
 
     Http::fake([
         'https://api.example.com/v2/projects/test_project/apps' => Http::response($newApp, 201),
     ]);
 
-    $data = [
-        'name' => 'My App Store App',
-        'type' => 'app_store',
+    $storeConfig = [
         'app_store' => [
             'bundle_id' => 'com.apple.Pages',
             'shared_secret' => '1234567890abcdef1234567890abcdef',
@@ -101,11 +104,14 @@ test('create returns AppData DTO', function () use ($sampleApp) {
             'subscription_key_issuer' => '5a049d62-1b9b-453c-b605-1988189d8129',
         ],
     ];
-    $app = RevenueCat::apps()->create($data);
+    $app = RevenueCat::apps()->create('My App Store App', 'app_store', $storeConfig);
 
     expect($app)->toBeInstanceOf(AppData::class);
     expect($app->getId())->toBe('app_new12345');
     expect($app->getType())->toBe('app_store');
+    expect($app->getProjectId())->toBe('proj1a2b3c4');
+    expect(($app->getAppStore() ?? [])['bundle_id'] ?? null)->toBe('com.apple.Pages');
+
 });
 
 test('get returns AppData with encoded app id', function () use ($sampleApp) {

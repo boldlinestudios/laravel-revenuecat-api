@@ -45,9 +45,8 @@ $customer = RevenueCat::getCustomer('customer_id');
 $customers = RevenueCat::customers()->list(25);
 
 // Create (CustomerData)
-$created = RevenueCat::customers()->create([
-  'id' => 'customer_id',
-  'attributes' => [['name' => '$email', 'value' => 'me@example.com']],
+$created = RevenueCat::customers()->create('customer_id', [
+  ['name' => '$email', 'value' => 'me@example.com'],
 ]);
 
 // Delete (bool)
@@ -90,8 +89,8 @@ $ents = RevenueCat::entitlements()->list(10);
 $ents = RevenueCat::getEntitlementList(10);
 
 // Create/Update (EntitlementData)
-$created = RevenueCat::entitlements()->create(['lookup_key' => 'premium', 'display_name' => 'Premium']);
-$updated = RevenueCat::entitlements()->update('entitlement_id', ['display_name' => 'Pro']);
+$created = RevenueCat::entitlements()->create('premium', 'Premium');
+$updated = RevenueCat::entitlements()->update('entitlement_id', 'Pro');
 
 // Delete (bool)
 $deleted = RevenueCat::entitlements()->delete('entitlement_id');
@@ -113,8 +112,8 @@ $offerings = RevenueCat::offerings()->list(10);
 $offerings = RevenueCat::getOfferingList(10);
 
 // Create/Update (OfferingData)
-$created = RevenueCat::offerings()->create(['lookup_key' => 'basic', 'display_name' => 'Basic']);
-$updated = RevenueCat::offerings()->update('offering_id', ['display_name' => 'Pro']);
+$created = RevenueCat::offerings()->create('basic', 'Basic', ['color' => 'blue']);
+$updated = RevenueCat::offerings()->update('offering_id', 'Pro', null, ['color' => 'green']);
 
 // Delete (bool)
 $deleted = RevenueCat::offerings()->delete('offering_id');
@@ -132,8 +131,8 @@ $pkgs = RevenueCat::packages()->list(10);
 $pkgs = RevenueCat::getPackageList(10);
 
 // Create/Update (PackageData)
-$created = RevenueCat::packages()->create(['lookup_key' => 'gold', 'display_name' => 'Gold', 'position' => 1]);
-$updated = RevenueCat::packages()->update('package_id', ['display_name' => 'Platinum', 'position' => 2]);
+$created = RevenueCat::packages()->create('gold', 'Gold', 1);
+$updated = RevenueCat::packages()->update('package_id', 'Platinum', 2);
 
 // Delete (bool)
 $deleted = RevenueCat::packages()->delete('package_id');
@@ -155,11 +154,7 @@ $products = RevenueCat::products()->list(10);
 $products = RevenueCat::getProductList(10);
 
 // Create (ProductData)
-$created = RevenueCat::products()->create([
-  'store_identifier' => 'rc_1w_199',
-  'app_id' => 'app_id',
-  'type' => 'subscription',
-]);
+$created = RevenueCat::products()->create('rc_1w_199', 'app_id', 'subscription', 'Display Name');
 
 // Delete (bool)
 $deleted = RevenueCat::products()->delete('product_id');

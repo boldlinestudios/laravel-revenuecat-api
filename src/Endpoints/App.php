@@ -52,18 +52,49 @@ class App
      *
      * Provider-specific config lives under a key matching `type`.
      *
-     * Example payload:
+     * storeconfig top level must match the type. Example payload for $storeConfig:
      * [
-     *   'name' => 'My App',
-     *   'type' => 'app_store',
-     *   'app_store' => ['bundle_id' => 'com.example.app', ...],
+     *   'play_store' => [
+     *     'package_name' => 'com.example.app',
+     *   ],
      * ]
      *
-     * @param  array{name: string, type: string} & array<string, mixed>  $data
+     * @param  array<string, array<string, mixed>>  $storeConfig
      */
-    public function create(array $data): AppData
+    public function create(string $name, string $type, array $storeConfig): AppData
     {
-        return AppData::fromResponse($this->createRaw($data));
+        $this->validateCreatePayload($name, $type, $storeConfig);
+
+        return AppData::fromResponse($this->createRaw([
+            'name' => $name,
+            'type' => $type,
+            ...$storeConfig,
+        ]));
+    }
+
+    /**
+     * Validate the payload for the create method.
+     *
+     * @param  array<string, array<string, mixed>>  $storeConfig
+     */
+    private function validateCreatePayload(string $name, string $type, array $storeConfig): void
+    {
+        $types = ['amazon', 'app_store', 'mac_app_store', 'play_store', 'stripe', 'rc_billing', 'roku', 'paddle'];
+
+        if ($name === '' || strlen($name) > 255) {
+            throw new \InvalidArgumentException('name must be a non-empty string with a maximum length of 255 characters');
+        }
+
+        if (! in_array($type, $types)) {
+            throw new \InvalidArgumentException('type must be one of: '.implode(', ', $types));
+        }
+
+        // Ensure storeConfig has exactly one top-level key and it matches the type
+        $topLevelKeys = array_keys($storeConfig);
+        if (count($topLevelKeys) !== 1 || $topLevelKeys[0] !== $type) {
+            $provided = implode(', ', $topLevelKeys);
+            throw new \InvalidArgumentException("storeConfig must contain exactly one top-level key matching type '$type'. Provided: [$provided]");
+        }
     }
 
     public function get(string $appId): AppData
