@@ -445,14 +445,20 @@ describe('Offering Convenience Methods', function () {
                 'id' => 'new-offering-id',
                 'lookup_key' => 'basic',
                 'display_name' => 'New Plan',
+                'metadata' => ['color' => 'blue', 'call_to_action' => 'Get it now'],
             ], 201),
         ]);
 
-        $data = ['lookup_key' => 'basic', 'display_name' => 'New Plan'];
-        $response = RevenueCat::createOffering($data);
+        $response = RevenueCat::createOffering(
+            'basic',
+            'New Plan',
+            ['color' => 'blue', 'call_to_action' => 'Get it now']);
 
         expect($response)->toBeInstanceOf(OfferingData::class);
         expect($response->getId())->toBe('new-offering-id');
+        expect($response->getLookupKey())->toBe('basic');
+        expect($response->getDisplayName())->toBe('New Plan');
+        expect($response->getMetadata())->toBe(['color' => 'blue', 'call_to_action' => 'Get it now']);
     });
 
     test('updateOffering calls offerings()->update() with correct parameters', function () {

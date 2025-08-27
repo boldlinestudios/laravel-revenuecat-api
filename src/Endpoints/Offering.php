@@ -32,14 +32,16 @@ class Offering
     }
 
     /**
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   metadata?: array<string, mixed>
-     * } $data Offering payload with lookup key, display name, and metadata.
+     * @param  array<string, mixed>|null  $metadata
      */
-    public function create(array $data): OfferingData
+    public function create(string $lookupKey, string $displayName, ?array $metadata = []): OfferingData
     {
+        $data = [
+            'lookup_key' => $lookupKey,
+            'display_name' => $displayName,
+            'metadata' => $metadata, // color => blue, call_to_action => Get it now etc
+        ];
+
         return OfferingData::fromResponse($this->createRaw($data));
     }
 

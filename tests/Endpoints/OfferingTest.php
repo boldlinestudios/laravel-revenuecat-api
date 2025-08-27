@@ -42,14 +42,21 @@ test('create returns OfferingData DTO', function () {
             'lookup_key' => 'new_premium',
             'display_name' => 'New Premium',
             'created_at' => 1704067200000,
+            'metadata' => ['color' => 'blue', 'call_to_action' => 'Get it now'],
         ], 201),
     ]);
 
-    $data = ['lookup_key' => 'new_premium', 'display_name' => 'New Premium'];
-    $offering = RevenueCat::offerings()->create($data);
+    $offering = RevenueCat::offerings()->create(
+        'new_premium',
+        'New Premium',
+        ['color' => 'blue', 'call_to_action' => 'Get it now']
+    );
 
     expect($offering)->toBeInstanceOf(OfferingData::class);
     expect($offering->getId())->toBe('new_offering_id');
+    expect($offering->getLookupKey())->toBe('new_premium');
+    expect($offering->getDisplayName())->toBe('New Premium');
+    expect($offering->getMetadata())->toBe(['color' => 'blue', 'call_to_action' => 'Get it now']);
 });
 
 test('get returns OfferingData with encoded offering id', function () {

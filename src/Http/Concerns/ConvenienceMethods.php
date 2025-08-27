@@ -192,15 +192,11 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   metadata?: array<string, mixed>
-     * } $data
+     * @param  array<string, mixed>|null  $metadata
      */
-    public function createOffering(array $data): OfferingData
+    public function createOffering(string $lookupKey, string $displayName, ?array $metadata = []): OfferingData
     {
-        return $this->offerings()->create($data);
+        return $this->offerings()->create($lookupKey, $displayName, $metadata);
     }
 
     /**
