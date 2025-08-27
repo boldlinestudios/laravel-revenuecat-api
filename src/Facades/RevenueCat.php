@@ -17,22 +17,22 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Purchase purchases()
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Subscription subscriptions()
  *
- * Convenience methods (return Illuminate\Http\Client\Response)
+ * Convenience methods (DTOs for resources; Response for utility endpoints)
  *
  * Apps
- * @method static \Illuminate\Http\Client\Response getApp(string $appId)
- * @method static \Illuminate\Http\Client\Response getAppList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createApp(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updateApp(string $appId, array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deleteApp(string $appId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\AppData getApp(string $appId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\AppData> getAppList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\AppData createApp(array{name: string, type: string} & array<string, mixed> $data)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, array{name: string} & array<string, mixed> $data)
+ * @method static bool deleteApp(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppStoreKitConfig(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppPublicKeys(string $appId)
  *
  * Customers
- * @method static \Illuminate\Http\Client\Response getCustomer(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createCustomer(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deleteCustomer(string $customerId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData getCustomer(string $customerId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerData> getCustomerList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData createCustomer(string $id, list<array{name: string, value: string}> $attributes)
+ * @method static bool deleteCustomer(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerSubscriptions(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerPurchases(string $customerId)
  * @method static \Illuminate\Http\Client\Response getCustomerActiveEntitlements(string $customerId)
@@ -41,43 +41,43 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response getCustomerAttributes(string $customerId)
  *
  * Entitlements
- * @method static \Illuminate\Http\Client\Response getEntitlement(string $entitlementId)
- * @method static \Illuminate\Http\Client\Response getEntitlementList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createEntitlement(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updateEntitlement(string $entitlementId, array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deleteEntitlement(string $entitlementId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData getEntitlement(string $entitlementId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\EntitlementData> getEntitlementList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData createEntitlement(string $lookupKey, string $displayName)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData updateEntitlement(string $entitlementId, string $displayName)
+ * @method static bool deleteEntitlement(string $entitlementId)
  * @method static \Illuminate\Http\Client\Response getEntitlementProducts(string $entitlementId)
  *
  * Offerings
- * @method static \Illuminate\Http\Client\Response getOffering(string $offeringId)
- * @method static \Illuminate\Http\Client\Response getOfferingList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createOffering(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updateOffering(string $offeringId, array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deleteOffering(string $offeringId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData getOffering(string $offeringId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\OfferingData> getOfferingList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData createOffering(string $lookupKey, string $displayName, ?array<string, mixed> $metadata = null)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array<string, mixed> $metadata = null)
+ * @method static bool deleteOffering(string $offeringId)
  *
  * Packages
- * @method static \Illuminate\Http\Client\Response getPackage(string $packageId)
- * @method static \Illuminate\Http\Client\Response getPackageList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createPackage(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response updatePackage(string $packageId, array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deletePackage(string $packageId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData getPackage(string $packageId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\PackageData> getPackageList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData createPackage(string $lookupKey, string $displayName, ?int $position = null)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData updatePackage(string $packageId, ?string $displayName, ?int $position = null)
+ * @method static bool deletePackage(string $packageId)
  * @method static \Illuminate\Http\Client\Response getPackageProducts(string $packageId)
  *
  * Products
- * @method static \Illuminate\Http\Client\Response getProduct(string $productId)
- * @method static \Illuminate\Http\Client\Response getProductList(array<string,mixed> $query = [])
- * @method static \Illuminate\Http\Client\Response createProduct(array<string,mixed> $data)
- * @method static \Illuminate\Http\Client\Response deleteProduct(string $productId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ProductData getProduct(string $productId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\ProductData> getProductList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ProductData createProduct(string $storeIdentifier, string $appId, string $type, ?string $displayName = null)
+ * @method static bool deleteProduct(string $productId)
  *
  * Projects
- * @method static \Illuminate\Http\Client\Response getProjectList(array<string,mixed> $query = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\ProjectData> getProjectList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  *
  * Purchases
- * @method static \Illuminate\Http\Client\Response getPurchase(string $purchaseId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PurchaseData getPurchase(string $purchaseId)
  * @method static \Illuminate\Http\Client\Response getPurchaseEntitlements(string $purchaseId)
  *
  * Subscriptions
- * @method static \Illuminate\Http\Client\Response getSubscription(string $subscriptionId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData getSubscription(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response getSubscriptionEntitlements(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response getSubscriptionTransactions(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response getSubscriptionCustomerPortalUrl(string $subscriptionId)
