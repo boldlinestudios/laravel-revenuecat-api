@@ -34,15 +34,17 @@ class Package
 
     /**
      * Create a package.
-     *
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   position: int,
-     * } $data Package payload with lookup key, display name, and position.
      */
-    public function create(array $data): PackageData
+    public function create(string $lookupKey, string $displayName, ?int $position = null): PackageData
     {
+        $data = [
+            'lookup_key' => $lookupKey,
+            'display_name' => $displayName,
+        ];
+        if ($position) {
+            $data['position'] = $position;
+        }
+
         return PackageData::fromResponse($this->createRaw($data));
     }
 

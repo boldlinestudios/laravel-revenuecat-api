@@ -233,16 +233,10 @@ trait ConvenienceMethods
 
     /**
      * Create a package.
-     *
-     * @param array{
-     *   lookup_key: string,
-     *   display_name: string,
-     *   position: int,
-     * } $data Package payload with lookup key, display name, and position.
      */
-    public function createPackage(array $data): PackageData
+    public function createPackage(string $lookupKey, string $displayName, ?int $position = null): PackageData
     {
-        return $this->packages()->create($data);
+        return $this->packages()->create($lookupKey, $displayName, $position);
     }
 
     /**

@@ -38,18 +38,23 @@ test('list returns ListPage of PackageData', function () {
 test('create returns PackageData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages' => Http::response([
+            'object' => 'package',
             'id' => 'new_package_id',
             'lookup_key' => 'new_package',
             'display_name' => 'New package',
             'position' => 1,
+            'created_at' => 1658399423658,
         ], 201),
     ]);
 
-    $data = ['lookup_key' => 'new_package', 'display_name' => 'New package', 'position' => 1];
-    $package = RevenueCat::packages()->create($data);
+    $package = RevenueCat::packages()->create('new_package', 'New package', 1);
 
     expect($package)->toBeInstanceOf(PackageData::class);
     expect($package->getId())->toBe('new_package_id');
+    expect($package->getLookupKey())->toBe('new_package');
+    expect($package->getDisplayName())->toBe('New package');
+    expect($package->getPosition())->toBe(1);
+    expect($package->getCreatedAtMs())->toBe(1658399423658);
 });
 
 test('get returns PackageData with encoded package id', function () {

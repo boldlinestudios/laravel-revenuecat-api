@@ -539,14 +539,18 @@ describe('Package Convenience Methods', function () {
                 'lookup_key' => 'monthly',
                 'display_name' => 'Monthly',
                 'position' => 1,
+                'created_at' => 1658399423658,
             ], 201),
         ]);
 
-        $data = ['lookup_key' => 'monthly', 'display_name' => 'Monthly', 'position' => 1];
-        $package = RevenueCat::createPackage($data);
+        $package = RevenueCat::createPackage('monthly', 'Monthly', 1);
 
         expect($package)->toBeInstanceOf(PackageData::class);
         expect($package->getId())->toBe('new-package-id');
+        expect($package->getLookupKey())->toBe('monthly');
+        expect($package->getDisplayName())->toBe('Monthly');
+        expect($package->getPosition())->toBe(1);
+        expect($package->getCreatedAtMs())->toBe(1658399423658);
     });
 
     test('updatePackage calls packages()->update() with correct parameters', function () {
