@@ -78,15 +78,17 @@ test('update returns EntitlementData DTO', function () {
             'id' => 'test-entitlement-id',
             'lookup_key' => 'premium_plus',
             'display_name' => 'Updated Premium',
+            'created_at' => 1704067200000,
         ], 200),
     ]);
 
     $entitlementId = 'test-entitlement-id';
-    $data = ['lookup_key' => 'premium_plus', 'display_name' => 'Updated Premium'];
-    $entitlement = RevenueCat::entitlements()->update($entitlementId, $data);
+    $entitlement = RevenueCat::entitlements()->update($entitlementId, 'Updated Premium');
 
     expect($entitlement)->toBeInstanceOf(EntitlementData::class);
     expect($entitlement->getDisplayName())->toBe('Updated Premium');
+    expect($entitlement->getLookupKey())->toBe('premium_plus');
+    expect($entitlement->getCreatedAtMs())->toBe(1704067200000);
 });
 
 test('delete returns true when deletion succeeds', function () {

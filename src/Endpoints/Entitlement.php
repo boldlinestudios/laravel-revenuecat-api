@@ -52,13 +52,14 @@ class Entitlement
 
     /**
      * Update an entitlement.
-     *
-     * @param array{
-     *   display_name: string,
-     * } $data Entitlement payload with display name.
      */
-    public function update(string $entitlementId, array $data): EntitlementData
+    public function update(string $entitlementId, string $displayName): EntitlementData
     {
+        // this is all the data the api docs say is updatable 8/26/25
+        $data = [
+            'display_name' => $displayName,
+        ];
+
         return EntitlementData::fromResponse($this->updateRaw($entitlementId, $data));
     }
 

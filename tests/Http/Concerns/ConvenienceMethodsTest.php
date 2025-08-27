@@ -356,15 +356,19 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id' => Http::response([
                 'object' => 'entitlement',
                 'id' => 'test-entitlement-id',
+                'lookup_key' => 'premium_plus',
+                'project_id' => 'proj1ab2c3d4',
                 'display_name' => 'Updated',
+                'created_at' => 1704067200000,
             ], 200),
         ]);
 
-        $data = ['display_name' => 'Updated'];
-        $entitlement = RevenueCat::updateEntitlement('test-entitlement-id', $data);
+        $entitlement = RevenueCat::updateEntitlement('test-entitlement-id', 'Updated');
 
         expect($entitlement)->toBeInstanceOf(EntitlementData::class);
         expect($entitlement->getDisplayName())->toBe('Updated');
+        expect($entitlement->getLookupKey())->toBe('premium_plus');
+        expect($entitlement->getCreatedAtMs())->toBe(1704067200000);
     });
 
     test('deleteEntitlement calls entitlements()->delete() with correct parameters', function () {

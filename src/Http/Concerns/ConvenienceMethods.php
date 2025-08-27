@@ -161,16 +161,9 @@ trait ConvenienceMethods
         return $this->entitlements()->create($lookupKey, $displayName);
     }
 
-    /**
-     * Update an entitlement.
-     *
-     * @param array{
-     *   display_name: string,
-     * } $data Entitlement payload with display name.
-     */
-    public function updateEntitlement(string $entitlementId, array $data): EntitlementData
+    public function updateEntitlement(string $entitlementId, string $displayName): EntitlementData
     {
-        return $this->entitlements()->update($entitlementId, $data);
+        return $this->entitlements()->update($entitlementId, $displayName);
     }
 
     public function deleteEntitlement(string $entitlementId): bool
