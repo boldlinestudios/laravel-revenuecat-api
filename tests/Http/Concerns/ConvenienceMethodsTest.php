@@ -558,16 +558,19 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
                 'object' => 'package',
                 'id' => 'test-package-id',
+                'lookup_key' => 'monthly',
                 'display_name' => 'Updated Package',
                 'position' => 2,
+                'created_at' => 1658399423658,
             ], 200),
         ]);
 
-        $data = ['display_name' => 'Updated Package', 'position' => 2];
-        $package = RevenueCat::updatePackage('test-package-id', $data);
+        $package = RevenueCat::updatePackage('test-package-id', 'Updated Package', 2);
 
         expect($package)->toBeInstanceOf(PackageData::class);
         expect($package->getDisplayName())->toBe('Updated Package');
+        expect($package->getPosition())->toBe(2);
+        expect($package->getCreatedAtMs())->toBe(1658399423658);
     });
 
     test('deletePackage calls packages()->delete() with correct parameters', function () {

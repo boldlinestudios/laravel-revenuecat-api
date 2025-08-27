@@ -77,19 +77,22 @@ test('get returns PackageData with encoded package id', function () {
 test('update returns PackageData DTO', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
+            'object' => 'package',
             'id' => 'test-package-id',
             'lookup_key' => 'premium_plus_package',
             'display_name' => 'Updated premium package',
             'position' => 2,
+            'created_at' => 1658399423658,
         ], 200),
     ]);
 
     $packageId = 'test-package-id';
-    $data = ['display_name' => 'Updated premium package', 'position' => 2];
-    $package = RevenueCat::packages()->update($packageId, $data);
+    $package = RevenueCat::packages()->update($packageId, 'Updated premium package', 2);
 
     expect($package)->toBeInstanceOf(PackageData::class);
     expect($package->getDisplayName())->toBe('Updated premium package');
+    expect($package->getPosition())->toBe(2);
+    expect($package->getCreatedAtMs())->toBe(1658399423658);
 });
 
 test('delete returns true when deletion succeeds', function () {

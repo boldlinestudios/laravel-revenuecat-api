@@ -56,13 +56,18 @@ class Package
     /**
      * Update a package.
      *
-     * @param array{
-     *   display_name: string,
-     *   position: int,
-     * } $data Package payload with display name and position.
+     * Note: any null values will be ignored and not updated
      */
-    public function update(string $id, array $data): PackageData
+    public function update(string $id, ?string $displayName, ?int $position = null): PackageData
     {
+        $data = [];
+        if ($displayName) {
+            $data['display_name'] = $displayName;
+        }
+        if ($position) {
+            $data['position'] = $position;
+        }
+
         return PackageData::fromResponse($this->updateRaw($id, $data));
     }
 

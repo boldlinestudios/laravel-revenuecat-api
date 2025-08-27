@@ -242,14 +242,11 @@ trait ConvenienceMethods
     /**
      * Update a package.
      *
-     * @param array{
-     *   display_name: string,
-     *   position: int,
-     * } $data Package payload with display name and position.
+     * Note: any null values will be ignored and not updated
      */
-    public function updatePackage(string $packageId, array $data): PackageData
+    public function updatePackage(string $packageId, ?string $displayName, ?int $position = null): PackageData
     {
-        return $this->packages()->update($packageId, $data);
+        return $this->packages()->update($packageId, $displayName, $position);
     }
 
     public function deletePackage(string $packageId): bool
