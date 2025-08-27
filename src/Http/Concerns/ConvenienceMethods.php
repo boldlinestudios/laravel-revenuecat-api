@@ -275,16 +275,11 @@ trait ConvenienceMethods
     }
 
     /**
-     * @param array{
-     *   store_identifier: string,
-     *   app_id: string,
-     *   type: 'subscription'|'one_time'|'consumable'|'non_consumable'|'non_renewing_subscription',
-     *   display_name: string|null
-     * } $data
+     * Create a product.
      */
-    public function createProduct(array $data): ProductData
+    public function createProduct(string $storeIdentifier, string $appId, string $type, ?string $displayName = null): ProductData
     {
-        return $this->products()->create($data);
+        return $this->products()->create($storeIdentifier, $appId, $type, $displayName);
     }
 
     public function deleteProduct(string $productId): bool

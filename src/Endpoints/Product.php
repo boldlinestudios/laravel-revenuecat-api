@@ -31,16 +31,18 @@ class Product
 
     /**
      * Create a product.
-     *
-     * @param array{
-     *   store_identifier: string,
-     *   app_id: string,
-     *   type: 'subscription'|'one_time'|'consumable'|'non_consumable'|'non_renewing_subscription',
-     *   display_name: string|null
-     * } $data
      */
-    public function create(array $data): ProductData
+    public function create(string $storeIdentifier, string $appId, string $type, ?string $displayName = null): ProductData
     {
+        $data = [
+            'store_identifier' => $storeIdentifier,
+            'app_id' => $appId,
+            'type' => $type,
+        ];
+        if ($displayName) {
+            $data['display_name'] = $displayName;
+        }
+
         return ProductData::fromResponse($this->createRaw($data));
     }
 

@@ -644,22 +644,44 @@ describe('Product Convenience Methods', function () {
         Http::fake([
             'https://api.example.com/v2/projects/test_project/products' => Http::response([
                 'object' => 'product',
-                'id' => 'new-product-id',
-                'store_identifier' => 'sku',
+                'id' => 'new_product_id',
+                'store_identifier' => 'rc_1w_199"',
                 'type' => 'subscription',
+                'created_at' => 1658399423658,
+                'subscription' => [
+                    'duration' => 'P1W',
+                    'grace_period_duration' => 'P1D',
+                    'trial_duration' => 'P1D',
+                ],
+                'one_time' => [
+                    'is_consumable' => false,
+                ],
+                'app_id' => 'test_app_id',
+                'app' => [
+                    'object' => 'app',
+                    'id' => 'test_app_id',
+                    'name' => 'Test app',
+                    'created_at' => 1658399423658,
+                    'type' => 'app_store',
+                    'app_store' => [
+                        'bundle_id' => 'com.example.app',
+                    ],
+                ],
+                'display_name' => 'New product',
             ], 201),
         ]);
 
-        $data = [
-            'store_identifier' => 'sku',
-            'app_id' => 'app123',
-            'type' => 'subscription',
-            'display_name' => 'Premium',
-        ];
-        $product = RevenueCat::createProduct($data);
+        $product = RevenueCat::createProduct('rc_1w_199"', 'test_app_id', 'subscription', 'New Product');
 
         expect($product)->toBeInstanceOf(ProductData::class);
-        expect($product->getId())->toBe('new-product-id');
+        expect($product->getStoreIdentifier())->toBe('rc_1w_199"');
+        expect($product->getId())->toBe('new_product_id');
+        expect($product->getDisplayName())->toBe('New product');
+        expect($product->getType())->toBe('subscription');
+        expect($product->getCreatedAtMs())->toBe(1658399423658);
+        expect($product->getSubscription()['duration'])->toBe('P1W');
+        expect($product->getSubscription()['grace_period_duration'])->toBe('P1D');
+        expect($product->getSubscription()['trial_duration'])->toBe('P1D');
     });
 
     test('deleteProduct calls products()->delete() with correct parameters', function () {

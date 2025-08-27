@@ -37,17 +37,50 @@ test('list returns response from client', function () {
 test('create returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/products' => Http::response([
+            'object' => 'product',
             'id' => 'new_product_id',
-            'identifier' => 'new_product',
-            'created_at' => '2024-01-01T00:00:00Z',
+            'store_identifier' => 'rc_1w_199"',
+            'type' => 'subscription',
+            'created_at' => 1658399423658,
+            'subscription' => [
+                'duration' => 'P1W',
+                'grace_period_duration' => 'P1D',
+                'trial_duration' => 'P1D',
+            ],
+            'one_time' => [
+                'is_consumable' => false,
+            ],
+            'app_id' => 'test_app_id',
+            'app' => [
+                'object' => 'app',
+                'id' => 'test_app_id',
+                'name' => 'Test app',
+                'created_at' => 1658399423658,
+                'type' => 'app_store',
+                'app_store' => [
+                    'bundle_id' => 'com.example.app',
+                ],
+            ],
+            'display_name' => 'New product',
         ], 201),
     ]);
 
-    $data = ['identifier' => 'new_product', 'description' => 'New product'];
-    $product = RevenueCat::products()->create($data);
+    $product = RevenueCat::products()->create('new_product', 'New product', 'subscription');
 
     expect($product)->toBeInstanceOf(ProductData::class);
     expect($product->getId())->toBe('new_product_id');
+    expect($product->getType())->toBe('subscription');
+    expect($product->getCreatedAtMs())->toBe(1658399423658);
+    expect($product->getSubscription()['duration'])->toBe('P1W');
+    expect($product->getSubscription()['grace_period_duration'])->toBe('P1D');
+    expect($product->getSubscription()['trial_duration'])->toBe('P1D');
+    expect($product->getOneTime()['is_consumable'])->toBeFalse();
+    expect($product->getApp()->getId())->toBe('test_app_id');
+    expect($product->getApp()->getName())->toBe('Test app');
+    expect($product->getApp()->getCreatedAtMs())->toBe(1658399423658);
+    expect($product->getApp()->getType())->toBe('app_store');
+    expect($product->getApp()->getAppStore()['bundle_id'])->toBe('com.example.app');
+    expect($product->getDisplayName())->toBe('New product');
 });
 
 test('get returns response from client with encoded product id', function () {
