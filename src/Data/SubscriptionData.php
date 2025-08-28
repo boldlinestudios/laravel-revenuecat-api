@@ -9,113 +9,42 @@ use Illuminate\Http\Client\Response;
  */
 class SubscriptionData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $customerId;
-
-    private ?string $originalCustomerId;
-
-    private ?string $productId;
-
-    /** Milliseconds since epoch */
-    private ?int $startsAtMs;
-
-    /** Milliseconds since epoch */
-    private ?int $currentPeriodStartsAtMs;
-
-    /** Milliseconds since epoch */
-    private ?int $currentPeriodEndsAtMs;
-
-    private ?bool $givesAccess;
-
-    private ?bool $pendingPayment;
-
-    private ?string $autoRenewalStatus;
-
-    private ?string $status;
-
-    /** @var array<string, mixed>|null */
-    private ?array $totalRevenueInUsd;
-
-    private ?string $presentedOfferingId;
-
-    /**
-     * Entitlements list payload as returned by the API (object="list").
-     *
-     * @var array<string, mixed>|null
-     */
-    private ?array $entitlements;
-
-    private ?string $environment;
-
-    private ?string $store;
-
-    /** Often numeric or string depending on store; normalize to string when possible */
-    private ?string $storeSubscriptionIdentifier;
-
-    private ?string $ownership;
-
-    private ?ProductData $pendingChangesProduct;
-
-    private ?string $country;
-
-    private ?string $managementUrl;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $totalRevenueInUsd
      * @param  array<string, mixed>|null  $entitlements
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $customerId,
-        ?string $originalCustomerId,
-        ?string $productId,
-        ?int $startsAtMs,
-        ?int $currentPeriodStartsAtMs,
-        ?int $currentPeriodEndsAtMs,
-        ?bool $givesAccess,
-        ?bool $pendingPayment,
-        ?string $autoRenewalStatus,
-        ?string $status,
-        ?array $totalRevenueInUsd,
-        ?string $presentedOfferingId,
-        ?array $entitlements,
-        ?string $environment,
-        ?string $store,
-        ?string $storeSubscriptionIdentifier,
-        ?string $ownership,
-        ?ProductData $pendingChangesProduct,
-        ?string $country,
-        ?string $managementUrl,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->customerId = $customerId;
-        $this->originalCustomerId = $originalCustomerId;
-        $this->productId = $productId;
-        $this->startsAtMs = $startsAtMs;
-        $this->currentPeriodStartsAtMs = $currentPeriodStartsAtMs;
-        $this->currentPeriodEndsAtMs = $currentPeriodEndsAtMs;
-        $this->givesAccess = $givesAccess;
-        $this->pendingPayment = $pendingPayment;
-        $this->autoRenewalStatus = $autoRenewalStatus;
-        $this->status = $status;
-        $this->totalRevenueInUsd = $totalRevenueInUsd;
-        $this->presentedOfferingId = $presentedOfferingId;
-        $this->entitlements = $entitlements;
-        $this->environment = $environment;
-        $this->store = $store;
-        $this->storeSubscriptionIdentifier = $storeSubscriptionIdentifier;
-        $this->ownership = $ownership;
-        $this->pendingChangesProduct = $pendingChangesProduct;
-        $this->country = $country;
-        $this->managementUrl = $managementUrl;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $customerId,
+        private ?string $originalCustomerId,
+        private ?string $productId,
+        /** Milliseconds since epoch */
+        private ?int $startsAtMs,
+        /** Milliseconds since epoch */
+        private ?int $currentPeriodStartsAtMs,
+        /** Milliseconds since epoch */
+        private ?int $currentPeriodEndsAtMs,
+        private ?bool $givesAccess,
+        private ?bool $pendingPayment,
+        private ?string $autoRenewalStatus,
+        private ?string $status,
+        /** @var array<string, mixed>|null */
+        private ?array $totalRevenueInUsd,
+        private ?string $presentedOfferingId,
+        /** @var array<string, mixed>|null */
+        private ?array $entitlements,
+        private ?string $environment,
+        private ?string $store,
+        /** Often numeric or string depending on store; normalize to string when possible */
+        private ?string $storeSubscriptionIdentifier,
+        private ?string $ownership,
+        private ?ProductData $pendingChangesProduct = null,
+        private ?string $country = null,
+        private ?string $managementUrl = null,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

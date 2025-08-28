@@ -9,53 +9,25 @@ use Illuminate\Http\Client\Response;
  */
 class OfferingData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $lookupKey;
-
-    private ?string $displayName;
-
-    private ?bool $isCurrent;
-
-    private ?int $createdAtMs;
-
-    private ?string $projectId;
-
-    /** @var array<string, mixed>|null */
-    private ?array $metadata;
-
-    /** @var array<string, mixed>|null */
-    private ?array $packages;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $metadata
      * @param  array<string, mixed>|null  $packages
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $lookupKey,
-        ?string $displayName,
-        ?bool $isCurrent,
-        ?int $createdAtMs,
-        ?string $projectId,
-        ?array $metadata,
-        ?array $packages,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->lookupKey = $lookupKey;
-        $this->displayName = $displayName;
-        $this->isCurrent = $isCurrent;
-        $this->createdAtMs = $createdAtMs;
-        $this->projectId = $projectId;
-        $this->metadata = $metadata;
-        $this->packages = $packages;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $lookupKey,
+        private ?string $displayName,
+        private ?bool $isCurrent,
+        private ?int $createdAtMs,
+        private ?string $projectId,
+        /** @var array<string, mixed>|null */
+        private ?array $metadata,
+        /** @var array<string, mixed>|null */
+        private ?array $packages,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

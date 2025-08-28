@@ -9,45 +9,21 @@ use Illuminate\Http\Client\Response;
  */
 class EntitlementData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $projectId;
-
-    private ?string $lookupKey;
-
-    private ?string $displayName;
-
-    private ?int $createdAtMs;
-
-    /**
-     * @var array<int, ProductData>|null
-     */
-    private ?array $products;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<int, ProductData>|null  $products
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $projectId,
-        ?string $lookupKey,
-        ?string $displayName,
-        ?int $createdAtMs,
-        ?array $products,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->projectId = $projectId;
-        $this->lookupKey = $lookupKey;
-        $this->displayName = $displayName;
-        $this->createdAtMs = $createdAtMs;
-        $this->products = $products;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $projectId,
+        private ?string $lookupKey,
+        private ?string $displayName,
+        private ?int $createdAtMs,
+        /** @var array<int, ProductData>|null */
+        private ?array $products,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

@@ -9,87 +9,34 @@ use Illuminate\Http\Client\Response;
  */
 class PurchaseData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $customerId;
-
-    private ?string $originalCustomerId;
-
-    private ?string $productId;
-
-    /** Milliseconds since epoch, if provided by the API */
-    private ?int $purchasedAtMs;
-
-    /** @var array<string, mixed>|null */
-    private ?array $revenueInUsd;
-
-    private ?int $quantity;
-
-    private ?string $status;
-
-    private ?string $presentedOfferingId;
-
-    /**
-     * Entitlements list payload as returned by the API (object="list").
-     *
-     * @var array<string, mixed>|null
-     */
-    private ?array $entitlements;
-
-    private ?string $environment;
-
-    private ?string $store;
-
-    /** Often numeric or string depending on store; normalize to string when possible */
-    private ?string $storePurchaseIdentifier;
-
-    private ?string $ownership;
-
-    private ?string $country;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $revenueInUsd
      * @param  array<string, mixed>|null  $entitlements
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $customerId,
-        ?string $originalCustomerId,
-        ?string $productId,
-        ?int $purchasedAtMs,
-        ?array $revenueInUsd,
-        ?int $quantity,
-        ?string $status,
-        ?string $presentedOfferingId,
-        ?array $entitlements,
-        ?string $environment,
-        ?string $store,
-        ?string $storePurchaseIdentifier,
-        ?string $ownership,
-        ?string $country,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->customerId = $customerId;
-        $this->originalCustomerId = $originalCustomerId;
-        $this->productId = $productId;
-        $this->purchasedAtMs = $purchasedAtMs;
-        $this->revenueInUsd = $revenueInUsd;
-        $this->quantity = $quantity;
-        $this->status = $status;
-        $this->presentedOfferingId = $presentedOfferingId;
-        $this->entitlements = $entitlements;
-        $this->environment = $environment;
-        $this->store = $store;
-        $this->storePurchaseIdentifier = $storePurchaseIdentifier;
-        $this->ownership = $ownership;
-        $this->country = $country;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $customerId,
+        private ?string $originalCustomerId,
+        private ?string $productId,
+        /** Milliseconds since epoch, if provided by the API */
+        private ?int $purchasedAtMs,
+        /** @var array<string, mixed>|null */
+        private ?array $revenueInUsd,
+        private ?int $quantity,
+        private ?string $status,
+        private ?string $presentedOfferingId,
+        /** @var array<string, mixed>|null */
+        private ?array $entitlements,
+        private ?string $environment,
+        private ?string $store,
+        /** Often numeric or string depending on store; normalize to string when possible */
+        private ?string $storePurchaseIdentifier,
+        private ?string $ownership,
+        private ?string $country,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

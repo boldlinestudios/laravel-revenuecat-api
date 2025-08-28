@@ -9,57 +9,26 @@ use Illuminate\Http\Client\Response;
  */
 class ProductData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $storeIdentifier;
-
-    private ?string $type;
-
-    /** @var array<string, mixed>|null */
-    private ?array $subscription;
-
-    /** @var array<string, mixed>|null */
-    private ?array $oneTime;
-
-    private ?int $createdAtMs;
-
-    private ?string $appId;
-
-    private ?AppData $app;
-
-    private ?string $displayName;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $subscription
      * @param  array<string, mixed>|null  $oneTime
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $storeIdentifier,
-        ?string $type,
-        ?array $subscription,
-        ?array $oneTime,
-        ?int $createdAtMs,
-        ?string $appId,
-        ?AppData $app,
-        ?string $displayName,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->storeIdentifier = $storeIdentifier;
-        $this->type = $type;
-        $this->subscription = $subscription;
-        $this->oneTime = $oneTime;
-        $this->createdAtMs = $createdAtMs;
-        $this->appId = $appId;
-        $this->app = $app;
-        $this->displayName = $displayName;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $storeIdentifier,
+        private ?string $type,
+        /** @var array<string, mixed>|null */
+        private ?array $subscription,
+        /** @var array<string, mixed>|null */
+        private ?array $oneTime,
+        private ?int $createdAtMs,
+        private ?string $appId,
+        private ?AppData $app,
+        private ?string $displayName,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

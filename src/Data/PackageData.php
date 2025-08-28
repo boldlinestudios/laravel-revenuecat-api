@@ -9,43 +9,21 @@ use Illuminate\Http\Client\Response;
  */
 class PackageData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $lookupKey;
-
-    private ?string $displayName;
-
-    private ?int $position;
-
-    private ?int $createdAtMs;
-
-    /** @var array<string, mixed>|null */
-    private ?array $products;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $products
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $lookupKey,
-        ?string $displayName,
-        ?int $position,
-        ?int $createdAtMs,
-        ?array $products,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->lookupKey = $lookupKey;
-        $this->displayName = $displayName;
-        $this->position = $position;
-        $this->createdAtMs = $createdAtMs;
-        $this->products = $products;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $lookupKey,
+        private ?string $displayName,
+        private ?int $position,
+        private ?int $createdAtMs,
+        /** @var array<string, mixed>|null */
+        private ?array $products,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

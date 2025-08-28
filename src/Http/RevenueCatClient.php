@@ -31,18 +31,13 @@ class RevenueCatClient
 
     private PendingRequest $http;
 
-    private string $baseUrl;
-
-    private string $projectId;
-
     public function __construct(
         string $apiKey,
-        string $baseUrl,
-        string $projectId,
+        private string $baseUrl,
+        private string $projectId,
         int $timeout = 30,
     ) {
-        $this->baseUrl = rtrim($baseUrl, '/');
-        $this->projectId = $projectId;
+        $this->baseUrl = rtrim($this->baseUrl, '/');
 
         $client = Http::withHeaders([
             'Authorization' => 'Bearer '.$apiKey,

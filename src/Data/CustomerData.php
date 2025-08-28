@@ -9,34 +9,6 @@ use Illuminate\Http\Client\Response;
  */
 class CustomerData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $projectId;
-
-    private ?int $firstSeenAtMs;
-
-    private ?int $lastSeenAtMs;
-
-    private ?string $lastSeenAppVersion;
-
-    private ?string $lastSeenCountry;
-
-    private ?string $lastSeenPlatform;
-
-    private ?string $lastSeenPlatformVersion;
-
-    /** @var array<string, mixed>|null */
-    private ?array $activeEntitlements;
-
-    /** @var array<string, mixed>|null */
-    private ?array $experiment;
-
-    /** @var array<string, mixed>|null */
-    private ?array $attributes;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $activeEntitlements
@@ -44,32 +16,23 @@ class CustomerData
      * @param  array<string, mixed>|null  $attributes
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $projectId,
-        ?int $firstSeenAtMs,
-        ?int $lastSeenAtMs,
-        ?string $lastSeenAppVersion,
-        ?string $lastSeenCountry,
-        ?string $lastSeenPlatform,
-        ?string $lastSeenPlatformVersion,
-        ?array $activeEntitlements,
-        ?array $experiment,
-        ?array $attributes,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->projectId = $projectId;
-        $this->firstSeenAtMs = $firstSeenAtMs;
-        $this->lastSeenAtMs = $lastSeenAtMs;
-        $this->lastSeenAppVersion = $lastSeenAppVersion;
-        $this->lastSeenCountry = $lastSeenCountry;
-        $this->lastSeenPlatform = $lastSeenPlatform;
-        $this->lastSeenPlatformVersion = $lastSeenPlatformVersion;
-        $this->activeEntitlements = $activeEntitlements;
-        $this->experiment = $experiment;
-        $this->attributes = $attributes;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $projectId,
+        private ?int $firstSeenAtMs,
+        private ?int $lastSeenAtMs,
+        private ?string $lastSeenAppVersion,
+        private ?string $lastSeenCountry,
+        private ?string $lastSeenPlatform,
+        private ?string $lastSeenPlatformVersion,
+        /** @var array<string, mixed>|null */
+        private ?array $activeEntitlements,
+        /** @var array<string, mixed>|null */
+        private ?array $experiment,
+        /** @var array<string, mixed>|null */
+        private ?array $attributes,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

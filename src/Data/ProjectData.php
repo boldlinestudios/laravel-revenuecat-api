@@ -10,30 +10,17 @@ use Illuminate\Http\Client\Response;
  */
 class ProjectData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $name;
-
-    /** Milliseconds since epoch, if provided by the API */
-    private ?int $createdAtMs;
-
     /**
      * @param  array<string, mixed>  $raw
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $name,
-        ?int $createdAtMs,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->name = $name;
-        $this->createdAtMs = $createdAtMs;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $name,
+        /** Milliseconds since epoch, if provided by the API */
+        private ?int $createdAtMs,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload

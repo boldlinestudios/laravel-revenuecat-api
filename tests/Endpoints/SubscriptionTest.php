@@ -19,9 +19,31 @@ test('get returns response from client with encoded subscription id', function (
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id' => Http::response([
             'id' => 'test-subscription-id',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
             'product_id' => 'product123',
             'status' => 'active',
-            'expires_date' => '2024-12-31T23:59:59Z',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
@@ -122,7 +144,31 @@ test('get method properly encodes special characters in subscription id', functi
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars' => Http::response([
             'id' => 'test subscription with spaces & special chars',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
             'product_id' => 'special_product',
+            'status' => 'active',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 

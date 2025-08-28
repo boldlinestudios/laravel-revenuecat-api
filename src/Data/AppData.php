@@ -9,44 +9,6 @@ use Illuminate\Http\Client\Response;
  */
 class AppData
 {
-    /** @var array<string, mixed> */
-    private array $raw;
-
-    private string $id;
-
-    private ?string $name;
-
-    /** Milliseconds since epoch, if provided by the API */
-    private ?int $createdAtMs;
-
-    private ?string $type;
-
-    private ?string $projectId;
-
-    /** @var array<string, mixed>|null */
-    private ?array $amazon;
-
-    /** @var array<string, mixed>|null */
-    private ?array $appStore;
-
-    /** @var array<string, mixed>|null */
-    private ?array $macAppStore;
-
-    /** @var array<string, mixed>|null */
-    private ?array $playStore;
-
-    /** @var array<string, mixed>|null */
-    private ?array $stripe;
-
-    /** @var array<string, mixed>|null */
-    private ?array $rcBilling;
-
-    /** @var array<string, mixed>|null */
-    private ?array $roku;
-
-    /** @var array<string, mixed>|null */
-    private ?array $paddle;
-
     /**
      * @param  array<string, mixed>  $raw
      * @param  array<string, mixed>|null  $amazon
@@ -59,36 +21,31 @@ class AppData
      * @param  array<string, mixed>|null  $paddle
      */
     private function __construct(
-        array $raw,
-        string $id,
-        ?string $name,
-        ?int $createdAtMs,
-        ?string $type,
-        ?string $projectId,
-        ?array $amazon,
-        ?array $appStore,
-        ?array $macAppStore,
-        ?array $playStore,
-        ?array $stripe,
-        ?array $rcBilling,
-        ?array $roku,
-        ?array $paddle,
-    ) {
-        $this->raw = $raw;
-        $this->id = $id;
-        $this->name = $name;
-        $this->createdAtMs = $createdAtMs;
-        $this->type = $type;
-        $this->projectId = $projectId;
-        $this->amazon = $amazon;
-        $this->appStore = $appStore;
-        $this->macAppStore = $macAppStore;
-        $this->playStore = $playStore;
-        $this->stripe = $stripe;
-        $this->rcBilling = $rcBilling;
-        $this->roku = $roku;
-        $this->paddle = $paddle;
-    }
+        /** @var array<string, mixed> */
+        private array $raw,
+        private string $id,
+        private ?string $name,
+        /** Milliseconds since epoch, if provided by the API */
+        private ?int $createdAtMs,
+        private ?string $type,
+        private ?string $projectId,
+        /** @var array<string, mixed>|null */
+        private ?array $amazon,
+        /** @var array<string, mixed>|null */
+        private ?array $appStore,
+        /** @var array<string, mixed>|null */
+        private ?array $macAppStore,
+        /** @var array<string, mixed>|null */
+        private ?array $playStore,
+        /** @var array<string, mixed>|null */
+        private ?array $stripe,
+        /** @var array<string, mixed>|null */
+        private ?array $rcBilling,
+        /** @var array<string, mixed>|null */
+        private ?array $roku,
+        /** @var array<string, mixed>|null */
+        private ?array $paddle,
+    ) {}
 
     /**
      * @param  array<string, mixed>  $payload
