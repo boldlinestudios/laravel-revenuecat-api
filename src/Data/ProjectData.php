@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -27,22 +28,11 @@ class ProjectData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('ProjectData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'ProjectData');
 
         $name = isset($payload['name']) && is_string($payload['name']) ? $payload['name'] : null;
 
-        $createdAtMs = null;
-        if (isset($payload['created_at'])) {
-            $createdAt = $payload['created_at'];
-            if (is_int($createdAt)) {
-                $createdAtMs = $createdAt;
-            } elseif (is_string($createdAt) && is_numeric($createdAt)) {
-                $createdAtMs = (int) $createdAt;
-            }
-        }
+        $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
         return new self(
             $payload,
@@ -79,13 +69,7 @@ class ProjectData
 
     public function getCreatedAtDate(): ?\DateTimeImmutable
     {
-        if ($this->createdAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->createdAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->createdAtMs);
     }
 
     /**

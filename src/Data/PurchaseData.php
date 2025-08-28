@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -43,10 +44,7 @@ class PurchaseData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('PurchaseData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'PurchaseData');
 
         $customerId = isset($payload['customer_id']) && is_string($payload['customer_id'])
             ? $payload['customer_id']
@@ -60,15 +58,7 @@ class PurchaseData
             ? $payload['product_id']
             : null;
 
-        $purchasedAtMs = null;
-        if (isset($payload['purchased_at'])) {
-            $v = $payload['purchased_at'];
-            if (is_int($v)) {
-                $purchasedAtMs = $v;
-            } elseif (is_string($v) && is_numeric($v)) {
-                $purchasedAtMs = (int) $v;
-            }
-        }
+        $purchasedAtMs = Payload::parseMs($payload['purchased_at'] ?? null);
 
         $revenueInUsd = isset($payload['revenue_in_usd']) && is_array($payload['revenue_in_usd'])
             ? $payload['revenue_in_usd']
@@ -169,13 +159,7 @@ class PurchaseData
 
     public function getPurchasedAtDate(): ?\DateTimeImmutable
     {
-        if ($this->purchasedAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->purchasedAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->purchasedAtMs);
     }
 
     /**

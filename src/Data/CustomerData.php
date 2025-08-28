@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -39,32 +40,13 @@ class CustomerData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('CustomerData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'CustomerData');
 
         $projectId = isset($payload['project_id']) && is_string($payload['project_id']) ? $payload['project_id'] : null;
 
-        $firstSeenAtMs = null;
-        if (isset($payload['first_seen_at'])) {
-            $v = $payload['first_seen_at'];
-            if (is_int($v)) {
-                $firstSeenAtMs = $v;
-            } elseif (is_string($v) && is_numeric($v)) {
-                $firstSeenAtMs = (int) $v;
-            }
-        }
+        $firstSeenAtMs = Payload::parseMs($payload['first_seen_at'] ?? null);
 
-        $lastSeenAtMs = null;
-        if (isset($payload['last_seen_at'])) {
-            $v = $payload['last_seen_at'];
-            if (is_int($v)) {
-                $lastSeenAtMs = $v;
-            } elseif (is_string($v) && is_numeric($v)) {
-                $lastSeenAtMs = (int) $v;
-            }
-        }
+        $lastSeenAtMs = Payload::parseMs($payload['last_seen_at'] ?? null);
 
         $lastSeenAppVersion = isset($payload['last_seen_app_version']) && is_string($payload['last_seen_app_version'])
             ? $payload['last_seen_app_version']
@@ -131,13 +113,7 @@ class CustomerData
 
     public function getFirstSeenAtDate(): ?\DateTimeImmutable
     {
-        if ($this->firstSeenAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->firstSeenAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->firstSeenAtMs);
     }
 
     public function getLastSeenAtMs(): ?int
@@ -147,13 +123,7 @@ class CustomerData
 
     public function getLastSeenAtDate(): ?\DateTimeImmutable
     {
-        if ($this->lastSeenAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->lastSeenAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->lastSeenAtMs);
     }
 
     public function getLastSeenAppVersion(): ?string

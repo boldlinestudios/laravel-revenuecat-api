@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -35,10 +36,7 @@ class ProductData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('ProductData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'ProductData');
 
         $storeIdentifier = isset($payload['store_identifier']) && is_string($payload['store_identifier'])
             ? $payload['store_identifier']
@@ -54,15 +52,7 @@ class ProductData
             ? $payload['one_time']
             : null;
 
-        $createdAtMs = null;
-        if (isset($payload['created_at'])) {
-            $v = $payload['created_at'];
-            if (is_int($v)) {
-                $createdAtMs = $v;
-            } elseif (is_string($v) && is_numeric($v)) {
-                $createdAtMs = (int) $v;
-            }
-        }
+        $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
         $appId = isset($payload['app_id']) && is_string($payload['app_id']) ? $payload['app_id'] : null;
 
@@ -136,13 +126,7 @@ class ProductData
 
     public function getCreatedAtDate(): ?\DateTimeImmutable
     {
-        if ($this->createdAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->createdAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->createdAtMs);
     }
 
     public function getAppId(): ?string

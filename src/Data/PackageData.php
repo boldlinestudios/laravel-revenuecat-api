@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -107,13 +108,7 @@ class PackageData
 
     public function getCreatedAtDate(): ?\DateTimeImmutable
     {
-        if ($this->createdAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->createdAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->createdAtMs);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -30,24 +31,13 @@ class EntitlementData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('EntitlementData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'EntitlementData');
 
         $projectId = isset($payload['project_id']) && is_string($payload['project_id']) ? $payload['project_id'] : null;
         $lookupKey = isset($payload['lookup_key']) && is_string($payload['lookup_key']) ? $payload['lookup_key'] : null;
         $displayName = isset($payload['display_name']) && is_string($payload['display_name']) ? $payload['display_name'] : null;
 
-        $createdAtMs = null;
-        if (isset($payload['created_at'])) {
-            $v = $payload['created_at'];
-            if (is_int($v)) {
-                $createdAtMs = $v;
-            } elseif (is_string($v) && is_numeric($v)) {
-                $createdAtMs = (int) $v;
-            }
-        }
+        $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
         $products = null;
         if (isset($payload['products']) && is_array($payload['products'])) {
@@ -110,13 +100,7 @@ class EntitlementData
 
     public function getCreatedAtDate(): ?\DateTimeImmutable
     {
-        if ($this->createdAtMs === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($this->createdAtMs / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
+        return Payload::dateFromMs($this->createdAtMs);
     }
 
     /**

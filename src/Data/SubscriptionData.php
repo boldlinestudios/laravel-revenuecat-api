@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Data;
 
+use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**
@@ -51,10 +52,7 @@ class SubscriptionData
      */
     public static function fromArray(array $payload): self
     {
-        $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
-        if ($id === '') {
-            throw new \InvalidArgumentException('SubscriptionData requires a non-empty string id');
-        }
+        $id = Payload::requireNonEmptyString($payload, 'id', 'SubscriptionData');
 
         $customerId = isset($payload['customer_id']) && is_string($payload['customer_id']) ? $payload['customer_id'] : null;
         $originalCustomerId = isset($payload['original_customer_id']) && is_string($payload['original_customer_id'])
@@ -62,12 +60,12 @@ class SubscriptionData
             : null;
         $productId = isset($payload['product_id']) && is_string($payload['product_id']) ? $payload['product_id'] : null;
 
-        $startsAtMs = self::parseMs($payload['starts_at'] ?? null);
-        $currentPeriodStartsAtMs = self::parseMs($payload['current_period_starts_at'] ?? null);
-        $currentPeriodEndsAtMs = self::parseMs($payload['current_period_ends_at'] ?? null);
+        $startsAtMs = Payload::parseMs($payload['starts_at'] ?? null);
+        $currentPeriodStartsAtMs = Payload::parseMs($payload['current_period_starts_at'] ?? null);
+        $currentPeriodEndsAtMs = Payload::parseMs($payload['current_period_ends_at'] ?? null);
 
-        $givesAccess = array_key_exists('gives_access', $payload) ? self::parseBool($payload['gives_access']) : null;
-        $pendingPayment = array_key_exists('pending_payment', $payload) ? self::parseBool($payload['pending_payment']) : null;
+        $givesAccess = array_key_exists('gives_access', $payload) ? Payload::parseBool($payload['gives_access']) : null;
+        $pendingPayment = array_key_exists('pending_payment', $payload) ? Payload::parseBool($payload['pending_payment']) : null;
 
         $autoRenewalStatus = isset($payload['auto_renewal_status']) && is_string($payload['auto_renewal_status'])
             ? $payload['auto_renewal_status']
@@ -177,7 +175,7 @@ class SubscriptionData
 
     public function getStartsAtDate(): ?\DateTimeImmutable
     {
-        return self::dateFromMs($this->startsAtMs);
+        return Payload::dateFromMs($this->startsAtMs);
     }
 
     /** Milliseconds since epoch */
@@ -188,7 +186,7 @@ class SubscriptionData
 
     public function getCurrentPeriodStartsAtDate(): ?\DateTimeImmutable
     {
-        return self::dateFromMs($this->currentPeriodStartsAtMs);
+        return Payload::dateFromMs($this->currentPeriodStartsAtMs);
     }
 
     /** Milliseconds since epoch */
@@ -199,7 +197,7 @@ class SubscriptionData
 
     public function getCurrentPeriodEndsAtDate(): ?\DateTimeImmutable
     {
-        return self::dateFromMs($this->currentPeriodEndsAtMs);
+        return Payload::dateFromMs($this->currentPeriodEndsAtMs);
     }
 
     public function getGivesAccess(): ?bool
@@ -317,54 +315,5 @@ class SubscriptionData
             'management_url' => $this->managementUrl,
             'raw' => $this->raw,
         ];
-    }
-
-    private static function parseMs(mixed $value): ?int
-    {
-        if (is_int($value)) {
-            return $value;
-        }
-        if (is_string($value) && is_numeric($value)) {
-            return (int) $value;
-        }
-
-        return null;
-    }
-
-    private static function parseBool(mixed $value): ?bool
-    {
-        if (is_bool($value)) {
-            return $value;
-        }
-        if (is_string($value)) {
-            $lower = strtolower($value);
-            if ($lower === 'true') {
-                return true;
-            }
-            if ($lower === 'false') {
-                return false;
-            }
-        }
-        if (is_int($value)) {
-            if ($value === 1) {
-                return true;
-            }
-            if ($value === 0) {
-                return false;
-            }
-        }
-
-        return null;
-    }
-
-    private static function dateFromMs(?int $ms): ?\DateTimeImmutable
-    {
-        if ($ms === null) {
-            return null;
-        }
-
-        return (new \DateTimeImmutable('@0'))
-            ->setTimestamp((int) floor($ms / 1000))
-            ->setTimezone(new \DateTimeZone('UTC'));
     }
 }
