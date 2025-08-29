@@ -113,9 +113,17 @@ trait ConvenienceMethods
         return $this->customers()->delete($customerId);
     }
 
-    public function getCustomerSubscriptions(string $customerId): Response
-    {
-        return $this->customers()->listOfSubscriptions($customerId);
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<SubscriptionData>
+     */
+    public function getCustomerSubscriptions(
+        string $customerId,
+        int $limit = 20,
+        ?string $startingAfter = null,
+        array $extra = []
+    ): ListPage {
+        return $this->customers()->listOfSubscriptions($customerId, $limit, $startingAfter, $extra);
     }
 
     public function getCustomerPurchases(string $customerId): Response

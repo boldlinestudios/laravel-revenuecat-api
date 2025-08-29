@@ -2,6 +2,7 @@
 
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -84,19 +85,126 @@ test('delete returns true when deletion succeeds', function () {
 test('listOfSubscriptions returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/subscriptions' => Http::response([
-            'subscriptions' => [
-                ['id' => 'sub1', 'product_id' => 'prod1'],
-                ['id' => 'sub2', 'product_id' => 'prod2'],
+            'object' => 'list',
+            'items' => [
+                [
+                    'object' => 'subscription',
+                    'id' => 'sub1',
+                    'customer_id' => 'test-customer-id',
+                    'original_customer_id' => 'original-customer-id',
+                    'product_id' => 'prod1',
+                    'purchased_at' => 1658399423658,
+                    'total_revenue_in_usd' => [
+                        'gross' => 9.99,
+                        'commission' => 2.99,
+                        'tax' => 0.75,
+                        'proceeds' => 6.25,
+                    ],
+                    'current_period_starts_at' => 1658399423658,
+                    'current_period_ends_at' => 1658399423658,
+                    'gives_access' => true,
+                    'pending_payment' => true,
+                    'auto_renewal_status' => 'will_renew',
+                    'status' => 'trialing',
+                    'presented_offering_id' => 'ofrnge1a2b3c4d5',
+                    'entitlements' => [
+                        'object' => 'list',
+                        'items' => [
+                            'object' => 'entitlement',
+                            'project_id' => 'proj1ab2c3d4',
+                            'id' => 'entla1b2c3d4e5',
+                            'lookup_key' => 'premium',
+                            'display_name' => 'Premium',
+                            'created_at' => 1658399423658,
+                            'products' => [],
+                        ],
+                        'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements?status=active&starting_after=entlab21dac',
+                        'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements',
+                    ],
+                    'environment' => 'production',
+                    'store' => 'amazon',
+                    'store_subscription_identifier' => 12345678,
+                    'ownership' => 'purchased',
+                    'country' => 'US',
+                ],
+                [
+                    'object' => 'subscription',
+                    'id' => 'sub2',
+                    'customer_id' => 'test-customer-id',
+                    'original_customer_id' => 'original-customer-id',
+                    'product_id' => 'prod2',
+                    'purchased_at' => 1658399423658,
+                    'total_revenue_in_usd' => [
+                        'gross' => 9.99,
+                        'commission' => 2.99,
+                        'tax' => 0.75,
+                        'proceeds' => 6.25,
+                    ],
+                    'current_period_starts_at' => 1658399423658,
+                    'current_period_ends_at' => 1658399423658,
+                    'gives_access' => true,
+                    'pending_payment' => true,
+                    'auto_renewal_status' => 'will_renew',
+                    'status' => 'trialing',
+                    'total_revenue_in_usd' => [
+                        'gross' => 9.99,
+                        'commission' => 2.99,
+                        'tax' => 0.75,
+                        'proceeds' => 6.25,
+                    ],
+                    'presented_offering_id' => 'ofrnge1a2b3c4d5',
+                    'entitlements' => [
+                        'object' => 'list',
+                        'items' => [
+                            'object' => 'entitlement',
+                            'project_id' => 'proj1ab2c3d4',
+                            'id' => 'entla1b2c3d4e5',
+                            'lookup_key' => 'premium',
+                            'display_name' => 'Premium',
+                            'created_at' => 1658399423658,
+                            'products' => [],
+                        ],
+                        'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements?status=active&starting_after=entlab21dac',
+                        'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements',
+                    ],
+                    'environment' => 'production',
+                    'store' => 'amazon',
+                    'store_subscription_identifier' => 12345678,
+                    'ownership' => 'purchased',
+                    'country' => 'US',
+                ],
+                'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements?status=active&starting_after=entlab21dac',
+                'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements',
             ],
+
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfSubscriptions($customerId);
+    $listOfSubscriptions = RevenueCat::customers()->listOfSubscriptions($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('subscriptions'))->toHaveCount(2);
+    expect($listOfSubscriptions)->toBeInstanceOf(ListPage::class);
+    expect(count($listOfSubscriptions->items()))->toBe(2);
+    expect($listOfSubscriptions->items()[0])->toBeInstanceOf(SubscriptionData::class);
+    expect($listOfSubscriptions->items()[0]->getId())->toBe('sub1');
+    expect($listOfSubscriptions->items()[0]->getCustomerId())->toBe('test-customer-id');
+    expect($listOfSubscriptions->items()[0]->getOriginalCustomerId())->toBe('original-customer-id');
+    expect($listOfSubscriptions->items()[0]->getProductId())->toBe('prod1');
+    expect($listOfSubscriptions->items()[0]->getTotalRevenueInUsd())->toBe(['gross' => 9.99, 'commission' => 2.99, 'tax' => 0.75, 'proceeds' => 6.25]);
+    expect($listOfSubscriptions->items()[0]->getCurrentPeriodStartsAtMs())->toBe(1658399423658);
+    expect($listOfSubscriptions->items()[0]->getCurrentPeriodEndsAtMs())->toBe(1658399423658);
+    expect($listOfSubscriptions->items()[0]->getGivesAccess())->toBeTrue();
+    expect($listOfSubscriptions->items()[1]->getId())->toBe('sub2');
+    expect($listOfSubscriptions->items()[1]->getCustomerId())->toBe('test-customer-id');
+    expect($listOfSubscriptions->items()[1]->getOriginalCustomerId())->toBe('original-customer-id');
+    expect($listOfSubscriptions->items()[1]->getProductId())->toBe('prod2');
+    expect($listOfSubscriptions->items()[1]->getTotalRevenueInUsd())->toBe(['gross' => 9.99, 'commission' => 2.99, 'tax' => 0.75, 'proceeds' => 6.25]);
+    expect($listOfSubscriptions->items()[1]->getCurrentPeriodStartsAtMs())->toBe(1658399423658);
+    expect($listOfSubscriptions->items()[1]->getCurrentPeriodEndsAtMs())->toBe(1658399423658);
+    expect($listOfSubscriptions->items()[0]->getPendingPayment())->toBeTrue();
+    expect($listOfSubscriptions->items()[0]->getAutoRenewalStatus())->toBe('will_renew');
+    expect($listOfSubscriptions->items()[0]->getStatus())->toBe('trialing');
+    expect($listOfSubscriptions->items()[0]->getPresentedOfferingId())->toBe('ofrnge1a2b3c4d5');
 });
 
 test('listOfPurchases returns response from client', function () {

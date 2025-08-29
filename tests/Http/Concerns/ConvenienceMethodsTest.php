@@ -218,7 +218,7 @@ describe('Customer Convenience Methods', function () {
 
     test('getCustomerSubscriptions calls customers()->listOfSubscriptions() with correct parameters', function () {
         Http::fake([
-            'https://api.example.com/v2/projects/test_project/customers/test-customer-id/subscriptions' => Http::response([
+            'https://api.example.com/v2/projects/test_project/customers/test-customer-id/subscriptions?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
                     ['id' => 'sub1', 'status' => 'active'],
@@ -226,11 +226,13 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerSubscriptions('test-customer-id');
+        $listOfSubscriptions = RevenueCat::getCustomerSubscriptions('test-customer-id', 10);
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($listOfSubscriptions)->toBeInstanceOf(ListPage::class);
+        expect(count($listOfSubscriptions->items()))->toBe(1);
+        expect($listOfSubscriptions->items()[0])->toBeInstanceOf(SubscriptionData::class);
+        expect($listOfSubscriptions->items()[0]->getId())->toBe('sub1');
+        expect($listOfSubscriptions->items()[0]->getStatus())->toBe('active');
     });
 
     test('getCustomerPurchases calls customers()->listOfPurchases() with correct parameters', function () {

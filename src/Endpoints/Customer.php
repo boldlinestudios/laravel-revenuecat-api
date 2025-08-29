@@ -4,6 +4,7 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
@@ -85,13 +86,20 @@ class Customer
     }
 
     /**
-     * Get a list of subscriptions associated with a customer
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<SubscriptionData>
      */
-    public function listOfSubscriptions(string $customerId): Response
-    {
+    public function listOfSubscriptions(
+        string $customerId,
+        int $limit = 20,
+        ?string $startingAfter = null,
+        array $extra = []
+    ): ListPage {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/subscriptions";
 
-        return $this->client->get("customers/{$customerId}/subscriptions");
+        /** @var ListPage<SubscriptionData> */
+        return $this->listPageForPath($path, SubscriptionData::class, $limit, $startingAfter, $extra);
     }
 
     /**
