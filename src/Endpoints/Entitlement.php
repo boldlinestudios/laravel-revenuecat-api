@@ -4,13 +4,13 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Entitlement
 {
@@ -64,13 +64,23 @@ class Entitlement
     }
 
     /**
-     * Get a list of products attached to a given entitlement
+     * @return ListPage<ProductData>
      */
-    public function listOfProducts(string $entitlementId): Response
-    {
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ProductData>
+     */
+    public function listOfProducts(
+        string $entitlementId,
+        int $limit = 20,
+        ?string $startingAfter = null,
+        array $extra = []
+    ): ListPage {
         $entitlementId = rawurlencode($entitlementId);
+        $path = "/entitlements/{$entitlementId}/products";
 
-        return $this->client->get("/entitlements/{$entitlementId}/products");
+        /** @var ListPage<ProductData> */
+        return $this->listPageForPath($path, ProductData::class, $limit, $startingAfter, $extra);
     }
 
     /**
@@ -79,6 +89,7 @@ class Entitlement
      */
     public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        /** @var ListPage<EntitlementData> */
         return $this->listAsDto(EntitlementData::class, $limit, $startingAfter, $extra);
     }
 }

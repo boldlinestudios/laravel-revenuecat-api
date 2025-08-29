@@ -87,6 +87,7 @@ class Package
      */
     public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        /** @var ListPage<PackageData> */
         return $this->listAsDto(PackageData::class, $limit, $startingAfter, $extra);
     }
 }

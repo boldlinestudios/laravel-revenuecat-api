@@ -5,9 +5,6 @@ namespace BoldlineStudios\RevenueCatApi\Data;
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-/**
- * Immutable DTO representing a RevenueCat Customer resource.
- */
 class CustomerData
 {
     /**

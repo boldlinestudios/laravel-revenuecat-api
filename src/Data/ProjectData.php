@@ -5,10 +5,6 @@ namespace BoldlineStudios\RevenueCatApi\Data;
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-/**
- * Immutable DTO representing a RevenueCat Project resource.
- * Projects are currently only listed, not retrieved individually in this API.
- */
 class ProjectData
 {
     /**

@@ -29,6 +29,7 @@ class Project
      */
     public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        /** @var ListPage<ProjectData> */
         return $this->listAsDto(ProjectData::class, $limit, $startingAfter, $extra, 'projects', 'next_page', 'url');
     }
 }

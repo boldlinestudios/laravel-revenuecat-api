@@ -173,7 +173,10 @@ trait ConvenienceMethods
         return $this->entitlements()->delete($entitlementId);
     }
 
-    public function getEntitlementProducts(string $entitlementId): Response
+    /**
+     * @return ListPage<ProductData>
+     */
+    public function getEntitlementProducts(string $entitlementId): ListPage
     {
         return $this->entitlements()->listOfProducts($entitlementId);
     }

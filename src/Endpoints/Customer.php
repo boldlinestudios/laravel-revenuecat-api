@@ -80,6 +80,7 @@ class Customer
      */
     public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        /** @var ListPage<CustomerData> */
         return $this->listAsDto(CustomerData::class, $limit, $startingAfter, $extra);
     }
 

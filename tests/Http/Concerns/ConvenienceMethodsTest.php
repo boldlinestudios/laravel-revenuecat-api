@@ -410,17 +410,60 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/products' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'name' => 'Product 1'],
-                    ['id' => 'prod2', 'name' => 'Product 2'],
+                    [
+                        'object' => 'product',
+                        'id' => 'prod1',
+                        'store_identifier' => 'sku1',
+                        'type' => 'subscription', 'created_at' => 1658399423658,
+                        'app_id' => 'test_app_id',
+                        'app' => [
+                            'object' => 'app',
+                            'id' => 'test_app_id',
+                            'name' => 'Test app',
+                            'created_at' => 1658399423658,
+                            'type' => 'app_store',
+                            'app_store' => [
+                                'bundle_id' => 'com.example.app',
+                            ],
+                        ],
+                        'display_name' => 'Product 1',
+                    ],
+                    [
+                        'object' => 'product',
+                        'id' => 'prod2',
+                        'store_identifier' => 'sku2',
+                        'type' => 'one_time',
+                        'created_at' => 1658399423658,
+                        'app_id' => 'test_app_id',
+                        'app' => [
+                            'object' => 'app',
+                            'id' => 'test_app_id',
+                            'name' => 'Test app',
+                            'created_at' => 1658399423658,
+                            'type' => 'app_store',
+                            'app_store' => [
+                                'bundle_id' => 'com.example.app',
+                            ],
+                        ],
+                        'display_name' => 'Product 2',
+                    ],
                 ],
             ], 200),
         ]);
 
         $response = RevenueCat::getEntitlementProducts('test-entitlement-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(2);
+        expect($response->items()[0])->toBeInstanceOf(ProductData::class);
+        expect($response->items()[1])->toBeInstanceOf(ProductData::class);
+        expect($response->items()[0]->getStoreIdentifier())->toBe('sku1');
+        expect($response->items()[1]->getStoreIdentifier())->toBe('sku2');
+        expect($response->items()[0]->getDisplayName())->toBe('Product 1');
+        expect($response->items()[1]->getDisplayName())->toBe('Product 2');
+        expect($response->items()[0]->getApp()->getId())->toBe('test_app_id');
+        expect($response->items()[1]->getApp()->getId())->toBe('test_app_id');
+        expect($response->items()[0]->getApp()->getName())->toBe('Test app');
     });
 });
 

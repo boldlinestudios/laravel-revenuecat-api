@@ -2,8 +2,8 @@
 
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -106,7 +106,7 @@ test('delete returns true when deletion succeeds', function () {
     expect($deleted)->toBeTrue();
 });
 
-test('listOfProducts returns response from client', function () {
+test('listOfProducts returns ListPage of ProductData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/products' => Http::response([
             'object' => 'list',
@@ -122,9 +122,10 @@ test('listOfProducts returns response from client', function () {
     $entitlementId = 'test-entitlement-id';
     $response = RevenueCat::entitlements()->listOfProducts($entitlementId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('items'))->toHaveCount(2);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(2);
+    expect($response->items()[0])->toBeInstanceOf(ProductData::class);
+    expect($response->nextCursor())->toBeNull();
 });
 
 test('get method properly encodes special characters in entitlement id', function () {
