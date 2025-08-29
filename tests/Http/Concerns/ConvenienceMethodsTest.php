@@ -240,16 +240,93 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/purchases' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'purchase1', 'amount' => 9.99],
+                    [
+                        'object' => 'purchase',
+                        'id' => 'purchase1',
+                        'customer_id' => 'test-customer-id',
+                        'original_customer_id' => 'original-customer-id',
+                        'product_id' => 'prod1',
+                        'purchased_at' => 1658399423658,
+                        'revenue_in_usd' => [
+                            'currency' => 'USD',
+                            'gross' => 9.99,
+                            'commission' => 2.99,
+                            'tax' => 0.75,
+                            'proceeds' => 6.25,
+                        ],
+                        'current_period_starts_at' => 1658399423658,
+                        'current_period_ends_at' => 1658399423658,
+                        'gives_access' => true,
+                        'pending_payment' => true,
+                        'auto_renewal_status' => 'will_renew',
+                        'status' => 'trialing',
+                        'presented_offering_id' => 'ofrnge1a2b3c4d5',
+                        'entitlements' => [
+                            'object' => 'list',
+                            'items' => [
+                                [
+                                    'object' => 'entitlement',
+                                    'project_id' => 'proj1ab2c3d4',
+                                    'id' => 'entitlement1',
+                                    'lookup_key' => 'premium',
+                                    'display_name' => 'Premium',
+                                    'created_at' => 1658399423658,
+                                    'products' => [
+                                        'object' => 'list',
+                                        'items' => [
+                                            [
+                                                'object' => 'product',
+                                                'id' => 'prod1',
+                                                'store_identifier' => 'sku1',
+                                                'type' => 'subscription',
+                                                'subscription' => [],
+                                                'one_time' => [],
+                                                'created_at' => 1658399423658,
+                                                'app_id' => 'app1',
+                                                'app' => [
+                                                    'object' => 'app',
+                                                    'id' => 'app1',
+                                                    'name' => 'App 1',
+                                                    'type' => 'app_store',
+                                                    'created_at' => 1658399423658,
+                                                ],
+                                                'display_name' => 'Product 1',
+                                            ],
+                                        ],
+                                        'next_page' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement1/products?starting_after=prod1',
+                                        'url' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement1/products',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements?status=active&starting_after=entlab21dac',
+                        'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements',
+                    ],
+                    'environment' => 'production',
+                    'store' => 'amazon',
+                    'store_subscription_identifier' => 12345678,
+                    'ownership' => 'purchased',
+                    'country' => 'US',
                 ],
+                'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/purchases?status=active&starting_after=entlab21dac',
+                'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/purchases',
             ], 200),
         ]);
 
         $response = RevenueCat::getCustomerPurchases('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(1);
+        expect($response->items()[0])->toBeInstanceOf(PurchaseData::class);
+        expect($response->items()[0]->getId())->toBe('purchase1');
+        expect($response->items()[0]->getCustomerId())->toBe('test-customer-id');
+        expect($response->items()[0]->getRevenueInUsd())->toBe(['currency' => 'USD', 'gross' => 9.99, 'commission' => 2.99, 'tax' => 0.75, 'proceeds' => 6.25]);
+        expect($response->items()[0]->getEntitlements())->toBeArray();
+        expect($response->items()[0]->getEntitlements()[0])->toBeInstanceOf(EntitlementData::class);
+        expect($response->items()[0]->getEntitlements()[0]->getId())->toBe('entitlement1');
+        expect($response->items()[0]->getEntitlements()[0]->getLookupKey())->toBe('premium');
+        expect($response->items()[0]->getEntitlements()[0]->getDisplayName())->toBe('Premium');
+        expect($response->items()[0]->getEntitlements()[0]->getCreatedAtMs())->toBe(1658399423658);
     });
 
     test('getCustomerActiveEntitlements calls customers()->listOfActiveEntitlements() with correct parameters', function () {

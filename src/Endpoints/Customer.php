@@ -4,6 +4,7 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
@@ -89,12 +90,8 @@ class Customer
      * @param  array<string, mixed>  $extra
      * @return ListPage<SubscriptionData>
      */
-    public function listOfSubscriptions(
-        string $customerId,
-        int $limit = 20,
-        ?string $startingAfter = null,
-        array $extra = []
-    ): ListPage {
+    public function listOfSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/subscriptions";
 
@@ -104,12 +101,17 @@ class Customer
 
     /**
      * Get a list of purchases associated with a customer
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<PurchaseData>
      */
-    public function listOfPurchases(string $customerId): Response
+    public function listOfPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/purchases";
 
-        return $this->client->get("customers/{$customerId}/purchases");
+        /** @var ListPage<PurchaseData> */
+        return $this->listPageForPath($path, PurchaseData::class, $limit, $startingAfter, $extra);
     }
 
     /**

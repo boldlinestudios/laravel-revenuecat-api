@@ -1,7 +1,11 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
+use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
@@ -207,22 +211,149 @@ test('listOfSubscriptions returns response from client', function () {
     expect($listOfSubscriptions->items()[0]->getPresentedOfferingId())->toBe('ofrnge1a2b3c4d5');
 });
 
-test('listOfPurchases returns response from client', function () {
+test('listOfPurchases returns ListPage of PurchaseData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/purchases' => Http::response([
-            'purchases' => [
-                ['id' => 'purchase1', 'product_id' => 'prod1'],
-                ['id' => 'purchase2', 'product_id' => 'prod2'],
+            'object' => 'list',
+            'items' => [
+                [
+                    'object' => 'purchase',
+                    'id' => 'purchase1',
+                    'customer_id' => 'test-customer-id',
+                    'original_customer_id' => 'original-customer-id',
+                    'product_id' => 'prod1',
+                    'purchased_at' => 1658399423658,
+                    'revenue_in_usd' => [
+                        'currency' => 'USD',
+                        'gross' => 9.99,
+                        'commission' => 2.99,
+                        'tax' => 0.75,
+                        'proceeds' => 6.25,
+                    ],
+                    'current_period_starts_at' => 1658399423658,
+                    'current_period_ends_at' => 1658399423658,
+                    'gives_access' => true,
+                    'pending_payment' => true,
+                    'auto_renewal_status' => 'will_renew',
+                    'status' => 'trialing',
+                    'presented_offering_id' => 'ofrnge1a2b3c4d5',
+                    'entitlements' => [
+                        'object' => 'list',
+                        'items' => [
+                            [
+                                'object' => 'entitlement',
+                                'project_id' => 'proj1ab2c3d4',
+                                'id' => 'entitlement1',
+                                'lookup_key' => 'premium',
+                                'display_name' => 'Premium',
+                                'created_at' => 1658399423658,
+                                'products' => [
+                                    'object' => 'list',
+                                    'items' => [
+                                        [
+                                            'object' => 'product',
+                                            'id' => 'prod1',
+                                            'store_identifier' => 'sku1',
+                                            'type' => 'subscription',
+                                            'subscription' => [],
+                                            'one_time' => [],
+                                            'created_at' => 1658399423658,
+                                            'app_id' => 'app1',
+                                            'app' => [
+                                                'object' => 'app',
+                                                'id' => 'app1',
+                                                'name' => 'App 1',
+                                                'type' => 'app_store',
+                                                'created_at' => 1658399423658,
+                                            ],
+                                            'display_name' => 'Product 1',
+                                        ],
+                                    ],
+                                    'next_page' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement1/products?starting_after=prod1',
+                                    'url' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement1/products',
+                                ],
+                            ],
+                            [
+                                'object' => 'entitlement',
+                                'project_id' => 'proj1ab2c3d4',
+                                'id' => 'entitlement2',
+                                'lookup_key' => 'pro',
+                                'display_name' => 'Pro',
+                                'created_at' => 1658399423658,
+                                'products' => [
+                                    'object' => 'list',
+                                    'items' => [
+                                        [
+                                            'object' => 'product',
+                                            'id' => 'prod2',
+                                            'store_identifier' => 'sku1',
+                                            'type' => 'subscription',
+                                            'subscription' => [],
+                                            'one_time' => [],
+                                            'created_at' => 1658399423658,
+                                            'app_id' => 'app1',
+                                            'app' => [
+                                                'object' => 'app',
+                                                'id' => 'app1',
+                                                'name' => 'App 1',
+                                                'type' => 'app_store',
+                                                'created_at' => 1658399423658,
+                                            ],
+                                            'display_name' => 'Product 2',
+                                        ],
+                                    ],
+                                    'next_page' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement2/products?starting_after=prod2',
+                                    'url' => '/v2/projects/proj1ab2c3d4/entitlements/entitlement2/products',
+                                ],
+                            ],
+                        ],
+                        'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements?status=active&starting_after=entlab21dac',
+                        'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/entitlements',
+                    ],
+                    'environment' => 'production',
+                    'store' => 'amazon',
+                    'store_subscription_identifier' => 12345678,
+                    'ownership' => 'purchased',
+                    'country' => 'US',
+                ],
             ],
+            'next_page' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/purchases?status=active&starting_after=entlab21dac',
+            'url' => '/v2/projects/proj1ab2c3d4/purchases/sub1a2b3c4d5e/purchases',
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfPurchases($customerId);
+    $listOfPurchases = RevenueCat::customers()->listOfPurchases($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('purchases'))->toHaveCount(2);
+    expect($listOfPurchases)->toBeInstanceOf(ListPage::class);
+    expect(count($listOfPurchases->items()))->toBe(1);
+    expect($listOfPurchases->items()[0])->toBeInstanceOf(PurchaseData::class);
+    expect($listOfPurchases->items()[0]->getId())->toBe('purchase1');
+    expect($listOfPurchases->items()[0]->getCustomerId())->toBe('test-customer-id');
+    expect($listOfPurchases->items()[0]->getOriginalCustomerId())->toBe('original-customer-id');
+    expect($listOfPurchases->items()[0]->getProductId())->toBe('prod1');
+    expect($listOfPurchases->items()[0]->getPurchasedAtMs())->toBe(1658399423658);
+    expect($listOfPurchases->items()[0]->getRevenueInUsd())->toBe(['currency' => 'USD', 'gross' => 9.99, 'commission' => 2.99, 'tax' => 0.75, 'proceeds' => 6.25]);
+    // test entitlements
+    expect($listOfPurchases->items()[0]->getEntitlements())->toBeArray();
+    expect($listOfPurchases->items()[0]->getEntitlements()[0])->toBeInstanceOf(EntitlementData::class);
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getId())->toBe('entitlement1');
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getLookupKey())->toBe('premium');
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getDisplayName())->toBe('Premium');
+    // test second entitlement
+    expect($listOfPurchases->items()[0]->getEntitlements()[1]->getId())->toBe('entitlement2');
+    expect($listOfPurchases->items()[0]->getEntitlements()[1]->getLookupKey())->toBe('pro');
+    expect($listOfPurchases->items()[0]->getEntitlements()[1]->getDisplayName())->toBe('Pro');
+    expect($listOfPurchases->items()[0]->getEntitlements()[1]->getCreatedAtMs())->toBe(1658399423658);
+
+    // test app inside of entitlements/products
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts())->toBeArray();
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0])->toBeInstanceOf(ProductData::class);
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp())->toBeInstanceOf(AppData::class);
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp()->getId())->toBe('app1');
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp()->getName())->toBe('App 1');
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp()->getType())->toBe('app_store');
+    expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp()->getCreatedAtMs())->toBe(1658399423658);
 });
 
 test('listOfActiveEntitlements returns response from client', function () {

@@ -26,7 +26,7 @@ class PurchaseData
         private ?int $quantity,
         private ?string $status,
         private ?string $presentedOfferingId,
-        /** @var array<string, mixed>|null */
+        /** @var array<EntitlementData>|null */
         private ?array $entitlements,
         private ?string $environment,
         private ?string $store,
@@ -77,9 +77,21 @@ class PurchaseData
             ? $payload['presented_offering_id']
             : null;
 
-        $entitlements = isset($payload['entitlements']) && is_array($payload['entitlements'])
-            ? $payload['entitlements']
-            : null;
+        $entitlements = null;
+        if (isset($payload['entitlements']) && is_array($payload['entitlements'])) {
+            $items = $payload['entitlements']['items'] ?? [];
+            $items = is_array($items) ? $items : [];
+
+            $mapped = [];
+            foreach ($items as $item) {
+                if (is_array($item)) {
+                    /** @var array<string, mixed> $item */
+                    $mapped[] = EntitlementData::fromArray($item);
+                }
+            }
+
+            $entitlements = $mapped;
+        }
 
         $environment = isset($payload['environment']) && is_string($payload['environment']) ? $payload['environment'] : null;
 
