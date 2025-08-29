@@ -135,24 +135,39 @@ trait ConvenienceMethods
         return $this->customers()->listOfPurchases($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerActiveEntitlements(string $customerId): Response
+    /**
+     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerActiveEntitlementData>
+     */
+    public function getCustomerActiveEntitlements(string $customerId): ListPage
     {
         return $this->customers()->listOfActiveEntitlements($customerId);
     }
 
-    public function getCustomerAliases(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAliasData>
+     */
+    public function getCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfAliases($customerId);
+        return $this->customers()->listOfAliases($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerVirtualCurrencyBalances(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerVirtualCurrencyBalanceData>
+     */
+    public function getCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfVirtualCurrencyBalances($customerId);
+        return $this->customers()->listOfVirtualCurrencyBalances($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerAttributes(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAttributeData>
+     */
+    public function getCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfAttributes($customerId);
+        return $this->customers()->listOfAttributes($customerId, $limit, $startingAfter, $extra);
     }
 
     // Entitlement convenience methods

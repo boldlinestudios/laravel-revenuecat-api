@@ -119,58 +119,58 @@ $deleted = RevenueCat::customers()->delete('customer_id');
 $deleted = RevenueCat::deleteCustomer('customer_id');
 ```
 
-#### Subscriptions (Response)
+#### Subscriptions
 ```php
 // Signature:
-// customers()->listOfSubscriptions(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<SubscriptionData>
 
-$resp = RevenueCat::customers()->listOfSubscriptions('customer_id');
-$resp = RevenueCat::getCustomerSubscriptions('customer_id');
+$subs = RevenueCat::customers()->listOfSubscriptions('customer_id');
+$subs = RevenueCat::getCustomerSubscriptions('customer_id');
 ```
 
-#### Purchases (Response)
+#### Purchases
 ```php
 // Signature:
-// customers()->listOfPurchases(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<PurchaseData>
 
-$resp = RevenueCat::customers()->listOfPurchases('customer_id');
-$resp = RevenueCat::getCustomerPurchases('customer_id');
+$purchases = RevenueCat::customers()->listOfPurchases('customer_id');
+$purchases = RevenueCat::getCustomerPurchases('customer_id');
 ```
 
-#### Active entitlements (Response)
+#### Active entitlements
 ```php
 // Signature:
-// customers()->listOfActiveEntitlements(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfActiveEntitlements(string $customerId): ListPage<CustomerActiveEntitlementData>
 
-$resp = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
-$resp = RevenueCat::getCustomerActiveEntitlements('customer_id');
+$ents = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
+$ents = RevenueCat::getCustomerActiveEntitlements('customer_id');
 ```
 
-#### Aliases (Response)
+#### Aliases
 ```php
 // Signature:
-// customers()->listOfAliases(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerAliasData>
 
-$resp = RevenueCat::customers()->listOfAliases('customer_id');
-$resp = RevenueCat::getCustomerAliases('customer_id');
+$aliases = RevenueCat::customers()->listOfAliases('customer_id');
+$aliases = RevenueCat::getCustomerAliases('customer_id');
 ```
 
-#### Virtual currency balances (Response)
+#### Virtual currency balances
 ```php
 // Signature:
-// customers()->listOfVirtualCurrencyBalances(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerVirtualCurrencyBalanceData>
 
-$resp = RevenueCat::customers()->listOfVirtualCurrencyBalances('customer_id');
-$resp = RevenueCat::getCustomerVirtualCurrencyBalances('customer_id');
+$balances = RevenueCat::customers()->listOfVirtualCurrencyBalances('customer_id');
+$balances = RevenueCat::getCustomerVirtualCurrencyBalances('customer_id');
 ```
 
-#### Attributes (Response)
+#### Attributes
 ```php
 // Signature:
-// customers()->listOfAttributes(string $customerId): Illuminate\Http\Client\Response
+// customers()->listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerAttributeData>
 
-$resp = RevenueCat::customers()->listOfAttributes('customer_id');
-$resp = RevenueCat::getCustomerAttributes('customer_id');
+$attrs = RevenueCat::customers()->listOfAttributes('customer_id');
+$attrs = RevenueCat::getCustomerAttributes('customer_id');
 ```
 
 ## Entitlements

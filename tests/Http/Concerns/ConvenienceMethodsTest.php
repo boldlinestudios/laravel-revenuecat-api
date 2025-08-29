@@ -339,11 +339,10 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerActiveEntitlements('test-customer-id');
+        $list = RevenueCat::getCustomerActiveEntitlements('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(1);
     });
 
     test('getCustomerAliases calls customers()->listOfAliases() with correct parameters', function () {
@@ -356,11 +355,10 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerAliases('test-customer-id');
+        $list = RevenueCat::getCustomerAliases('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(1);
     });
 
     test('getCustomerVirtualCurrencyBalances calls customers()->listOfVirtualCurrencyBalances() with correct parameters', function () {
@@ -373,11 +371,10 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerVirtualCurrencyBalances('test-customer-id');
+        $list = RevenueCat::getCustomerVirtualCurrencyBalances('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(1);
     });
 
     test('getCustomerAttributes calls customers()->listOfAttributes() with correct parameters', function () {
@@ -390,11 +387,10 @@ describe('Customer Convenience Methods', function () {
             ], 200),
         ]);
 
-        $response = RevenueCat::getCustomerAttributes('test-customer-id');
+        $list = RevenueCat::getCustomerAttributes('test-customer-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(1);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(1);
     });
 });
 

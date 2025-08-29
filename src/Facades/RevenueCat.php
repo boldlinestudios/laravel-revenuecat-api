@@ -33,12 +33,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerData> getCustomerList(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData createCustomer(string $id, list<array{name: string, value: string}> $attributes)
  * @method static bool deleteCustomer(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerSubscriptions(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerPurchases(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerActiveEntitlements(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerAliases(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerVirtualCurrencyBalances(string $customerId)
- * @method static \Illuminate\Http\Client\Response getCustomerAttributes(string $customerId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\SubscriptionData> getCustomerSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\PurchaseData> getCustomerPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerActiveEntitlementData> getCustomerActiveEntitlements(string $customerId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAliasData> getCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerVirtualCurrencyBalanceData> getCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAttributeData> getCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  *
  * Entitlements
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData getEntitlement(string $entitlementId)

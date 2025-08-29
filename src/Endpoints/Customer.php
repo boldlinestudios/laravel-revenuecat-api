@@ -2,7 +2,11 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\CustomerActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\CustomerAliasData;
+use BoldlineStudios\RevenueCatApi\Data\CustomerAttributeData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
+use BoldlineStudios\RevenueCatApi\Data\CustomerVirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
@@ -11,7 +15,6 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Customer
 {
@@ -117,40 +120,63 @@ class Customer
     /**
      * Get a list of active entitlements for a customer
      */
-    public function listOfActiveEntitlements(string $customerId): Response
+    /**
+     * @return ListPage<CustomerActiveEntitlementData>
+     */
+    public function listOfActiveEntitlements(string $customerId): ListPage
     {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/active_entitlements";
 
-        return $this->client->get("customers/{$customerId}/active_entitlements");
+        /** @var ListPage<CustomerActiveEntitlementData> */
+        return $this->listPageForPath($path, CustomerActiveEntitlementData::class, 20, null, [], 'entitlements', 'next_page', 'url');
     }
 
     /**
      * Get a list of aliases for a customer
      */
-    public function listOfAliases(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<CustomerAliasData>
+     */
+    public function listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/aliases";
 
-        return $this->client->get("customers/{$customerId}/aliases");
+        /** @var ListPage<CustomerAliasData> */
+        return $this->listPageForPath($path, CustomerAliasData::class, $limit, $startingAfter, $extra);
     }
 
     /**
      * Get a list of virtual currency balances for the customer
      */
-    public function listOfVirtualCurrencyBalances(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<CustomerVirtualCurrencyBalanceData>
+     */
+    public function listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/virtual_currencies";
 
-        return $this->client->get("customers/{$customerId}/virtual_currencies");
+        /** @var ListPage<CustomerVirtualCurrencyBalanceData> */
+        return $this->listPageForPath($path, CustomerVirtualCurrencyBalanceData::class, $limit, $startingAfter, $extra, 'virtual_currencies');
     }
 
     /**
      * Get a list of customer attributes
      */
-    public function listOfAttributes(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<CustomerAttributeData>
+     */
+    public function listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/attributes";
 
-        return $this->client->get("customers/{$customerId}/attributes");
+        /** @var ListPage<CustomerAttributeData> */
+        return $this->listPageForPath($path, CustomerAttributeData::class, $limit, $startingAfter, $extra, 'attributes');
     }
 }
