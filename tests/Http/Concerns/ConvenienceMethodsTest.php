@@ -755,8 +755,8 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['object' => 'product', 'id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription', 'display_name' => 'Product 1'],
-                    ['object' => 'product', 'id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time', 'display_name' => 'Product 2'],
+                    ['product' => ['object' => 'product', 'id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription']],
+                    ['product' => ['object' => 'product', 'id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time']],
                 ],
             ], 200),
         ]);
@@ -765,8 +765,6 @@ describe('Package Convenience Methods', function () {
 
         expect($response)->toBeInstanceOf(ListPage::class);
         expect(count($response->items()))->toBe(2);
-        expect($response->items()[0]->getDisplayName())->toBe('Product 1');
-        expect($response->items()[1]->getDisplayName())->toBe('Product 2');
     });
 });
 

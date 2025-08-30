@@ -73,6 +73,7 @@ class Package
 
     /**
      * Get a list of products attached to a given package of an offering
+     * Note: this endpoint nests each item under a "product" key in the items array.
      *
      * @param  array<string, mixed>  $extra
      * @return ListPage<ProductData>
@@ -82,8 +83,10 @@ class Package
         $packageId = rawurlencode($packageId);
         $path = "/packages/{$packageId}/products";
 
+
         /** @var ListPage<ProductData> */
         return $this->listPageForPath($path, ProductData::class, $limit, $startingAfter, $extra);
+
     }
 
     /**

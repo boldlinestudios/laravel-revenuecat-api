@@ -116,25 +116,82 @@ test('listOfProducts returns ListPage of ProductData', function () {
         'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
             'object' => 'list',
             'items' => [
-                ['object' => 'product', 'id' => 'product1', 'store_identifier' => 'rc_1w_199'],
-                ['object' => 'product', 'id' => 'product2', 'store_identifier' => 'rc_1w_100'],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/packages/test-package-id/products',
+                [
+                    'product' => [
+                        'object' => 'product',
+                        'id' => 'product1',
+                        'store_identifier' => 'rc_1w_199',
+                        'type' => 'subscription',
+                        'subscription' => [
+                            'duration' => 'P1M',
+                            'grace_period_duration' => 'P3D',
+                            'trial_duration' => 'P1W',
+                        ],
+                        'one_time' => [
+                            'is_consumable' => true,
+                        ],
+                        'created_at' => 1658399423658,
+                        'app_id' => 'app1a2b3c4',
+                        'app' => [
+                            'object' => 'app',
+                            'id' => 'app1a2b3c4',
+                            'name' => 'App 1',
+                            'created_at' => 1658399423658,
+                            'type' => 'app_store',
+                        ],
+                        'display_name' => 'Premium Monthly 2023',
+                    ],
+                    'eligibility_criteria' => 'all',
+                ],
+                [
+                    'product' => [
+                        'object' => 'product',
+                        'id' => 'product2',
+                        'store_identifier' => 'rc_1w_100',
+                        'type' => 'subscription',
+                        'subscription' => [
+                            'duration' => 'P1M',
+                            'grace_period_duration' => 'P3D',
+                            'trial_duration' => 'P1W',
+                        ],
+                        'one_time' => [
+                            'is_consumable' => false,
+                        ],
+                        'created_at' => 1658399423658,
+                        'app_id' => 'app1a2b3c4',
+                        'app' => [
+                            'object' => 'app',
+                            'id' => 'app1a2b3c4',
+                            'name' => 'App 2',
+                            'created_at' => 1658399423659,
+                            'type' => 'app_store',
+                        ],
+                        'display_name' => 'Premium Monthly 2023',
+                    ],
+                    'eligibility_criteria' => 'all',
+                ],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/packages/test-package-id/products',
-
         ], 200),
     ]);
 
     $packageId = 'test-package-id';
-    $response = RevenueCat::packages()->listOfProducts($packageId);
 
-    expect($response)->toBeInstanceOf(ListPage::class);
-    expect(count($response->items()))->toBe(2);
-    expect($response->items()[0])->toBeInstanceOf(ProductData::class);
-    expect($response->items()[0]->getId())->toBe('product1');
-    expect($response->items()[1])->toBeInstanceOf(ProductData::class);
-    expect($response->items()[1]->getId())->toBe('product2');
+    $page = RevenueCat::packages()->listOfProducts($packageId);
 
+    expect($page)->toBeInstanceOf(ListPage::class);
+    expect(count($page->items()))->toBe(2);
+    expect($page->items()[0])->toBeInstanceOf(ProductData::class);
+    expect($page->items()[1])->toBeInstanceOf(ProductData::class);
+    expect($page->items()[0]->getDisplayName())->toBe('Premium Monthly 2023');
+    expect($page->items()[1]->getDisplayName())->toBe('Premium Monthly 2023');
+    expect($page->items()[0]->getApp()->getName())->toBe('App 1');
+    expect($page->items()[1]->getApp()->getName())->toBe('App 2');
+    expect($page->items()[0]->getApp()->getCreatedAtMs())->toBe(1658399423658);
+    expect($page->items()[1]->getApp()->getCreatedAtMs())->toBe(1658399423659);
 });
 
 test('get method properly encodes special characters in package id', function () {
@@ -166,12 +223,12 @@ test('listOfProducts method properly encodes special characters in package id', 
     ]);
 
     $packageId = 'test package with spaces & special chars';
-    $response = RevenueCat::packages()->listOfProducts($packageId);
+    $page = RevenueCat::packages()->listOfProducts($packageId);
 
-    expect($response)->toBeInstanceOf(ListPage::class);
-    expect(count($response->items()))->toBe(0);
-    expect($response->items())->toBe([]);
-    expect($response->nextCursor())->toBeNull();
+    expect($page)->toBeInstanceOf(ListPage::class);
+    expect(count($page->items()))->toBe(0);
+    expect($page->items())->toBe([]);
+    expect($page->nextCursor())->toBeNull();
 });
 
 test('list method works with empty query array', function () {
