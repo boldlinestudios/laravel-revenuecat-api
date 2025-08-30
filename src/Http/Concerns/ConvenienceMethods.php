@@ -271,9 +271,13 @@ trait ConvenienceMethods
         return $this->packages()->delete($packageId);
     }
 
-    public function getPackageProducts(string $packageId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ProductData>
+     */
+    public function getPackageProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->packages()->listOfProducts($packageId);
+        return $this->packages()->listOfProducts($packageId, $limit, $startingAfter, $extra);
     }
 
     // Product convenience methods

@@ -4,13 +4,13 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Package
 {
@@ -73,12 +73,41 @@ class Package
 
     /**
      * Get a list of products attached to a given package of an offering
+     *
+     * Note: this endpoint nests each item under a "product" key in the items array.
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ProductData>
      */
-    public function listOfProducts(string $packageId): Response
+    public function listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $packageId = rawurlencode($packageId);
+        $path = "/packages/{$packageId}/products";
 
-        return $this->client->get("/packages/{$packageId}/products");
+        $response = $this->listRawForPath($path, $limit, $startingAfter, $extra);
+        $payload = $response->json();
+        $payload = is_array($payload) ? $payload : [];
+
+        $items = $payload['items'] ?? [];
+        $items = is_array($items) ? $items : [];
+
+        $dtos = [];
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+
+            $product = $item['product'] ?? null;
+            if (is_array($product)) {
+                $dtos[] = ProductData::fromArray($product);
+            }
+        }
+
+        $next = isset($payload['next_page']) && is_string($payload['next_page']) ? $payload['next_page'] : null;
+        $url = isset($payload['url']) && is_string($payload['url']) ? $payload['url'] : $path;
+
+        /** @var ListPage<ProductData> */
+        return new ListPage($dtos, $next, $url, $response);
     }
 
     /**

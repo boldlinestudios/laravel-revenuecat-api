@@ -734,17 +734,16 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription'],
-                    ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time'],
+                    ['product' => ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription']],
+                    ['product' => ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time']],
                 ],
             ], 200),
         ]);
 
         $response = RevenueCat::getPackageProducts('test-package-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(2);
     });
 });
 
