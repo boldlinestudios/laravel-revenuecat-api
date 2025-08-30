@@ -1,6 +1,8 @@
 <?php
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
@@ -8,7 +10,6 @@ use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -356,76 +357,89 @@ test('listOfPurchases returns ListPage of PurchaseData', function () {
     expect($listOfPurchases->items()[0]->getEntitlements()[0]->getProducts()[0]->getApp()->getCreatedAtMs())->toBe(1658399423658);
 });
 
-test('listOfActiveEntitlements returns response from client', function () {
+test('listOfActiveEntitlements returns ListPage of CustomerActiveEntitlementData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/active_entitlements' => Http::response([
-            'entitlements' => [
-                ['id' => 'ent1', 'identifier' => 'premium'],
-                ['id' => 'ent2', 'identifier' => 'pro'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.active_entitlement', 'entitlement_id' => 'ent1', 'expires_at' => 1658399423658],
+                ['object' => 'customer.active_entitlement', 'entitlement_id' => 'ent2', 'expires_at' => 1658399423659],
             ],
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfActiveEntitlements($customerId);
+    $list = RevenueCat::customers()->listOfActiveEntitlements($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('entitlements'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
+    expect($list->items()[0])->toBeInstanceOf(ActiveEntitlementData::class);
+    expect($list->items()[0]->getResourceType())->toBe('customer.active_entitlement');
+    expect($list->items()[0]->getEntitlementId())->toBe('ent1');
+    expect($list->items()[0]->getExpiresAtMs())->toBe(1658399423658);
+    expect($list->items()[1])->toBeInstanceOf(ActiveEntitlementData::class);
+    expect($list->items()[1]->getEntitlementId())->toBe('ent2');
+    expect($list->items()[1]->getExpiresAtMs())->toBe(1658399423659);
 });
 
-test('listOfAliases returns response from client', function () {
+test('listOfAliases returns ListPage of CustomerAliasData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/aliases' => Http::response([
-            'aliases' => [
-                ['id' => 'alias1', 'alias' => 'user1@example.com'],
-                ['id' => 'alias2', 'alias' => 'user1_alt'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.alias', 'id' => '19b8de26-77c1-49f1-aa18-019a391603e2', 'created_at' => 1658399423658],
+                ['object' => 'customer.alias', 'id' => '19b8de26-77c1-49f1-aa18-019a391603e3', 'created_at' => 1658399423659],
             ],
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfAliases($customerId);
+    $list = RevenueCat::customers()->listOfAliases($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('aliases'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
-test('listOfVirtualCurrencyBalances returns response from client', function () {
+test('listOfVirtualCurrencyBalances returns ListPage of CustomerVirtualCurrencyBalanceData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/virtual_currencies' => Http::response([
-            'virtual_currencies' => [
-                ['id' => 'vc1', 'currency' => 'coins', 'balance' => 100],
-                ['id' => 'vc2', 'currency' => 'gems', 'balance' => 50],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'virtual_currency_balance', 'currency_code' => 'string', 'balance' => 0],
+                ['object' => 'virtual_currency_balance', 'currency_code' => 'string', 'balance' => 2],
             ],
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfVirtualCurrencyBalances($customerId);
+    $list = RevenueCat::customers()->listOfVirtualCurrencyBalances($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('virtual_currencies'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
+    expect($list->items()[0])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+    expect($list->items()[1])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+    expect($list->items()[0]->getCurrencyCode())->toBe('string');
+    expect($list->items()[0]->getBalance())->toBe(0);
+    expect($list->items()[1]->getCurrencyCode())->toBe('string');
+    expect($list->items()[1]->getBalance())->toBe(2);
 });
 
-test('listOfAttributes returns response from client', function () {
+test('listOfAttributes returns ListPage of CustomerAttributeData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
-            'attributes' => [
-                ['key' => 'country', 'value' => 'US'],
-                ['key' => 'language', 'value' => 'en'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example@example.com', 'updated_at' => 1658399423658],
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example2@example.com', 'updated_at' => 1658399423659],
             ],
         ], 200),
     ]);
 
     $customerId = 'test-customer-id';
-    $response = RevenueCat::customers()->listOfAttributes($customerId);
+    $list = RevenueCat::customers()->listOfAttributes($customerId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('attributes'))->toHaveCount(2);
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
 });
 
 test('get method properly encodes special characters in customer id', function () {

@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class ProjectData
+class AliasData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -15,8 +15,6 @@ class ProjectData
         private array $raw,
         private string $resourceType,
         private string $id,
-        private ?string $name,
-        /** Milliseconds since epoch, if provided by the API */
         private ?int $createdAtMs,
     ) {}
 
@@ -25,20 +23,11 @@ class ProjectData
      */
     public static function fromArray(array $payload): self
     {
-        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'ProjectData');
-        $id = Payload::requireNonEmptyString($payload, 'id', 'ProjectData');
-
-        $name = isset($payload['name']) && is_string($payload['name']) ? $payload['name'] : null;
-
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'AliasData');
+        $id = Payload::requireNonEmptyString($payload, 'id', 'AliasData');
         $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
-        return new self(
-            $payload,
-            $resourceType,
-            $id,
-            $name,
-            $createdAtMs,
-        );
+        return new self($payload, $resourceType, $id, $createdAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -60,12 +49,6 @@ class ProjectData
         return $this->resourceType;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /** Milliseconds since epoch, if provided by the API */
     public function getCreatedAtMs(): ?int
     {
         return $this->createdAtMs;
@@ -92,7 +75,6 @@ class ProjectData
         return [
             'object' => $this->resourceType,
             'id' => $this->id,
-            'name' => $this->name,
             'created_at' => $this->createdAtMs,
             'raw' => $this->raw,
         ];

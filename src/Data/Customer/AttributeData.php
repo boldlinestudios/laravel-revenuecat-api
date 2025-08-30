@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class ProjectData
+class AttributeData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -14,10 +14,9 @@ class ProjectData
         /** @var array<string, mixed> */
         private array $raw,
         private string $resourceType,
-        private string $id,
-        private ?string $name,
-        /** Milliseconds since epoch, if provided by the API */
-        private ?int $createdAtMs,
+        private string $name,
+        private ?string $value,
+        private ?int $updatedAtMs,
     ) {}
 
     /**
@@ -25,20 +24,12 @@ class ProjectData
      */
     public static function fromArray(array $payload): self
     {
-        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'ProjectData');
-        $id = Payload::requireNonEmptyString($payload, 'id', 'ProjectData');
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'AttributeData');
+        $name = Payload::requireNonEmptyString($payload, 'name', 'AttributeData');
+        $value = isset($payload['value']) && is_string($payload['value']) ? $payload['value'] : null;
+        $updatedAtMs = Payload::parseMs($payload['updated_at'] ?? null);
 
-        $name = isset($payload['name']) && is_string($payload['name']) ? $payload['name'] : null;
-
-        $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
-
-        return new self(
-            $payload,
-            $resourceType,
-            $id,
-            $name,
-            $createdAtMs,
-        );
+        return new self($payload, $resourceType, $name, $value, $updatedAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -50,30 +41,29 @@ class ProjectData
         return self::fromArray($payload);
     }
 
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
     public function getResourceType(): string
     {
         return $this->resourceType;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /** Milliseconds since epoch, if provided by the API */
-    public function getCreatedAtMs(): ?int
+    public function getValue(): ?string
     {
-        return $this->createdAtMs;
+        return $this->value;
     }
 
-    public function getCreatedAtDate(): ?\DateTimeImmutable
+    public function getUpdatedAtMs(): ?int
     {
-        return Payload::dateFromMs($this->createdAtMs);
+        return $this->updatedAtMs;
+    }
+
+    public function getUpdatedAtDate(): ?\DateTimeImmutable
+    {
+        return Payload::dateFromMs($this->updatedAtMs);
     }
 
     /**
@@ -91,9 +81,9 @@ class ProjectData
     {
         return [
             'object' => $this->resourceType,
-            'id' => $this->id,
             'name' => $this->name,
-            'created_at' => $this->createdAtMs,
+            'value' => $this->value,
+            'updated_at' => $this->updatedAtMs,
             'raw' => $this->raw,
         ];
     }

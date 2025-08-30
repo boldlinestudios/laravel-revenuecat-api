@@ -3,6 +3,10 @@
 namespace BoldlineStudios\RevenueCatApi\Http\Concerns;
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
@@ -135,24 +139,39 @@ trait ConvenienceMethods
         return $this->customers()->listOfPurchases($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerActiveEntitlements(string $customerId): Response
+    /**
+     * @return ListPage<ActiveEntitlementData>
+     */
+    public function getCustomerActiveEntitlements(string $customerId): ListPage
     {
         return $this->customers()->listOfActiveEntitlements($customerId);
     }
 
-    public function getCustomerAliases(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<AliasData>
+     */
+    public function getCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfAliases($customerId);
+        return $this->customers()->listOfAliases($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerVirtualCurrencyBalances(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<VirtualCurrencyBalanceData>
+     */
+    public function getCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfVirtualCurrencyBalances($customerId);
+        return $this->customers()->listOfVirtualCurrencyBalances($customerId, $limit, $startingAfter, $extra);
     }
 
-    public function getCustomerAttributes(string $customerId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<AttributeData>
+     */
+    public function getCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfAttributes($customerId);
+        return $this->customers()->listOfAttributes($customerId, $limit, $startingAfter, $extra);
     }
 
     // Entitlement convenience methods
@@ -324,9 +343,14 @@ trait ConvenienceMethods
         return $this->purchases()->get($purchaseId);
     }
 
-    public function getPurchaseEntitlements(string $purchaseId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
+     */
+    public function getPurchaseEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->purchases()->listOfEntitlements($purchaseId);
+        return $this->purchases()->listOfEntitlements($purchaseId, $limit, $startingAfter, $extra);
+
     }
 
     // Subscription convenience methods
@@ -335,9 +359,13 @@ trait ConvenienceMethods
         return $this->subscriptions()->get($subscriptionId);
     }
 
-    public function getSubscriptionEntitlements(string $subscriptionId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
+     */
+    public function getSubscriptionEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->subscriptions()->listOfEntitlements($subscriptionId);
+        return $this->subscriptions()->listOfEntitlements($subscriptionId, $limit, $startingAfter, $extra);
     }
 
     public function getSubscriptionTransactions(string $subscriptionId): Response

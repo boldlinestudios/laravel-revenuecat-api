@@ -74,16 +74,19 @@ class Package
     /**
      * Get a list of products attached to a given package of an offering
      *
-     * Note: this endpoint nests each item under a "product" key in the items array.
-     *
      * @param  array<string, mixed>  $extra
      * @return ListPage<ProductData>
      */
     public function listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        // This endpoint returns items shaped as { product: {...}, eligibility_criteria: ... }
+        // This is unlike other endpoints that return the items at the top level.
+
         $packageId = rawurlencode($packageId);
         $path = "/packages/{$packageId}/products";
 
+        // We unwrap the inner "product" payloads into ProductData DTOs while preserving
+        // standard pagination fields.
         $response = $this->listRawForPath($path, $limit, $startingAfter, $extra);
         $payload = $response->json();
         $payload = is_array($payload) ? $payload : [];
@@ -91,14 +94,17 @@ class Package
         $items = $payload['items'] ?? [];
         $items = is_array($items) ? $items : [];
 
+        /** @var array<int, ProductData> $dtos */
         $dtos = [];
         foreach ($items as $item) {
             if (! is_array($item)) {
                 continue;
             }
 
-            $product = $item['product'] ?? null;
-            if (is_array($product)) {
+            // Preferred: nested under 'product'
+            if (isset($item['product']) && is_array($item['product'])) {
+                /** @var array<string, mixed> $product */
+                $product = $item['product'];
                 $dtos[] = ProductData::fromArray($product);
             }
         }
@@ -106,8 +112,8 @@ class Package
         $next = isset($payload['next_page']) && is_string($payload['next_page']) ? $payload['next_page'] : null;
         $url = isset($payload['url']) && is_string($payload['url']) ? $payload['url'] : $path;
 
-        /** @var ListPage<ProductData> */
         return new ListPage($dtos, $next, $url, $response);
+
     }
 
     /**

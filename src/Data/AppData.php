@@ -21,6 +21,7 @@ class AppData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $name,
         /** Milliseconds since epoch, if provided by the API */
@@ -50,6 +51,7 @@ class AppData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'AppData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'AppData');
 
         $name = isset($payload['name']) && is_string($payload['name']) ? $payload['name'] : null;
@@ -70,6 +72,7 @@ class AppData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $name,
             $createdAtMs,
@@ -98,6 +101,11 @@ class AppData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getName(): ?string
@@ -211,6 +219,7 @@ class AppData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'name' => $this->name,
             'created_at' => $this->createdAtMs,

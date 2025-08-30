@@ -21,8 +21,8 @@ test('list returns ListPage of PackageData', function () {
         'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
-                ['id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
+                ['object' => 'package', 'id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
+                ['object' => 'package', 'id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/packages',
@@ -60,6 +60,7 @@ test('create returns PackageData DTO', function () {
 test('get returns PackageData with encoded package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
+            'object' => 'package',
             'id' => 'test-package-id',
             'lookup_key' => 'premium_package',
             'display_name' => 'Premium package',
@@ -176,6 +177,7 @@ test('listOfProducts returns ListPage of ProductData', function () {
     ]);
 
     $packageId = 'test-package-id';
+
     $page = RevenueCat::packages()->listOfProducts($packageId);
 
     expect($page)->toBeInstanceOf(ListPage::class);
@@ -193,6 +195,7 @@ test('listOfProducts returns ListPage of ProductData', function () {
 test('get method properly encodes special characters in package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'package',
             'id' => 'test package with spaces & special chars',
             'lookup_key' => 'special_package',
             'display_name' => 'Special package',
@@ -222,6 +225,8 @@ test('listOfProducts method properly encodes special characters in package id', 
 
     expect($page)->toBeInstanceOf(ListPage::class);
     expect(count($page->items()))->toBe(0);
+    expect($page->items())->toBe([]);
+    expect($page->nextCursor())->toBeNull();
 });
 
 test('list method works with empty query array', function () {

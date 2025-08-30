@@ -14,6 +14,7 @@ class EntitlementData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $projectId,
         private ?string $lookupKey,
@@ -28,6 +29,7 @@ class EntitlementData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'EntitlementData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'EntitlementData');
 
         $projectId = isset($payload['project_id']) && is_string($payload['project_id']) ? $payload['project_id'] : null;
@@ -52,6 +54,7 @@ class EntitlementData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $projectId,
             $lookupKey,
@@ -73,6 +76,11 @@ class EntitlementData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getProjectId(): ?string
@@ -122,6 +130,7 @@ class EntitlementData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'project_id' => $this->projectId,
             'lookup_key' => $this->lookupKey,

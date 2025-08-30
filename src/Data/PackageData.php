@@ -14,6 +14,7 @@ class PackageData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $lookupKey,
         private ?string $displayName,
@@ -28,6 +29,7 @@ class PackageData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'PackageData');
         $id = isset($payload['id']) && is_string($payload['id']) ? $payload['id'] : '';
         if ($id === '') {
             throw new \InvalidArgumentException('PackageData requires a non-empty string id');
@@ -60,6 +62,7 @@ class PackageData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $lookupKey,
             $displayName,
@@ -81,6 +84,11 @@ class PackageData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getLookupKey(): ?string
@@ -132,6 +140,7 @@ class PackageData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'lookup_key' => $this->lookupKey,
             'display_name' => $this->displayName,
