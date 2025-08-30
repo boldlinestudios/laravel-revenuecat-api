@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class CustomerVirtualCurrencyBalanceData
+class VirtualCurrencyBalanceData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -13,9 +13,8 @@ class CustomerVirtualCurrencyBalanceData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
-        private string $id,
-        private string $currency,
-        private ?int $balance,
+        private string $currencyCode,
+        private int $balance,
     ) {}
 
     /**
@@ -23,12 +22,10 @@ class CustomerVirtualCurrencyBalanceData
      */
     public static function fromArray(array $payload): self
     {
-        $id = Payload::requireNonEmptyString($payload, 'id', 'CustomerVirtualCurrencyBalanceData');
-        $currency = Payload::requireNonEmptyString($payload, 'currency', 'CustomerVirtualCurrencyBalanceData');
-        $balanceRaw = $payload['balance'] ?? null;
-        $balance = is_int($balanceRaw) ? $balanceRaw : (is_numeric($balanceRaw) ? (int) $balanceRaw : null);
+        $currencyCode = Payload::requireNonEmptyString($payload, 'currency_code', 'VirtualCurrencyBalanceData');
+        $balance = Payload::requireInteger($payload, 'balance', 'VirtualCurrencyBalanceData');
 
-        return new self($payload, $id, $currency, $balance);
+        return new self($payload, $currencyCode, $balance);
     }
 
     public static function fromResponse(Response $response): self
@@ -40,17 +37,12 @@ class CustomerVirtualCurrencyBalanceData
         return self::fromArray($payload);
     }
 
-    public function getId(): string
+    public function getCurrencyCode(): string
     {
-        return $this->id;
+        return $this->currencyCode;
     }
 
-    public function getCurrency(): string
-    {
-        return $this->currency;
-    }
-
-    public function getBalance(): ?int
+    public function getBalance(): int
     {
         return $this->balance;
     }
@@ -69,8 +61,7 @@ class CustomerVirtualCurrencyBalanceData
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'currency' => $this->currency,
+            'currency_code' => $this->currencyCode,
             'balance' => $this->balance,
             'raw' => $this->raw,
         ];

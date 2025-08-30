@@ -1,6 +1,8 @@
 <?php
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
@@ -358,9 +360,10 @@ test('listOfPurchases returns ListPage of PurchaseData', function () {
 test('listOfActiveEntitlements returns ListPage of CustomerActiveEntitlementData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/active_entitlements' => Http::response([
-            'entitlements' => [
-                ['id' => 'ent1', 'identifier' => 'premium'],
-                ['id' => 'ent2', 'identifier' => 'pro'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.active_entitlement', 'entitlement_id' => 'ent1', 'expires_at' => 1658399423658],
+                ['object' => 'customer.active_entitlement', 'entitlement_id' => 'ent2', 'expires_at' => 1658399423659],
             ],
         ], 200),
     ]);
@@ -370,16 +373,21 @@ test('listOfActiveEntitlements returns ListPage of CustomerActiveEntitlementData
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
-    expect($list->items()[0]->getId())->toBe('ent1');
+    expect($list->items()[0])->toBeInstanceOf(ActiveEntitlementData::class);
+    expect($list->items()[0]->getEntitlementId())->toBe('ent1');
+    expect($list->items()[0]->getExpiresAtMs())->toBe(1658399423658);
+    expect($list->items()[1])->toBeInstanceOf(ActiveEntitlementData::class);
+    expect($list->items()[1]->getEntitlementId())->toBe('ent2');
+    expect($list->items()[1]->getExpiresAtMs())->toBe(1658399423659);
 });
 
 test('listOfAliases returns ListPage of CustomerAliasData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/aliases' => Http::response([
             'object' => 'list',
-            'aliases' => [
-                ['id' => 'alias1', 'alias' => 'user1@example.com'],
-                ['id' => 'alias2', 'alias' => 'user1_alt'],
+            'items' => [
+                ['object' => 'customer.alias', 'id' => '19b8de26-77c1-49f1-aa18-019a391603e2', 'created_at' => 1658399423658],
+                ['object' => 'customer.alias', 'id' => '19b8de26-77c1-49f1-aa18-019a391603e3', 'created_at' => 1658399423659],
             ],
         ], 200),
     ]);
@@ -395,9 +403,9 @@ test('listOfVirtualCurrencyBalances returns ListPage of CustomerVirtualCurrencyB
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/virtual_currencies' => Http::response([
             'object' => 'list',
-            'virtual_currencies' => [
-                ['id' => 'vc1', 'currency' => 'coins', 'balance' => 100],
-                ['id' => 'vc2', 'currency' => 'gems', 'balance' => 50],
+            'items' => [
+                ['object' => 'virtual_currency_balance', 'currency_code' => 'string', 'balance' => 0],
+                ['object' => 'virtual_currency_balance', 'currency_code' => 'string', 'balance' => 2],
             ],
         ], 200),
     ]);
@@ -407,15 +415,21 @@ test('listOfVirtualCurrencyBalances returns ListPage of CustomerVirtualCurrencyB
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
+    expect($list->items()[0])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+    expect($list->items()[1])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+    expect($list->items()[0]->getCurrencyCode())->toBe('string');
+    expect($list->items()[0]->getBalance())->toBe(0);
+    expect($list->items()[1]->getCurrencyCode())->toBe('string');
+    expect($list->items()[1]->getBalance())->toBe(2);
 });
 
 test('listOfAttributes returns ListPage of CustomerAttributeData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
             'object' => 'list',
-            'attributes' => [
-                ['key' => 'country', 'value' => 'US'],
-                ['key' => 'language', 'value' => 'en'],
+            'items' => [
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example@example.com', 'updated_at' => 1658399423658],
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example2@example.com', 'updated_at' => 1658399423659],
             ],
         ], 200),
     ]);

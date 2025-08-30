@@ -1,6 +1,10 @@
 <?php
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
@@ -334,7 +338,7 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/active_entitlements' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'entitlement1', 'identifier' => 'premium'],
+                    ['object' => 'customer.active_entitlement', 'entitlement_id' => 'ent1', 'expires_at' => 1658399423658],
                 ],
             ], 200),
         ]);
@@ -343,6 +347,9 @@ describe('Customer Convenience Methods', function () {
 
         expect($list)->toBeInstanceOf(ListPage::class);
         expect(count($list->items()))->toBe(1);
+        expect($list->items()[0])->toBeInstanceOf(ActiveEntitlementData::class);
+        expect($list->items()[0]->getEntitlementId())->toBe('ent1');
+        expect($list->items()[0]->getExpiresAtMs())->toBe(1658399423658);
     });
 
     test('getCustomerAliases calls customers()->listOfAliases() with correct parameters', function () {
@@ -350,7 +357,7 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/aliases' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'alias1', 'alias' => 'john_doe'],
+                    ['object' => 'customer.alias', 'id' => '19b8de26-77c1-49f1-aa18-019a391603e2', 'created_at' => 1658399423658],
                 ],
             ], 200),
         ]);
@@ -359,6 +366,9 @@ describe('Customer Convenience Methods', function () {
 
         expect($list)->toBeInstanceOf(ListPage::class);
         expect(count($list->items()))->toBe(1);
+        expect($list->items()[0])->toBeInstanceOf(AliasData::class);
+        expect($list->items()[0]->getId())->toBe('19b8de26-77c1-49f1-aa18-019a391603e2');
+        expect($list->items()[0]->getCreatedAtMs())->toBe(1658399423658);
     });
 
     test('getCustomerVirtualCurrencyBalances calls customers()->listOfVirtualCurrencyBalances() with correct parameters', function () {
@@ -366,7 +376,8 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/virtual_currencies' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'balance1', 'currency' => 'coins', 'balance' => 100],
+                    ['object' => 'virtual_currency_balance', 'currency_code' => 'coins', 'balance' => 100],
+                    ['object' => 'virtual_currency_balance', 'currency_code' => 'gems', 'balance' => 200],
                 ],
             ], 200),
         ]);
@@ -374,7 +385,13 @@ describe('Customer Convenience Methods', function () {
         $list = RevenueCat::getCustomerVirtualCurrencyBalances('test-customer-id');
 
         expect($list)->toBeInstanceOf(ListPage::class);
-        expect(count($list->items()))->toBe(1);
+        expect(count($list->items()))->toBe(2);
+        expect($list->items()[0])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+        expect($list->items()[0]->getCurrencyCode())->toBe('coins');
+        expect($list->items()[0]->getBalance())->toBe(100);
+        expect($list->items()[1])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
+        expect($list->items()[1]->getCurrencyCode())->toBe('gems');
+        expect($list->items()[1]->getBalance())->toBe(200);
     });
 
     test('getCustomerAttributes calls customers()->listOfAttributes() with correct parameters', function () {
@@ -382,7 +399,8 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'attr1', 'key' => 'preference', 'value' => 'dark_mode'],
+                    ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example@example.com', 'updated_at' => 1658399423658],
+                    ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'example2@example.com', 'updated_at' => 1658399423659],
                 ],
             ], 200),
         ]);
@@ -390,7 +408,13 @@ describe('Customer Convenience Methods', function () {
         $list = RevenueCat::getCustomerAttributes('test-customer-id');
 
         expect($list)->toBeInstanceOf(ListPage::class);
-        expect(count($list->items()))->toBe(1);
+        expect(count($list->items()))->toBe(2);
+        expect($list->items()[0])->toBeInstanceOf(AttributeData::class);
+        expect($list->items()[0]->getName())->toBe('$email');
+        expect($list->items()[0]->getValue())->toBe('example@example.com');
+        expect($list->items()[1])->toBeInstanceOf(AttributeData::class);
+        expect($list->items()[1]->getName())->toBe('$email');
+        expect($list->items()[1]->getValue())->toBe('example2@example.com');
     });
 });
 

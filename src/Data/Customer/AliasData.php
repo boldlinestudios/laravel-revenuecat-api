@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class CustomerAttributeData
+class AliasData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -13,8 +13,8 @@ class CustomerAttributeData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
-        private string $key,
-        private ?string $value,
+        private string $id,
+        private ?int $createdAtMs,
     ) {}
 
     /**
@@ -22,10 +22,10 @@ class CustomerAttributeData
      */
     public static function fromArray(array $payload): self
     {
-        $key = Payload::requireNonEmptyString($payload, 'key', 'CustomerAttributeData');
-        $value = isset($payload['value']) && is_string($payload['value']) ? $payload['value'] : null;
+        $id = Payload::requireNonEmptyString($payload, 'id', 'AliasData');
+        $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
-        return new self($payload, $key, $value);
+        return new self($payload, $id, $createdAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -37,14 +37,19 @@ class CustomerAttributeData
         return self::fromArray($payload);
     }
 
-    public function getKey(): string
+    public function getId(): string
     {
-        return $this->key;
+        return $this->id;
     }
 
-    public function getValue(): ?string
+    public function getCreatedAtMs(): ?int
     {
-        return $this->value;
+        return $this->createdAtMs;
+    }
+
+    public function getCreatedAtDate(): ?\DateTimeImmutable
+    {
+        return Payload::dateFromMs($this->createdAtMs);
     }
 
     /**
@@ -61,8 +66,8 @@ class CustomerAttributeData
     public function toArray(): array
     {
         return [
-            'key' => $this->key,
-            'value' => $this->value,
+            'id' => $this->id,
+            'created_at' => $this->createdAtMs,
             'raw' => $this->raw,
         ];
     }

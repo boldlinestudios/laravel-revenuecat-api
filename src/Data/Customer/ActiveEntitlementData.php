@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class CustomerAliasData
+class ActiveEntitlementData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -13,8 +13,8 @@ class CustomerAliasData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
-        private string $id,
-        private string $alias,
+        private string $entitlementId,
+        private ?int $expiresAtMs,
     ) {}
 
     /**
@@ -22,10 +22,12 @@ class CustomerAliasData
      */
     public static function fromArray(array $payload): self
     {
-        $id = Payload::requireNonEmptyString($payload, 'id', 'CustomerAliasData');
-        $alias = Payload::requireNonEmptyString($payload, 'alias', 'CustomerAliasData');
+        $entitlementId = Payload::requireNonEmptyString($payload, 'entitlement_id', 'ActiveEntitlementData');
+        $expiresAtMs = isset($payload['expires_at']) && is_int($payload['expires_at'])
+            ? $payload['expires_at']
+            : null;
 
-        return new self($payload, $id, $alias);
+        return new self($payload, $entitlementId, $expiresAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -37,14 +39,19 @@ class CustomerAliasData
         return self::fromArray($payload);
     }
 
-    public function getId(): string
+    public function getEntitlementId(): string
     {
-        return $this->id;
+        return $this->entitlementId;
     }
 
-    public function getAlias(): string
+    public function getExpiresAtMs(): ?int
     {
-        return $this->alias;
+        return $this->expiresAtMs;
+    }
+
+    public function getExpiresAtDate(): ?\DateTimeImmutable
+    {
+        return Payload::dateFromMs($this->expiresAtMs) ?? null;
     }
 
     /**
@@ -61,8 +68,8 @@ class CustomerAliasData
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'alias' => $this->alias,
+            'entitlement_id' => $this->entitlementId,
+            'expires_at' => $this->expiresAtMs,
             'raw' => $this->raw,
         ];
     }

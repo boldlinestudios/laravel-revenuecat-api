@@ -88,4 +88,31 @@ final class Payload
             ->setTimestamp((int) floor($ms / 1000))
             ->setTimezone(new \DateTimeZone('UTC'));
     }
+
+    /**
+     * Require an integer field from a payload.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public static function requireInteger(array $data, string $key, string $context): int
+    {
+        $value = $data[$key] ?? null;
+        if (! is_int($value)) {
+            throw new \InvalidArgumentException($context.' requires an integer '.$key);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Read an optional integer field.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public static function optionalInteger(array $data, string $key): ?int
+    {
+        $value = $data[$key] ?? null;
+
+        return is_int($value) ? $value : null;
+    }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldlineStudios\RevenueCatApi\Data\Customer;
 
 use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
-class CustomerActiveEntitlementData
+class AttributeData
 {
     /**
      * @param  array<string, mixed>  $raw
@@ -13,8 +13,9 @@ class CustomerActiveEntitlementData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
-        private string $id,
-        private ?string $identifier,
+        private string $name,
+        private ?string $value,
+        private ?int $updatedAtMs,
     ) {}
 
     /**
@@ -22,12 +23,11 @@ class CustomerActiveEntitlementData
      */
     public static function fromArray(array $payload): self
     {
-        $id = Payload::requireNonEmptyString($payload, 'id', 'CustomerActiveEntitlementData');
-        $identifier = isset($payload['identifier']) && is_string($payload['identifier'])
-            ? $payload['identifier']
-            : null;
+        $name = Payload::requireNonEmptyString($payload, 'name', 'AttributeData');
+        $value = isset($payload['value']) && is_string($payload['value']) ? $payload['value'] : null;
+        $updatedAtMs = Payload::parseMs($payload['updated_at'] ?? null);
 
-        return new self($payload, $id, $identifier);
+        return new self($payload, $name, $value, $updatedAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -39,14 +39,24 @@ class CustomerActiveEntitlementData
         return self::fromArray($payload);
     }
 
-    public function getId(): string
+    public function getName(): string
     {
-        return $this->id;
+        return $this->name;
     }
 
-    public function getIdentifier(): ?string
+    public function getValue(): ?string
     {
-        return $this->identifier;
+        return $this->value;
+    }
+
+    public function getUpdatedAtMs(): ?int
+    {
+        return $this->updatedAtMs;
+    }
+
+    public function getUpdatedAtDate(): ?\DateTimeImmutable
+    {
+        return Payload::dateFromMs($this->updatedAtMs);
     }
 
     /**
@@ -63,8 +73,9 @@ class CustomerActiveEntitlementData
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'identifier' => $this->identifier,
+            'name' => $this->name,
+            'value' => $this->value,
+            'updated_at' => $this->updatedAtMs,
             'raw' => $this->raw,
         ];
     }

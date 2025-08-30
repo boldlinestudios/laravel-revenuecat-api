@@ -2,11 +2,11 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\CustomerActiveEntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerAliasData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerAttributeData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerVirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
@@ -119,17 +119,17 @@ class Customer
 
     /**
      * Get a list of active entitlements for a customer
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ActiveEntitlementData>
      */
-    /**
-     * @return ListPage<CustomerActiveEntitlementData>
-     */
-    public function listOfActiveEntitlements(string $customerId): ListPage
+    public function listOfActiveEntitlements(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/active_entitlements";
 
-        /** @var ListPage<CustomerActiveEntitlementData> */
-        return $this->listPageForPath($path, CustomerActiveEntitlementData::class, 20, null, [], 'entitlements', 'next_page', 'url');
+        /** @var ListPage<ActiveEntitlementData> */
+        return $this->listPageForPath($path, ActiveEntitlementData::class, $limit, $startingAfter, $extra);
     }
 
     /**
@@ -137,46 +137,44 @@ class Customer
      */
     /**
      * @param  array<string, mixed>  $extra
-     * @return ListPage<CustomerAliasData>
+     * @return ListPage<AliasData>
      */
     public function listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/aliases";
 
-        /** @var ListPage<CustomerAliasData> */
-        return $this->listPageForPath($path, CustomerAliasData::class, $limit, $startingAfter, $extra);
+        /** @var ListPage<AliasData> */
+        return $this->listPageForPath($path, AliasData::class, $limit, $startingAfter, $extra);
     }
 
     /**
      * Get a list of virtual currency balances for the customer
-     */
-    /**
+     *
      * @param  array<string, mixed>  $extra
-     * @return ListPage<CustomerVirtualCurrencyBalanceData>
+     * @return ListPage<VirtualCurrencyBalanceData>
      */
     public function listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/virtual_currencies";
 
-        /** @var ListPage<CustomerVirtualCurrencyBalanceData> */
-        return $this->listPageForPath($path, CustomerVirtualCurrencyBalanceData::class, $limit, $startingAfter, $extra, 'virtual_currencies');
+        /** @var ListPage<VirtualCurrencyBalanceData> */
+        return $this->listPageForPath($path, VirtualCurrencyBalanceData::class, $limit, $startingAfter, $extra);
     }
 
     /**
      * Get a list of customer attributes
-     */
-    /**
+     *
      * @param  array<string, mixed>  $extra
-     * @return ListPage<CustomerAttributeData>
+     * @return ListPage<AttributeData>
      */
     public function listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/attributes";
 
-        /** @var ListPage<CustomerAttributeData> */
-        return $this->listPageForPath($path, CustomerAttributeData::class, $limit, $startingAfter, $extra, 'attributes');
+        /** @var ListPage<AttributeData> */
+        return $this->listPageForPath($path, AttributeData::class, $limit, $startingAfter, $extra);
     }
 }

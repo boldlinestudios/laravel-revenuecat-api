@@ -3,6 +3,10 @@
 namespace BoldlineStudios\RevenueCatApi\Http\Concerns;
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
@@ -136,7 +140,7 @@ trait ConvenienceMethods
     }
 
     /**
-     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerActiveEntitlementData>
+     * @return ListPage<ActiveEntitlementData>
      */
     public function getCustomerActiveEntitlements(string $customerId): ListPage
     {
@@ -145,7 +149,7 @@ trait ConvenienceMethods
 
     /**
      * @param  array<string, mixed>  $extra
-     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAliasData>
+     * @return ListPage<AliasData>
      */
     public function getCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
@@ -154,7 +158,7 @@ trait ConvenienceMethods
 
     /**
      * @param  array<string, mixed>  $extra
-     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerVirtualCurrencyBalanceData>
+     * @return ListPage<VirtualCurrencyBalanceData>
      */
     public function getCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
@@ -163,7 +167,7 @@ trait ConvenienceMethods
 
     /**
      * @param  array<string, mixed>  $extra
-     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\CustomerAttributeData>
+     * @return ListPage<AttributeData>
      */
     public function getCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
