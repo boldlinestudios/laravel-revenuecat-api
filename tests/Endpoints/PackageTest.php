@@ -116,8 +116,6 @@ test('listOfProducts returns ListPage of ProductData', function () {
         'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
             'object' => 'list',
             'items' => [
-            'next_page' => null,
-            'url' => '/v2/projects/test_project/packages/test-package-id/products',
                 [
                     'product' => [
                         'object' => 'product',
