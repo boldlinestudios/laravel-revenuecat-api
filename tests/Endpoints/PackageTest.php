@@ -2,8 +2,8 @@
 
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -21,8 +21,8 @@ test('list returns ListPage of PackageData', function () {
         'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
-                ['id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
+                ['object' => 'package', 'id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
+                ['object' => 'package', 'id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/packages',
@@ -60,6 +60,7 @@ test('create returns PackageData DTO', function () {
 test('get returns PackageData with encoded package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id' => Http::response([
+            'object' => 'package',
             'id' => 'test-package-id',
             'lookup_key' => 'premium_package',
             'display_name' => 'Premium package',
@@ -110,32 +111,36 @@ test('delete returns true when deletion succeeds', function () {
     expect($deleted)->toBeTrue();
 });
 
-test('listOfProducts returns response from client', function () {
+test('listOfProducts returns ListPage of ProductData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
-            'products' => [
-                'object' => 'list',
-                'items' => [
-                    ['id' => 'product1', 'store_identifier' => 'rc_1w_199'],
-                    ['id' => 'product2', 'store_identifier' => 'rc_1w_100'],
-                ],
-                'next_page' => null,
-                'url' => '/v2/projects/test_project/packages/test-package-id/products',
+            'object' => 'list',
+            'items' => [
+                ['object' => 'product', 'id' => 'product1', 'store_identifier' => 'rc_1w_199'],
+                ['object' => 'product', 'id' => 'product2', 'store_identifier' => 'rc_1w_100'],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/packages/test-package-id/products',
+
         ], 200),
     ]);
 
     $packageId = 'test-package-id';
     $response = RevenueCat::packages()->listOfProducts($packageId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('products')['items'])->toHaveCount(2);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(2);
+    expect($response->items()[0])->toBeInstanceOf(ProductData::class);
+    expect($response->items()[0]->getId())->toBe('product1');
+    expect($response->items()[1])->toBeInstanceOf(ProductData::class);
+    expect($response->items()[1]->getId())->toBe('product2');
+
 });
 
 test('get method properly encodes special characters in package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'package',
             'id' => 'test package with spaces & special chars',
             'lookup_key' => 'special_package',
             'display_name' => 'Special package',
@@ -153,16 +158,20 @@ test('get method properly encodes special characters in package id', function ()
 test('listOfProducts method properly encodes special characters in package id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars/products' => Http::response([
-            'products' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars/products',
         ], 200),
     ]);
 
     $packageId = 'test package with spaces & special chars';
     $response = RevenueCat::packages()->listOfProducts($packageId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('products'))->toBe([]);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(0);
+    expect($response->items())->toBe([]);
+    expect($response->nextCursor())->toBeNull();
 });
 
 test('list method works with empty query array', function () {

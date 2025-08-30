@@ -15,6 +15,7 @@ class OfferingData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $lookupKey,
         private ?string $displayName,
@@ -32,6 +33,7 @@ class OfferingData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'OfferingData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'OfferingData');
 
         $lookupKey = isset($payload['lookup_key']) && is_string($payload['lookup_key']) ? $payload['lookup_key'] : null;
@@ -50,6 +52,7 @@ class OfferingData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $lookupKey,
             $displayName,
@@ -73,6 +76,11 @@ class OfferingData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getLookupKey(): ?string
@@ -137,6 +145,7 @@ class OfferingData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'lookup_key' => $this->lookupKey,
             'display_name' => $this->displayName,

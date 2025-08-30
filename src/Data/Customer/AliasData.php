@@ -13,6 +13,7 @@ class AliasData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?int $createdAtMs,
     ) {}
@@ -22,10 +23,11 @@ class AliasData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'AliasData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'AliasData');
         $createdAtMs = Payload::parseMs($payload['created_at'] ?? null);
 
-        return new self($payload, $id, $createdAtMs);
+        return new self($payload, $resourceType, $id, $createdAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -40,6 +42,11 @@ class AliasData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getCreatedAtMs(): ?int
@@ -66,6 +73,7 @@ class AliasData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'created_at' => $this->createdAtMs,
             'raw' => $this->raw,

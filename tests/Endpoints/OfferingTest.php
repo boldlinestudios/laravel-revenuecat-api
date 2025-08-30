@@ -20,8 +20,8 @@ test('list returns ListPage of OfferingData', function () {
         'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'offering1', 'lookup_key' => 'default', 'display_name' => 'Default'],
-                ['id' => 'offering2', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
+                ['object' => 'offering', 'id' => 'offering1', 'lookup_key' => 'default', 'display_name' => 'Default'],
+                ['object' => 'offering', 'id' => 'offering2', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/offerings',
@@ -41,7 +41,7 @@ test('create returns OfferingData DTO', function () {
             'id' => 'new_offering_id',
             'lookup_key' => 'new_premium',
             'display_name' => 'New Premium',
-            'created_at' => 1704067200000,
+            'created_at' => 1658399423658,
             'metadata' => ['color' => 'blue', 'call_to_action' => 'Get it now'],
         ], 201),
     ]);

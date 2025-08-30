@@ -21,8 +21,8 @@ test('list returns ListPage of EntitlementData', function () {
         'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'ent1', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
-                ['id' => 'ent2', 'lookup_key' => 'pro', 'display_name' => 'Pro'],
+                ['object' => 'entitlement', 'id' => 'ent1', 'lookup_key' => 'premium', 'display_name' => 'Premium'],
+                ['object' => 'entitlement', 'id' => 'ent2', 'lookup_key' => 'pro', 'display_name' => 'Pro'],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/entitlements',
@@ -111,8 +111,8 @@ test('listOfProducts returns ListPage of ProductData', function () {
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/products' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'prod1', 'store_identifier' => 'sku_monthly', 'type' => 'subscription'],
-                ['id' => 'prod2', 'store_identifier' => 'sku_yearly', 'type' => 'subscription'],
+                ['object' => 'product', 'id' => 'prod1', 'store_identifier' => 'sku_monthly', 'type' => 'subscription'],
+                ['object' => 'product', 'id' => 'prod2', 'store_identifier' => 'sku_yearly', 'type' => 'subscription'],
             ],
             'next_page' => null,
             'url' => '/v2/projects/test_project/entitlements/test-entitlement-id/products',

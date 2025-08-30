@@ -290,9 +290,13 @@ trait ConvenienceMethods
         return $this->packages()->delete($packageId);
     }
 
-    public function getPackageProducts(string $packageId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ProductData>
+     */
+    public function getPackageProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->packages()->listOfProducts($packageId);
+        return $this->packages()->listOfProducts($packageId, $limit, $startingAfter, $extra);
     }
 
     // Product convenience methods
@@ -339,9 +343,14 @@ trait ConvenienceMethods
         return $this->purchases()->get($purchaseId);
     }
 
-    public function getPurchaseEntitlements(string $purchaseId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
+     */
+    public function getPurchaseEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->purchases()->listOfEntitlements($purchaseId);
+        return $this->purchases()->listOfEntitlements($purchaseId, $limit, $startingAfter, $extra);
+
     }
 
     // Subscription convenience methods
@@ -350,9 +359,13 @@ trait ConvenienceMethods
         return $this->subscriptions()->get($subscriptionId);
     }
 
-    public function getSubscriptionEntitlements(string $subscriptionId): Response
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
+     */
+    public function getSubscriptionEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->subscriptions()->listOfEntitlements($subscriptionId);
+        return $this->subscriptions()->listOfEntitlements($subscriptionId, $limit, $startingAfter, $extra);
     }
 
     public function getSubscriptionTransactions(string $subscriptionId): Response

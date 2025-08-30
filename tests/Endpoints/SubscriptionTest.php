@@ -1,5 +1,7 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
@@ -18,6 +20,7 @@ beforeEach(function () {
 test('get returns response from client with encoded subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id' => Http::response([
+            'object' => 'subscription',
             'id' => 'test-subscription-id',
             'customer_id' => 'customer123',
             'original_customer_id' => 'original_customer123',
@@ -54,12 +57,13 @@ test('get returns response from client with encoded subscription id', function (
     expect($subscription->getId())->toBe('test-subscription-id');
 });
 
-test('listOfEntitlements returns response from client', function () {
+test('listOfEntitlements returns ListPage of EntitlementData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/entitlements' => Http::response([
-            'entitlements' => [
-                ['id' => 'entitlement1', 'identifier' => 'premium_access'],
-                ['id' => 'entitlement2', 'identifier' => 'basic_access'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'entitlement1', 'lookup_key' => 'premium', 'display_name' => 'Premium', 'created_at' => 1658399423658, 'products' => []],
+                ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'entitlement2', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'created_at' => 1658399423659, 'products' => []],
             ],
         ], 200),
     ]);
@@ -67,17 +71,27 @@ test('listOfEntitlements returns response from client', function () {
     $subscriptionId = 'test-subscription-id';
     $response = RevenueCat::subscriptions()->listOfEntitlements($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('entitlements'))->toHaveCount(2);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(2);
+    expect($response->items()[0])->toBeInstanceOf(EntitlementData::class);
+    expect($response->items()[0]->getId())->toBe('entitlement1');
+    expect($response->items()[0]->getProjectId())->toBe('test_project');
+    expect($response->items()[0]->getLookupKey())->toBe('premium');
+    expect($response->items()[0]->getDisplayName())->toBe('Premium');
+    expect($response->items()[0]->getCreatedAtMs())->toBe(1658399423658);
+    expect($response->items()[0]->getProducts())->toBe([]);
+    expect($response->items()[1])->toBeInstanceOf(EntitlementData::class);
+    expect($response->items()[1]->getId())->toBe('entitlement2');
 });
 
+// TODO: return ListPage<SubscriptionTransactionData>
 test('listOfTransactions returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions' => Http::response([
-            'transactions' => [
-                ['id' => 'transaction1', 'amount' => 9.99, 'currency' => 'USD'],
-                ['id' => 'transaction2', 'amount' => 9.99, 'currency' => 'USD'],
+            'object' => 'list',
+            'items' => [
+                ['object' => 'subscription_transaction', 'id' => 'transaction1', 'purchased_at' => 1658399423658],
+                ['object' => 'subscription_transaction', 'id' => 'transaction2', 'purchased_at' => 1658399423659],
             ],
         ], 200),
     ]);
@@ -87,12 +101,13 @@ test('listOfTransactions returns response from client', function () {
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
-    expect($response->json('transactions'))->toHaveCount(2);
+    expect(count($response->json('items')))->toBe(2);
 });
 
 test('getCustomerPortalUrl returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/authenticated_management_url' => Http::response([
+            'object' => 'authenticated_management_url',
             'url' => 'https://portal.example.com/access/abc123',
             'expires_at' => '2024-01-01T01:00:00Z',
         ], 200),
@@ -101,15 +116,19 @@ test('getCustomerPortalUrl returns response from client', function () {
     $subscriptionId = 'test-subscription-id';
     $response = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
     expect($response->json('url'))->toBe('https://portal.example.com/access/abc123');
 });
 
+// TODO: return subscription data
 test('cancelWebBillingSubscription returns response from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/actions/cancel' => Http::response([
+            'object' => 'subscription',
             'id' => 'test-subscription-id',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
+
             'status' => 'cancelled',
             'cancelled_at' => '2024-01-01T00:00:00Z',
         ], 200),
@@ -143,6 +162,7 @@ test('refundWebBillingSubscription returns response from client', function () {
 test('get method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars' => Http::response([
+            'object' => 'subscription',
             'id' => 'test subscription with spaces & special chars',
             'customer_id' => 'customer123',
             'original_customer_id' => 'original_customer123',
@@ -156,8 +176,11 @@ test('get method properly encodes special characters in subscription id', functi
                 'proceeds' => 90,
             ],
             'entitlements' => [
-                'premium_access' => true,
-                'basic_access' => false,
+                'object' => 'list',
+                'items' => [
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'entitlement1', 'lookup_key' => 'premium', 'display_name' => 'Premium', 'created_at' => 1658399423658, 'products' => []],
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'entitlement2', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'created_at' => 1658399423659, 'products' => []],
+                ],
             ],
             'starts_at' => 1714435200000,
             'current_period_starts_at' => 1714435200000,
@@ -182,22 +205,28 @@ test('get method properly encodes special characters in subscription id', functi
 test('listOfEntitlements method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/entitlements' => Http::response([
-            'entitlements' => [],
+            'object' => 'list',
+            'items' => [],
         ], 200),
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
     $response = RevenueCat::subscriptions()->listOfEntitlements($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('entitlements'))->toBe([]);
+    expect($response)->toBeInstanceOf(ListPage::class);
+    expect(count($response->items()))->toBe(0);
+    expect($response->items())->toBe([]);
+    expect($response->nextCursor())->toBeNull();
 });
 
+// TODO: return ListPage<SubscriptionTransactionData>
 test('listOfTransactions method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions' => Http::response([
-            'transactions' => [],
+            'object' => 'list',
+            'items' => [],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions',
         ], 200),
     ]);
 
@@ -206,7 +235,7 @@ test('listOfTransactions method properly encodes special characters in subscript
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();
-    expect($response->json('transactions'))->toBe([]);
+    expect(count($response->json('items')))->toBe(0);
 });
 
 test('getCustomerPortalUrl method properly encodes special characters in subscription id', function () {

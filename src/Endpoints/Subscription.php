@@ -2,13 +2,17 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 class Subscription
 {
+    use Listable;
     use Retrievable;
 
     public function __construct(private RevenueCatClient $client) {}
@@ -31,18 +35,24 @@ class Subscription
     /**
      * Get a list of entitlements associated with a subscription
      * This endpoint requires the following permission(s): customer_information:subscriptions:read
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
      */
-    public function listOfEntitlements(string $subscriptionId): Response
+    public function listOfEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $subscriptionId = rawurlencode($subscriptionId);
+        $path = "/subscriptions/{$subscriptionId}/entitlements";
 
-        return $this->client->get("/subscriptions/{$subscriptionId}/entitlements");
+        /** @var ListPage<EntitlementData> */
+        return $this->listPageForPath($path, EntitlementData::class, $limit, $startingAfter, $extra);
     }
 
     /**
      * Get a Play Store subscription's transactions
      * This endpoint requires the following permission(s): customer_information:subscriptions:read
      */
+    // TODO: return ListPage<SubscriptionTransactionData>
     public function listOfTransactions(string $subscriptionId): Response
     {
         $subscriptionId = rawurlencode($subscriptionId);

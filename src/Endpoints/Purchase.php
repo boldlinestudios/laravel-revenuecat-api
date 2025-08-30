@@ -2,13 +2,16 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Purchase
 {
+    use Listable;
     use Retrievable;
 
     public function __construct(private RevenueCatClient $client) {}
@@ -30,11 +33,16 @@ class Purchase
 
     /**
      * Get a list of entitlements associated with a purchase
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<EntitlementData>
      */
-    public function listOfEntitlements(string $purchaseId): Response
+    public function listOfEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $purchaseId = rawurlencode($purchaseId);
+        $path = "/purchases/{$purchaseId}/entitlements";
 
-        return $this->client->get("/purchases/{$purchaseId}/entitlements");
+        /** @var ListPage<EntitlementData> */
+        return $this->listPageForPath($path, EntitlementData::class, $limit, $startingAfter, $extra);
     }
 }

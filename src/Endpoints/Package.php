@@ -4,13 +4,13 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
+use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Package
 {
@@ -73,12 +73,17 @@ class Package
 
     /**
      * Get a list of products attached to a given package of an offering
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<ProductData>
      */
-    public function listOfProducts(string $packageId): Response
+    public function listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $packageId = rawurlencode($packageId);
+        $path = "/packages/{$packageId}/products";
 
-        return $this->client->get("/packages/{$packageId}/products");
+        /** @var ListPage<ProductData> */
+        return $this->listPageForPath($path, ProductData::class, $limit, $startingAfter, $extra);
     }
 
     /**

@@ -15,6 +15,7 @@ class ProductData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $storeIdentifier,
         private ?string $type,
@@ -33,6 +34,7 @@ class ProductData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'ProductData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'ProductData');
 
         $storeIdentifier = isset($payload['store_identifier']) && is_string($payload['store_identifier'])
@@ -64,6 +66,7 @@ class ProductData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $storeIdentifier,
             $type,
@@ -88,6 +91,11 @@ class ProductData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getStoreIdentifier(): ?string
@@ -155,6 +163,7 @@ class ProductData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'store_identifier' => $this->storeIdentifier,
             'type' => $this->type,

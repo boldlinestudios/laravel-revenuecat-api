@@ -13,6 +13,7 @@ class ActiveEntitlementData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $entitlementId,
         private ?int $expiresAtMs,
     ) {}
@@ -22,12 +23,13 @@ class ActiveEntitlementData
      */
     public static function fromArray(array $payload): self
     {
+        $object = Payload::requireNonEmptyString($payload, 'object', 'ActiveEntitlementData');
         $entitlementId = Payload::requireNonEmptyString($payload, 'entitlement_id', 'ActiveEntitlementData');
         $expiresAtMs = isset($payload['expires_at']) && is_int($payload['expires_at'])
             ? $payload['expires_at']
             : null;
 
-        return new self($payload, $entitlementId, $expiresAtMs);
+        return new self($payload, $object, $entitlementId, $expiresAtMs);
     }
 
     public static function fromResponse(Response $response): self
@@ -54,6 +56,11 @@ class ActiveEntitlementData
         return Payload::dateFromMs($this->expiresAtMs) ?? null;
     }
 
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -68,6 +75,7 @@ class ActiveEntitlementData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'entitlement_id' => $this->entitlementId,
             'expires_at' => $this->expiresAtMs,
             'raw' => $this->raw,

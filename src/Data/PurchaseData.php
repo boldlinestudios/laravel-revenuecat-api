@@ -15,6 +15,7 @@ class PurchaseData
     private function __construct(
         /** @var array<string, mixed> */
         private array $raw,
+        private string $resourceType,
         private string $id,
         private ?string $customerId,
         private ?string $originalCustomerId,
@@ -41,6 +42,7 @@ class PurchaseData
      */
     public static function fromArray(array $payload): self
     {
+        $resourceType = Payload::requireNonEmptyString($payload, 'object', 'PurchaseData');
         $id = Payload::requireNonEmptyString($payload, 'id', 'PurchaseData');
 
         $customerId = isset($payload['customer_id']) && is_string($payload['customer_id'])
@@ -113,6 +115,7 @@ class PurchaseData
 
         return new self(
             $payload,
+            $resourceType,
             $id,
             $customerId,
             $originalCustomerId,
@@ -143,6 +146,11 @@ class PurchaseData
     public function getId(): string
     {
         return $this->id;
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 
     public function getCustomerId(): ?string
@@ -243,6 +251,7 @@ class PurchaseData
     public function toArray(): array
     {
         return [
+            'object' => $this->resourceType,
             'id' => $this->id,
             'customer_id' => $this->customerId,
             'original_customer_id' => $this->originalCustomerId,

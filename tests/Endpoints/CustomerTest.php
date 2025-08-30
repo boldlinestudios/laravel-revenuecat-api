@@ -374,6 +374,7 @@ test('listOfActiveEntitlements returns ListPage of CustomerActiveEntitlementData
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
     expect($list->items()[0])->toBeInstanceOf(ActiveEntitlementData::class);
+    expect($list->items()[0]->getResourceType())->toBe('customer.active_entitlement');
     expect($list->items()[0]->getEntitlementId())->toBe('ent1');
     expect($list->items()[0]->getExpiresAtMs())->toBe(1658399423658);
     expect($list->items()[1])->toBeInstanceOf(ActiveEntitlementData::class);

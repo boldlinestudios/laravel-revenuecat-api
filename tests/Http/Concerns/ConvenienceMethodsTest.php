@@ -11,6 +11,7 @@ use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\OfferingData;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
 use BoldlineStudios\RevenueCatApi\Data\ProductData;
+use BoldlineStudios\RevenueCatApi\Data\ProjectData;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
@@ -48,8 +49,8 @@ describe('App Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/apps?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'app1', 'name' => 'App 1'],
-                    ['id' => 'app2', 'name' => 'App 2'],
+                    ['object' => 'app', 'id' => 'app1', 'name' => 'App 1'],
+                    ['object' => 'app', 'id' => 'app2', 'name' => 'App 2'],
                 ],
             ], 200),
         ]);
@@ -57,7 +58,7 @@ describe('App Convenience Methods', function () {
         $response = RevenueCat::getAppList(10);
 
         expect($response)->toBeInstanceOf(ListPage::class);
-        expect(count($response->items()))->toBe(2);
+        expect($response->items())->toHaveCount(2);
     });
 
     test('createApp calls apps()->create() with correct parameters', function () {
@@ -225,7 +226,7 @@ describe('Customer Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/customers/test-customer-id/subscriptions?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'sub1', 'status' => 'active'],
+                    ['object' => 'subscription', 'id' => 'sub1', 'status' => 'active'],
                 ],
             ], 200),
         ]);
@@ -438,8 +439,8 @@ describe('Entitlement Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'ent1'],
-                    ['id' => 'ent2'],
+                    ['object' => 'entitlement', 'id' => 'ent1'],
+                    ['object' => 'entitlement', 'id' => 'ent2'],
                 ],
             ], 200),
         ]);
@@ -588,8 +589,8 @@ describe('Offering Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'off1', 'lookup_key' => 'basic', 'display_name' => 'Basic Plan'],
-                    ['id' => 'off2', 'lookup_key' => 'pro', 'display_name' => 'Pro Plan'],
+                    ['object' => 'offering', 'id' => 'off1', 'lookup_key' => 'basic', 'display_name' => 'Basic Plan'],
+                    ['object' => 'offering', 'id' => 'off2', 'lookup_key' => 'pro', 'display_name' => 'Pro Plan'],
                 ],
             ], 200),
         ]);
@@ -681,8 +682,8 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'pkg1', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'position' => 1],
-                    ['id' => 'pkg2', 'lookup_key' => 'pro', 'display_name' => 'Pro', 'position' => 2],
+                    ['object' => 'package', 'id' => 'pkg1', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'position' => 1],
+                    ['object' => 'package', 'id' => 'pkg2', 'lookup_key' => 'pro', 'display_name' => 'Pro', 'position' => 2],
                 ],
             ], 200),
         ]);
@@ -754,17 +755,18 @@ describe('Package Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription'],
-                    ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time'],
+                    ['object' => 'product', 'id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription', 'display_name' => 'Product 1'],
+                    ['object' => 'product', 'id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time', 'display_name' => 'Product 2'],
                 ],
             ], 200),
         ]);
 
         $response = RevenueCat::getPackageProducts('test-package-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($response)->toBeInstanceOf(ListPage::class);
+        expect(count($response->items()))->toBe(2);
+        expect($response->items()[0]->getDisplayName())->toBe('Product 1');
+        expect($response->items()[1]->getDisplayName())->toBe('Product 2');
     });
 });
 
@@ -790,8 +792,8 @@ describe('Product Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/products?limit=10' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription'],
-                    ['id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time'],
+                    ['object' => 'product', 'id' => 'prod1', 'store_identifier' => 'sku1', 'type' => 'subscription', 'display_name' => 'Product 1'],
+                    ['object' => 'product', 'id' => 'prod2', 'store_identifier' => 'sku2', 'type' => 'one_time', 'display_name' => 'Product 2'],
                 ],
             ], 200),
         ]);
@@ -800,6 +802,8 @@ describe('Product Convenience Methods', function () {
 
         expect($list)->toBeInstanceOf(ListPage::class);
         expect(count($list->items()))->toBe(2);
+        expect($list->items()[0]->getDisplayName())->toBe('Product 1');
+        expect($list->items()[1]->getDisplayName())->toBe('Product 2');
     });
 
     test('createProduct calls products()->create() with correct parameters', function () {
@@ -866,9 +870,9 @@ describe('Project Convenience Methods', function () {
         Http::fake([
             'https://api.example.com/v2/projects?limit=10' => Http::response([
                 'object' => 'list',
-                'projects' => [
-                    ['id' => 'proj1', 'name' => 'Project 1'],
-                    ['id' => 'proj2', 'name' => 'Project 2'],
+                'items' => [
+                    ['object' => 'project', 'id' => 'proj1', 'name' => 'Project 1', 'created_at' => 1658399423658],
+                    ['object' => 'project', 'id' => 'proj2', 'name' => 'Project 2', 'created_at' => 1658399423658],
                 ],
                 'url' => '/v2/projects',
             ], 200),
@@ -877,7 +881,15 @@ describe('Project Convenience Methods', function () {
         $list = RevenueCat::getProjectList(10);
 
         expect($list)->toBeInstanceOf(ListPage::class);
-        expect(count($list->items()))->toBe(2);
+        expect($list->items())->toHaveCount(2);
+        expect($list->items()[0])->toBeInstanceOf(ProjectData::class);
+        expect($list->items()[0]->getId())->toBe('proj1');
+        expect($list->items()[0]->getName())->toBe('Project 1');
+        expect($list->items()[0]->getCreatedAtMs())->toBe(1658399423658);
+        expect($list->items()[1])->toBeInstanceOf(ProjectData::class);
+        expect($list->items()[1]->getId())->toBe('proj2');
+        expect($list->items()[1]->getName())->toBe('Project 2');
+        expect($list->items()[1]->getCreatedAtMs())->toBe(1658399423658);
     });
 });
 
@@ -904,17 +916,26 @@ describe('Purchase Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/purchases/test-purchase-id/entitlements' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'ent1', 'identifier' => 'premium'],
-                    ['id' => 'ent2', 'identifier' => 'basic'],
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'ent1', 'lookup_key' => 'premium', 'created_at' => 1658399423658, 'products' => []],
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'ent2', 'lookup_key' => 'basic', 'created_at' => 1658399423659, 'products' => []],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getPurchaseEntitlements('test-purchase-id');
+        $list = RevenueCat::getPurchaseEntitlements('test-purchase-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
+        expect($list->items()[0])->toBeInstanceOf(EntitlementData::class);
+        expect($list->items()[0]->getId())->toBe('ent1');
+        expect($list->items()[0]->getLookupKey())->toBe('premium');
+        expect($list->items()[0]->getCreatedAtMs())->toBe(1658399423658);
+        expect($list->items()[0]->getProducts())->toBe([]);
+        expect($list->items()[1])->toBeInstanceOf(EntitlementData::class);
+        expect($list->items()[1]->getId())->toBe('ent2');
+        expect($list->items()[1]->getLookupKey())->toBe('basic');
+        expect($list->items()[1]->getCreatedAtMs())->toBe(1658399423659);
+        expect($list->items()[1]->getProducts())->toBe([]);
     });
 });
 
@@ -939,17 +960,26 @@ describe('Subscription Convenience Methods', function () {
             'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/entitlements' => Http::response([
                 'object' => 'list',
                 'items' => [
-                    ['id' => 'ent1', 'identifier' => 'premium'],
-                    ['id' => 'ent2', 'identifier' => 'basic'],
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'ent1', 'lookup_key' => 'premium', 'created_at' => 1658399423658, 'products' => []],
+                    ['object' => 'entitlement', 'project_id' => 'test_project', 'id' => 'ent2', 'lookup_key' => 'basic', 'created_at' => 1658399423659, 'products' => []],
                 ],
             ], 200),
         ]);
 
-        $response = RevenueCat::getSubscriptionEntitlements('test-subscription-id');
+        $list = RevenueCat::getSubscriptionEntitlements('test-subscription-id');
 
-        expect($response)->toBeInstanceOf(Response::class);
-        expect($response->successful())->toBeTrue();
-        expect($response->json('items'))->toHaveCount(2);
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(2);
+        expect($list->items()[0])->toBeInstanceOf(EntitlementData::class);
+        expect($list->items()[0]->getId())->toBe('ent1');
+        expect($list->items()[0]->getLookupKey())->toBe('premium');
+        expect($list->items()[0]->getCreatedAtMs())->toBe(1658399423658);
+        expect($list->items()[0]->getProducts())->toBe([]);
+        expect($list->items()[1])->toBeInstanceOf(EntitlementData::class);
+        expect($list->items()[1]->getId())->toBe('ent2');
+        expect($list->items()[1]->getLookupKey())->toBe('basic');
+        expect($list->items()[1]->getCreatedAtMs())->toBe(1658399423659);
+        expect($list->items()[1]->getProducts())->toBe([]);
     });
 
     test('getSubscriptionTransactions calls subscriptions()->listOfTransactions() with correct parameters', function () {
