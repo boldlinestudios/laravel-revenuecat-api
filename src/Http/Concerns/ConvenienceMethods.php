@@ -205,6 +205,26 @@ trait ConvenienceMethods
     }
 
     /**
+     * Attach a set of products to an entitlement
+     *
+     * @param  array<string>  $productIds
+     */
+    public function attachEntitlementProducts(string $entitlementId, array $productIds): EntitlementData
+    {
+        return $this->entitlements()->attachProducts($entitlementId, $productIds);
+    }
+
+    /**
+     * Detach a set of products from an entitlement
+     *
+     * @param  array<string>  $productIds
+     */
+    public function detachEntitlementProducts(string $entitlementId, array $productIds): EntitlementData
+    {
+        return $this->entitlements()->detachProducts($entitlementId, $productIds);
+    }
+
+    /**
      * @return ListPage<ProductData>
      */
     public function getEntitlementProducts(string $entitlementId): ListPage

@@ -218,13 +218,31 @@ $deleted = RevenueCat::entitlements()->delete('entitlement_id');
 $deleted = RevenueCat::deleteEntitlement('entitlement_id');
 ```
 
-#### Products (Response)
+#### Attach products
 ```php
 // Signature:
-// entitlements()->listOfProducts(string $entitlementId): Illuminate\Http\Client\Response
+// entitlements()->attachProducts(string $entitlementId, array<string> $productIds): EntitlementData
 
-$resp = RevenueCat::entitlements()->listOfProducts('entitlement_id');
-$resp = RevenueCat::getEntitlementProducts('entitlement_id');
+$entitlement = RevenueCat::entitlements()->attachProducts('entitlement_id', ['prod_1']);
+$entitlement = RevenueCat::attachEntitlementProducts('entitlement_id', ['prod_1']);
+```
+
+#### Detach products
+```php
+// Signature:
+// entitlements()->detachProducts(string $entitlementId, array<string> $productIds): EntitlementData
+
+$entitlement = RevenueCat::entitlements()->detachProducts('entitlement_id', ['prod_1']);
+$entitlement = RevenueCat::detachEntitlementProducts('entitlement_id', ['prod_1']);
+```
+
+#### Products
+```php
+// Signature:
+// entitlements()->listOfProducts(string $entitlementId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProductData>
+
+$products = RevenueCat::entitlements()->listOfProducts('entitlement_id');
+$products = RevenueCat::getEntitlementProducts('entitlement_id');
 ```
 
 ## Offerings
@@ -316,13 +334,13 @@ $deleted = RevenueCat::packages()->delete('package_id');
 $deleted = RevenueCat::deletePackage('package_id');
 ```
 
-#### Products (Response)
+#### Products
 ```php
 // Signature:
-// packages()->listOfProducts(string $packageId): Illuminate\Http\Client\Response
+// packages()->listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProductData>
 
-$resp = RevenueCat::packages()->listOfProducts('package_id');
-$resp = RevenueCat::getPackageProducts('package_id');
+$products = RevenueCat::packages()->listOfProducts('package_id');
+$products = RevenueCat::getPackageProducts('package_id');
 ```
 
 ## Products

@@ -565,6 +565,63 @@ describe('Entitlement Convenience Methods', function () {
         expect($response->items()[1]->getApp()->getId())->toBe('test_app_id');
         expect($response->items()[0]->getApp()->getName())->toBe('Test app');
     });
+
+    test('attachEntitlementProducts calls entitlements()->attachProducts() with correct parameters', function () {
+        Http::fake([
+            'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/attach_products' => Http::response([
+                'object' => 'entitlement',
+                'project_id' => 'proj1ab2c3d4',
+                'id' => 'entla1b2c3d4e5',
+                'lookup_key' => 'premium',
+                'display_name' => 'Premium',
+                'created_at' => 1658399423658,
+                'products' => [
+                    'object' => 'list',
+                    'items' => [
+                        [
+                            'object' => 'product',
+                            'id' => 'prod1a2b3c4d5e',
+                            'store_identifier' => 'rc_1w_199',
+                            'type' => 'subscription',
+                        ],
+                    ],
+                    'url' => '/v2/projects/proj1ab2c3d4/entitlements/entle1a2b3c4d5/products',
+                ],
+            ], 200),
+        ]);
+
+        $entitlement = RevenueCat::attachEntitlementProducts('test-entitlement-id', ['prod1a2b3c4d5e']);
+
+        expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+        expect($entitlement->getId())->toBe('entla1b2c3d4e5');
+        expect($entitlement->getProducts())->toBeArray();
+        expect($entitlement->getProducts())->toHaveCount(1);
+    });
+
+    test('detachEntitlementProducts calls entitlements()->detachProducts() with correct parameters', function () {
+        Http::fake([
+            'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/detach_products' => Http::response([
+                'object' => 'entitlement',
+                'project_id' => 'proj1ab2c3d4',
+                'id' => 'entla1b2c3d4e5',
+                'lookup_key' => 'premium',
+                'display_name' => 'Premium',
+                'created_at' => 1658399423658,
+                'products' => [
+                    'object' => 'list',
+                    'items' => [],
+                    'url' => '/v2/projects/proj1ab2c3d4/entitlements/entle1a2b3c4d5/products',
+                ],
+            ], 200),
+        ]);
+
+        $entitlement = RevenueCat::detachEntitlementProducts('test-entitlement-id', ['prod1a2b3c4d5e']);
+
+        expect($entitlement)->toBeInstanceOf(EntitlementData::class);
+        expect($entitlement->getId())->toBe('entla1b2c3d4e5');
+        expect($entitlement->getProducts())->toBeArray();
+        expect($entitlement->getProducts())->toHaveCount(0);
+    });
 });
 
 describe('Offering Convenience Methods', function () {

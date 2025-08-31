@@ -160,3 +160,84 @@ test('list method works with empty query array', function () {
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(0);
 });
+
+test('attachProducts attaches products to entitlement and returns updated EntitlementData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/attach_products' => Http::response([
+            'object' => 'entitlement',
+            'project_id' => 'proj1ab2c3d4',
+            'id' => 'entla1b2c3d4e5',
+            'lookup_key' => 'premium',
+            'display_name' => 'Premium',
+            'created_at' => 1658399423658,
+            'products' => [
+                'object' => 'list',
+                'items' => [
+                    [
+                        'object' => 'product',
+                        'id' => 'prod1a2b3c4d5e',
+                        'store_identifier' => 'rc_1w_199',
+                        'type' => 'subscription',
+                        'subscription' => [
+                            'duration' => 'P1M',
+                            'grace_period_duration' => 'P3D',
+                            'trial_duration' => 'P1W',
+                        ],
+                        'one_time' => [
+                            'is_consumable' => true,
+                        ],
+                        'created_at' => 1658399423658,
+                        'app_id' => 'app1a2b3c4',
+                        'app' => [
+                            'object' => 'app',
+                            'id' => 'app1a2b3c4',
+                            'name' => 'string',
+                            'created_at' => 1658399423658,
+                            'type' => 'app_store',
+                        ],
+                        'display_name' => 'Premium Monthly 2023',
+                    ],
+                ],
+                'next_page' => '/v2/projects/proj1ab2c3d4/entitlements/entle1a2b3c4d5/products?starting_after=prodeab21dac',
+                'url' => '/v2/projects/proj1ab2c3d4/entitlements/entle1a2b3c4d5/products',
+            ],
+        ], 200),
+    ]);
+
+    $result = RevenueCat::entitlements()->attachProducts('test-entitlement-id', ['prod1a2b3c4d5e']);
+
+    expect($result)->toBeInstanceOf(EntitlementData::class);
+    expect($result->getId())->toBe('entla1b2c3d4e5');
+    expect($result->getLookupKey())->toBe('premium');
+    expect($result->getProducts())->toBeArray();
+    expect($result->getProducts())->not()->toBeNull();
+    expect($result->getProducts())->toHaveCount(1);
+    expect($result->getProducts()[0])->toBeInstanceOf(ProductData::class);
+    expect($result->getProducts()[0]->getId())->toBe('prod1a2b3c4d5e');
+});
+
+test('detachProducts detaches products from entitlement and returns updated EntitlementData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/detach_products' => Http::response([
+            'object' => 'entitlement',
+            'project_id' => 'proj1ab2c3d4',
+            'id' => 'entla1b2c3d4e5',
+            'lookup_key' => 'premium',
+            'display_name' => 'Premium',
+            'created_at' => 1658399423658,
+            'products' => [
+                'object' => 'list',
+                'items' => [],
+                'next_page' => null,
+                'url' => '/v2/projects/proj1ab2c3d4/entitlements/entle1a2b3c4d5/products',
+            ],
+        ], 200),
+    ]);
+
+    $result = RevenueCat::entitlements()->detachProducts('test-entitlement-id', ['prod1a2b3c4d5e']);
+
+    expect($result)->toBeInstanceOf(EntitlementData::class);
+    expect($result->getId())->toBe('entla1b2c3d4e5');
+    expect($result->getProducts())->toBeArray();
+    expect($result->getProducts())->toHaveCount(0);
+});

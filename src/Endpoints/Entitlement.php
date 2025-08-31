@@ -92,4 +92,26 @@ class Entitlement
         /** @var ListPage<EntitlementData> */
         return $this->listAsDto(EntitlementData::class, $limit, $startingAfter, $extra);
     }
+
+    /**
+     * @param  array<string>  $productIds
+     */
+    public function attachProducts(string $entitlementId, array $productIds): EntitlementData
+    {
+        $entitlementId = rawurlencode($entitlementId);
+        $path = "/entitlements/{$entitlementId}/attach_products";
+
+        return EntitlementData::fromResponse($this->client->post($path, ['product_ids' => $productIds]));
+    }
+
+    /**
+     * @param  array<string>  $productIds
+     */
+    public function detachProducts(string $entitlementId, array $productIds): EntitlementData
+    {
+        $entitlementId = rawurlencode($entitlementId);
+        $path = "/entitlements/{$entitlementId}/detach_products";
+
+        return EntitlementData::fromResponse($this->client->post($path, ['product_ids' => $productIds]));
+    }
 }
