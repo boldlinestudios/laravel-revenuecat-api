@@ -6,16 +6,6 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-beforeEach(function () {
-    // Override config for example domain to avoid hitting real endpoints
-    config([
-        'revenuecat-api.api_key' => 'test_api_key',
-        'revenuecat-api.base_url' => 'https://api.example.com/v2',
-        'revenuecat-api.project_id' => 'test_project',
-        'revenuecat-api.timeout' => 30,
-    ]);
-});
-
 // Shared test data that mimics RevenueCat API responses
 $sampleApp = [
     'object' => 'app',

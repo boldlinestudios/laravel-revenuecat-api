@@ -12,16 +12,6 @@ use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
-beforeEach(function () {
-    // Override config for example domain to avoid hitting real endpoints
-    config([
-        'revenuecat-api.api_key' => 'test_api_key',
-        'revenuecat-api.base_url' => 'https://api.example.com/v2',
-        'revenuecat-api.project_id' => 'test_project',
-        'revenuecat-api.timeout' => 30,
-    ]);
-});
-
 test('list returns ListPage of CustomerData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers?limit=10' => Http::response([
