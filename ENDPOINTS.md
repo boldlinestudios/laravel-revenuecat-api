@@ -173,6 +173,16 @@ $attrs = RevenueCat::customers()->listOfAttributes('customer_id');
 $attrs = RevenueCat::getCustomerAttributes('customer_id');
 ```
 
+#### Set attributes
+```php
+// Signature:
+// customers()->setAttributes(string $customerId, list<array{name: string, value: string}> $attributes): ListPage<CustomerAttributeData>
+
+$attrs = RevenueCat::customers()->setAttributes('customer_id', [
+  ['name' => '$email', 'value' => 'support@revenuecat.com'],
+]);
+```
+
 ## Entitlements
 
 #### Get
