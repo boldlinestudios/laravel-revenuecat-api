@@ -14,6 +14,7 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Customer
@@ -22,6 +23,7 @@ class Customer
     use Deletable;
     use Listable;
     use Retrievable;
+    use Updatable;
 
     public function __construct(private RevenueCatClient $client) {}
 
@@ -176,5 +178,22 @@ class Customer
 
         /** @var ListPage<AttributeData> */
         return $this->listPageForPath($path, AttributeData::class, $limit, $startingAfter, $extra);
+    }
+
+    /**
+     * @param  list<array{name: string, value: string}>  $attributes
+     * @return ListPage<AttributeData>
+     */
+    public function setAttributes(string $customerId, array $attributes): ListPage
+    {
+        $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/attributes";
+
+        $response = $this->client()->post($path, [
+            'attributes' => $this->validateAttributes($attributes),
+        ]);
+
+        /** @var ListPage<AttributeData> */
+        return $this->listFromResponse($response, AttributeData::class);
     }
 }

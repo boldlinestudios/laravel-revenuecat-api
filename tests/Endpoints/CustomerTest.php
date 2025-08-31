@@ -442,6 +442,33 @@ test('listOfAttributes returns ListPage of CustomerAttributeData', function () {
     expect(count($list->items()))->toBe(2);
 });
 
+test('setAttributes posts attributes and returns ListPage of Customer AttributeData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com', 'updated_at' => 1658399423658],
+                ['object' => 'customer.attribute', 'name' => 'my_custom_attr', 'value' => 'custom value', 'updated_at' => 1658399423659],
+            ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/customers/test-customer-id/attributes',
+        ], 200),
+    ]);
+
+    $customerId = 'test-customer-id';
+    $attrs = [
+        ['name' => '$email', 'value' => 'support@revenuecat.com'],
+        ['name' => 'my_custom_attr', 'value' => 'custom value'],
+    ];
+
+    $list = RevenueCat::customers()->setAttributes($customerId, $attrs);
+
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(2);
+    expect($list->items()[0]->getName())->toBe('$email');
+    expect($list->items()[0]->getValue())->toBe('support@revenuecat.com');
+});
+
 test('get method properly encodes special characters in customer id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test%20customer%20with%20spaces%20%26%20special%20chars' => Http::response([

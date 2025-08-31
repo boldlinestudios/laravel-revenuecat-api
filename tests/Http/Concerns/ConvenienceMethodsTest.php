@@ -417,6 +417,28 @@ describe('Customer Convenience Methods', function () {
         expect($list->items()[1]->getName())->toBe('$email');
         expect($list->items()[1]->getValue())->toBe('example2@example.com');
     });
+
+    test('setCustomerAttributes posts attributes and returns ListPage of AttributeData', function () {
+        Http::fake([
+            'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
+                'object' => 'list',
+                'items' => [
+                    ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com', 'updated_at' => 1658399423658],
+                ],
+            ], 200),
+        ]);
+
+        $attrs = [
+            ['name' => '$email', 'value' => 'support@revenuecat.com'],
+        ];
+
+        $list = RevenueCat::customers()->setAttributes('test-customer-id', $attrs);
+
+        expect($list)->toBeInstanceOf(ListPage::class);
+        expect(count($list->items()))->toBe(1);
+        expect($list->items()[0]->getName())->toBe('$email');
+        expect($list->items()[0]->getValue())->toBe('support@revenuecat.com');
+    });
 });
 
 describe('Entitlement Convenience Methods', function () {
