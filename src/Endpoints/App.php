@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
+use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
@@ -32,11 +33,12 @@ class App
         return '/apps';
     }
 
-    public function listOfPublicKeys(string $appId): Response
+    public function listOfPublicKeys(string $appId): ListPage
     {
         $appId = rawurlencode($appId);
+        $path = "/apps/{$appId}/public_api_keys";
 
-        return $this->client->get("/apps/{$appId}/public_api_keys");
+        return $this->listPageForPath($path, PublicApiKeyData::class);
     }
 
     /**

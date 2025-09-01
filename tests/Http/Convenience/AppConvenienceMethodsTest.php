@@ -1,5 +1,6 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
@@ -123,14 +124,21 @@ test('getAppPublicKeys calls apps()->listOfPublicKeys() with correct parameters'
         'https://api.example.com/v2/projects/test_project/apps/test-app-id/public_api_keys' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'key1', 'key' => 'pk_test_123'],
+                [
+                    'id' => 'key1',
+                    'object' => 'public_api_key',
+                    'key' => 'pk_test_123',
+                    'environment' => 'production',
+                    'app_id' => 'app1a2b3c4',
+                    'created_at' => 1658399423658,
+                ],
             ],
         ], 200),
     ]);
 
-    $response = RevenueCat::getAppPublicKeys('test-app-id');
+    $publicKeys = RevenueCat::getAppPublicKeys('test-app-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('items'))->toHaveCount(1);
+    expect($publicKeys)->toBeInstanceOf(ListPage::class);
+    expect($publicKeys->items())->toHaveCount(1);
+    expect($publicKeys->items()[0])->toBeInstanceOf(PublicApiKeyData::class);
 });

@@ -200,18 +200,15 @@ test('listOfPublicKeys returns response from client', function () {
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCat::apps()->listOfPublicKeys($appId);
+    $publicKeys = RevenueCat::apps()->listOfPublicKeys($appId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('object'))->toBe('list');
-    expect($response->json('items'))->toHaveCount(1);
-    expect($response->json('items.0.object'))->toBe('public_api_key');
-    expect($response->json('items.0.key'))->toBe('goog_1ab2c3d4');
-    expect($response->json('items.0.environment'))->toBe('production');
-    expect($response->json('items.0.app_id'))->toBe('app1a2b3c4');
-    expect($response->json('next_page'))->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys?starting_after=apikey12345');
-    expect($response->json('url'))->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys');
+    expect($publicKeys)->toBeInstanceOf(ListPage::class);
+    expect($publicKeys->items()[0]->getResourceType())->toBe('public_api_key');
+    expect($publicKeys->items()[0]->getKey())->toBe('goog_1ab2c3d4');
+    expect($publicKeys->items()[0]->getEnvironment())->toBe('production');
+    expect($publicKeys->items()[0]->getAppId())->toBe('app1a2b3c4');
+    expect($publicKeys->nextCursor())->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys?starting_after=apikey12345');
+    expect($publicKeys->url())->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys');
 });
 
 test('get method properly encodes special characters in app id', function () use ($sampleApp) {

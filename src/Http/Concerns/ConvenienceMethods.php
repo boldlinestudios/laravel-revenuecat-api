@@ -82,7 +82,7 @@ trait ConvenienceMethods
         return $this->apps()->storeKitConfig($appId);
     }
 
-    public function getAppPublicKeys(string $appId): Response
+    public function getAppPublicKeys(string $appId): ListPage
     {
         return $this->apps()->listOfPublicKeys($appId);
     }
