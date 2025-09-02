@@ -125,4 +125,30 @@ class Package
         /** @var ListPage<PackageData> */
         return $this->listAsDto(PackageData::class, $limit, $startingAfter, $extra);
     }
+
+    /**
+     * Attach a set of products to a package.
+     *
+     * @param  list<array{product_id: string, eligibility_criteria: string}>  $productAssociationList
+     */
+    public function attachProducts(string $packageId, array $productAssociationList): PackageData
+    {
+        $packageId = rawurlencode($packageId);
+        $path = "/packages/{$packageId}/actions/attach_products";
+
+        return PackageData::fromResponse($this->client->post($path, ['products' => $productAssociationList]));
+    }
+
+    /**
+     * Detach a set of products from a package.
+     *
+     * @param  array<string>  $productIds
+     */
+    public function detachProducts(string $packageId, array $productIds): PackageData
+    {
+        $packageId = rawurlencode($packageId);
+        $path = "/packages/{$packageId}/actions/detach_products";
+
+        return PackageData::fromResponse($this->client->post($path, ['product_ids' => $productIds]));
+    }
 }

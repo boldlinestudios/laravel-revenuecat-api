@@ -319,6 +319,26 @@ trait ConvenienceMethods
         return $this->packages()->listOfProducts($packageId, $limit, $startingAfter, $extra);
     }
 
+    /**
+     * Attach a set of products to a package.
+     *
+     * @param  list<array{product_id: string, eligibility_criteria: string}>  $productAssociationList
+     */
+    public function attachPackageProducts(string $packageId, array $productAssociationList): PackageData
+    {
+        return $this->packages()->attachProducts($packageId, $productAssociationList);
+    }
+
+    /**
+     * Detach a set of products from a package.
+     *
+     * @param  array<string>  $productIds
+     */
+    public function detachPackageProducts(string $packageId, array $productIds): PackageData
+    {
+        return $this->packages()->detachProducts($packageId, $productIds);
+    }
+
     // Product convenience methods
     public function getProduct(string $productId): ProductData
     {

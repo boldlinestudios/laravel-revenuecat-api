@@ -111,3 +111,50 @@ test('getPackageProducts calls packages()->listOfProducts() with correct paramet
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(2);
 });
+
+test('attachPackageProducts calls packages()->attachProducts() with correct parameters', function () {
+    $productAssociationList = [
+        ['product_id' => 'prod1', 'eligibility_criteria' => 'all'],
+        ['product_id' => 'prod2', 'eligibility_criteria' => 'google_sdk_lt_6'],
+    ];
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/packages/test-package-id/actions/attach_products' => Http::response([
+            'object' => 'package',
+            'id' => 'test-package-id',
+            'lookup_key' => 'test_package',
+            'display_name' => 'Test Package',
+            'position' => 1,
+            'created_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $package = RevenueCat::attachPackageProducts('test-package-id', $productAssociationList);
+
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test-package-id');
+    expect($package->getLookupKey())->toBe('test_package');
+    expect($package->getDisplayName())->toBe('Test Package');
+});
+
+test('detachPackageProducts calls packages()->detachProducts() with correct parameters', function () {
+    $productIds = ['prod1', 'prod2'];
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/packages/test-package-id/actions/detach_products' => Http::response([
+            'object' => 'package',
+            'id' => 'test-package-id',
+            'lookup_key' => 'test_package',
+            'display_name' => 'Test Package',
+            'position' => 1,
+            'created_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $package = RevenueCat::detachPackageProducts('test-package-id', $productIds);
+
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test-package-id');
+    expect($package->getLookupKey())->toBe('test_package');
+    expect($package->getDisplayName())->toBe('Test Package');
+});

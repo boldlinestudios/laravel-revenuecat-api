@@ -234,3 +234,75 @@ test('list method works with empty query array', function () {
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(0);
 });
+
+test('attachProducts attaches products to package and returns PackageData', function () {
+    $productAssociationList = [
+        ['product_id' => 'prod1', 'eligibility_criteria' => 'all'],
+        ['product_id' => 'prod2', 'eligibility_criteria' => 'google_sdk_lt_6'],
+    ];
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/packages/test-package-id/actions/attach_products' => Http::response([
+            'object' => 'package',
+            'id' => 'test-package-id',
+            'lookup_key' => 'test_package',
+            'display_name' => 'Test Package',
+            'position' => 1,
+            'created_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $packageId = 'test-package-id';
+    $package = RevenueCat::packages()->attachProducts($packageId, $productAssociationList);
+
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test-package-id');
+    expect($package->getLookupKey())->toBe('test_package');
+    expect($package->getDisplayName())->toBe('Test Package');
+});
+
+test('detachProducts detaches products from package and returns PackageData', function () {
+    $productIds = ['prod1', 'prod2'];
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/packages/test-package-id/actions/detach_products' => Http::response([
+            'object' => 'package',
+            'id' => 'test-package-id',
+            'lookup_key' => 'test_package',
+            'display_name' => 'Test Package',
+            'position' => 1,
+            'created_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $packageId = 'test-package-id';
+    $package = RevenueCat::packages()->detachProducts($packageId, $productIds);
+
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test-package-id');
+    expect($package->getLookupKey())->toBe('test_package');
+    expect($package->getDisplayName())->toBe('Test Package');
+});
+
+test('attachProducts method properly encodes special characters in package id', function () {
+    $productAssociationList = [
+        ['product_id' => 'prod1', 'eligibility_criteria' => 'all'],
+    ];
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/packages/test%20package%20with%20spaces%20%26%20special%20chars/actions/attach_products' => Http::response([
+            'object' => 'package',
+            'id' => 'test package with spaces & special chars',
+            'lookup_key' => 'special_package',
+            'display_name' => 'Special Package',
+            'position' => 1,
+            'created_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $packageId = 'test package with spaces & special chars';
+    $package = RevenueCat::packages()->attachProducts($packageId, $productAssociationList);
+
+    expect($package)->toBeInstanceOf(PackageData::class);
+    expect($package->getId())->toBe('test package with spaces & special chars');
+});

@@ -61,7 +61,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData createPackage(string $lookupKey, string $displayName, ?int $position = null)
  * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData updatePackage(string $packageId, ?string $displayName, ?int $position = null)
  * @method static bool deletePackage(string $packageId)
- * @method static \Illuminate\Http\Client\Response getPackageProducts(string $packageId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\ProductData> getPackageProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData attachPackageProducts(string $packageId, list<array{product_id: string, eligibility_criteria: string}> $productAssociationList)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData detachPackageProducts(string $packageId, array<string> $productIds)
  *
  * Products
  * @method static \BoldlineStudios\RevenueCatApi\Data\ProductData getProduct(string $productId)
