@@ -82,7 +82,10 @@ trait ConvenienceMethods
         return $this->apps()->storeKitConfig($appId);
     }
 
-    public function getAppPublicKeys(string $appId): ListPage
+    /**
+     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData>
+     */
+    public function getAppPublicKeys(string $appId)
     {
         return $this->apps()->listOfPublicKeys($appId);
     }

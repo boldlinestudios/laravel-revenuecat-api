@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, ?string $name, array<string, array<string, mixed>> $storeConfig)
  * @method static bool deleteApp(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppStoreKitConfig(string $appId)
- * @method static \Illuminate\Http\Client\Response getAppPublicKeys(string $appId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData> getAppPublicKeys(string $appId)
  *
  * Customers
  * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData getCustomer(string $customerId)

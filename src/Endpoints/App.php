@@ -33,11 +33,15 @@ class App
         return '/apps';
     }
 
-    public function listOfPublicKeys(string $appId): ListPage
+    /**
+     * @return ListPage<PublicApiKeyData>
+     */
+    public function listOfPublicKeys(string $appId)
     {
         $appId = rawurlencode($appId);
         $path = "/apps/{$appId}/public_api_keys";
 
+        /** @var ListPage<PublicApiKeyData> */
         return $this->listPageForPath($path, PublicApiKeyData::class);
     }
 
