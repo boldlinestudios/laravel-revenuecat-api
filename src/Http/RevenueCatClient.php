@@ -5,6 +5,7 @@ namespace BoldlineStudios\RevenueCatApi\Http;
 use BoldlineStudios\RevenueCatApi\Endpoints\App as Apps;
 use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
 use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
+use BoldlineStudios\RevenueCatApi\Endpoints\Invoice;
 use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
 use BoldlineStudios\RevenueCatApi\Endpoints\Package;
 use BoldlineStudios\RevenueCatApi\Endpoints\Paywall;
@@ -135,6 +136,11 @@ class RevenueCatClient
     public function paywalls(): Paywall
     {
         return new Paywall($this);
+    }
+
+    public function invoices(): Invoice
+    {
+        return new Invoice($this);
     }
 
     private function normalizePath(string $path): string

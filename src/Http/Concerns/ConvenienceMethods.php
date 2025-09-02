@@ -9,6 +9,7 @@ use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
 use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\InvoiceData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\OfferingData;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
@@ -411,6 +412,15 @@ trait ConvenienceMethods
     public function searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage
     {
         return $this->purchases()->searchPurchasesByIdentifier($storePurchaseIdentifier);
+    }
+
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<InvoiceData>
+     */
+    public function listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    {
+        return $this->invoices()->listCustomerInvoices($customerId, $limit, $startingAfter, $extra);
     }
 
     public function createPaywall(string $offeringId): PaywallData

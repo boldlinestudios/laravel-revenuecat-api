@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Purchase purchases()
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Subscription subscriptions()
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Paywall paywalls()
+ * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Invoice invoices()
  *
  * Convenience methods (DTOs for resources; Response for utility endpoints)
  *
@@ -48,6 +49,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData updateEntitlement(string $entitlementId, string $displayName)
  * @method static bool deleteEntitlement(string $entitlementId)
  * @method static \Illuminate\Http\Client\Response getEntitlementProducts(string $entitlementId)
+ *
+ * Invoices
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\InvoiceData> listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
  *
  * Offerings
  * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData getOffering(string $offeringId)

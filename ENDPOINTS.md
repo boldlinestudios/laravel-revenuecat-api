@@ -471,6 +471,17 @@ $resp = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_
 $resp = RevenueCat::refundWebBillingSubscription('subscription_id');
 ```
 
+## Invoices
+
+#### List customer invoices
+```php
+// Signature:
+// invoices()->listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<InvoiceData>
+
+$invoices = RevenueCat::invoices()->listCustomerInvoices('customer_id');
+$invoices = RevenueCat::listCustomerInvoices('customer_id');
+```
+
 ## Paywalls
 
 #### Create
