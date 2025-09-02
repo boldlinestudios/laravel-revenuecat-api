@@ -7,6 +7,7 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Customer;
 use BoldlineStudios\RevenueCatApi\Endpoints\Entitlement;
 use BoldlineStudios\RevenueCatApi\Endpoints\Offering;
 use BoldlineStudios\RevenueCatApi\Endpoints\Package;
+use BoldlineStudios\RevenueCatApi\Endpoints\Paywall;
 use BoldlineStudios\RevenueCatApi\Endpoints\Product;
 use BoldlineStudios\RevenueCatApi\Endpoints\Project;
 use BoldlineStudios\RevenueCatApi\Endpoints\Purchase;
@@ -129,6 +130,11 @@ class RevenueCatClient
     public function subscriptions(): Subscription
     {
         return new Subscription($this);
+    }
+
+    public function paywalls(): Paywall
+    {
+        return new Paywall($this);
     }
 
     private function normalizePath(string $path): string

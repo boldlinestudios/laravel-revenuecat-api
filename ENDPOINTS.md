@@ -470,3 +470,14 @@ $resp = RevenueCat::cancelWebBillingSubscription('subscription_id');
 $resp = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
 $resp = RevenueCat::refundWebBillingSubscription('subscription_id');
 ```
+
+## Paywalls
+
+#### Create
+```php
+// Signature:
+// paywalls()->create(string $offeringId): PaywallData
+
+$paywall = RevenueCat::paywalls()->create('offering_id');
+$paywall = RevenueCat::createPaywall('offering_id');
+```

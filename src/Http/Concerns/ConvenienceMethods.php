@@ -12,6 +12,7 @@ use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\OfferingData;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
+use BoldlineStudios\RevenueCatApi\Data\PaywallData;
 use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Data\ProjectData;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
@@ -410,6 +411,11 @@ trait ConvenienceMethods
     public function searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage
     {
         return $this->purchases()->searchPurchasesByIdentifier($storePurchaseIdentifier);
+    }
+
+    public function createPaywall(string $offeringId): PaywallData
+    {
+        return $this->paywalls()->create($offeringId);
     }
 
     // Subscription convenience methods
