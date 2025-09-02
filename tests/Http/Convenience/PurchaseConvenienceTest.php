@@ -49,3 +49,21 @@ test('getPurchaseEntitlements calls purchases()->listOfEntitlements() with corre
     expect($list->items()[1]->getCreatedAtMs())->toBe(1658399423659);
     expect($list->items()[1]->getProducts())->toBe([]);
 });
+
+test('refundWebBillingPurchase calls purchases()->refundWebBillingPurchase() with correct parameters', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/purchases/test-purchase-id/actions/refund' => Http::response([
+            'object' => 'purchase',
+            'id' => 'test-purchase-id',
+            'customer_id' => 'cust',
+            'product_id' => 'prod',
+            'purchased_at' => 1658399423658,
+            'refunded_at' => 1658399423659,
+        ], 200),
+    ]);
+
+    $purchase = RevenueCat::refundWebBillingPurchase('test-purchase-id');
+
+    expect($purchase)->toBeInstanceOf(PurchaseData::class);
+    expect($purchase->getId())->toBe('test-purchase-id');
+});

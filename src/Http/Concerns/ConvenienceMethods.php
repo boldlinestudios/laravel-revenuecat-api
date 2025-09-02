@@ -393,7 +393,11 @@ trait ConvenienceMethods
     public function getPurchaseEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         return $this->purchases()->listOfEntitlements($purchaseId, $limit, $startingAfter, $extra);
+    }
 
+    public function refundWebBillingPurchase(string $purchaseId): PurchaseData
+    {
+        return $this->purchases()->refundWebBillingPurchase($purchaseId);
     }
 
     // Subscription convenience methods

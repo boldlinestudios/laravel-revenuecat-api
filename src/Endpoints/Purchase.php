@@ -45,4 +45,12 @@ class Purchase
         /** @var ListPage<EntitlementData> */
         return $this->listPageForPath($path, EntitlementData::class, $limit, $startingAfter, $extra);
     }
+
+    public function refundWebBillingPurchase(string $purchaseId): PurchaseData
+    {
+        $purchaseId = rawurlencode($purchaseId);
+        $path = "/purchases/{$purchaseId}/actions/refund";
+
+        return PurchaseData::fromResponse($this->client->post($path));
+    }
 }

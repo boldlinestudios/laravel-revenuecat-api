@@ -76,7 +76,8 @@ use Illuminate\Support\Facades\Facade;
  *
  * Purchases
  * @method static \BoldlineStudios\RevenueCatApi\Data\PurchaseData getPurchase(string $purchaseId)
- * @method static \Illuminate\Http\Client\Response getPurchaseEntitlements(string $purchaseId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\EntitlementData> getPurchaseEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\PurchaseData refundWebBillingPurchase(string $purchaseId)
  *
  * Subscriptions
  * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData getSubscription(string $subscriptionId)

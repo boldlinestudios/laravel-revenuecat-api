@@ -79,3 +79,24 @@ test('listOfEntitlements method properly encodes special characters in purchase 
     expect($response->items())->toBe([]);
     expect($response->nextCursor())->toBeNull();
 });
+
+test('refundWebBillingPurchase refunds purchase and returns PurchaseData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/purchases/test-purchase-id/actions/refund' => Http::response([
+            'object' => 'purchase',
+            'id' => 'test-purchase-id',
+            'customer_id' => 'customer123',
+            'product_id' => 'product123',
+            'purchased_at' => 1658399423658,
+            'refunded_at' => 1658399423659,
+        ], 200),
+    ]);
+
+    $purchaseId = 'test-purchase-id';
+    $purchase = RevenueCat::purchases()->refundWebBillingPurchase($purchaseId);
+
+    expect($purchase)->toBeInstanceOf(PurchaseData::class);
+    expect($purchase->getId())->toBe('test-purchase-id');
+    expect($purchase->getCustomerId())->toBe('customer123');
+    expect($purchase->getProductId())->toBe('product123');
+});
