@@ -3,6 +3,7 @@
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -44,17 +45,24 @@ test('listSubscriptionTransactions calls subscriptions()->listOfTransactions() w
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions' => Http::response([
             'object' => 'list',
             'items' => [
-                ['id' => 'txn1', 'amount' => 9.99],
-                ['id' => 'txn2', 'amount' => 9.99],
+                ['object' => 'subscription_transaction', 'id' => 'txn1', 'purchased_at' => 1658399423658],
+                ['object' => 'subscription_transaction', 'id' => 'txn2', 'purchased_at' => 1658399423659],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/subscriptions/test-subscription-id/transactions',
         ], 200),
     ]);
 
-    $response = RevenueCat::listSubscriptionTransactions('test-subscription-id');
+    $listPage = RevenueCat::listSubscriptionTransactions('test-subscription-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('items'))->toHaveCount(2);
+    expect($listPage)->toBeInstanceOf(ListPage::class);
+    expect(count($listPage->items()))->toBe(2);
+    expect($listPage->items()[0])->toBeInstanceOf(TransactionData::class);
+    expect($listPage->items()[0]->getId())->toBe('txn1');
+    expect($listPage->items()[0]->getPurchasedAtMs())->toBe(1658399423658);
+    expect($listPage->items()[1])->toBeInstanceOf(TransactionData::class);
+    expect($listPage->items()[1]->getId())->toBe('txn2');
+    expect($listPage->items()[1]->getPurchasedAtMs())->toBe(1658399423659);
 });
 
 test('getSubscriptionCustomerPortalUrl calls subscriptions()->getCustomerPortalUrl() with correct parameters', function () {

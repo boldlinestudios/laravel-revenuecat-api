@@ -441,13 +441,13 @@ $resp = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
 $resp = RevenueCat::listSubscriptionEntitlements('subscription_id');
 ```
 
-#### Transactions (Response)
+#### Transactions
 ```php
 // Signature:
-// subscriptions()->listOfTransactions(string $subscriptionId): Illuminate\Http\Client\Response
+// subscriptions()->listOfTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<TransactionData>
 
-$resp = RevenueCat::subscriptions()->listOfTransactions('subscription_id');
-$resp = RevenueCat::listSubscriptionTransactions('subscription_id');
+$transactions = RevenueCat::subscriptions()->listOfTransactions('subscription_id');
+$transactions = RevenueCat::listSubscriptionTransactions('subscription_id');
 ```
 
 #### Customer portal URL (Response)

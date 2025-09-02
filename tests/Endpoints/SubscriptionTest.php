@@ -3,6 +3,7 @@
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -74,8 +75,7 @@ test('listOfEntitlements returns ListPage of EntitlementData', function () {
     expect($response->items()[1]->getId())->toBe('entitlement2');
 });
 
-// TODO: return ListPage<SubscriptionTransactionData>
-test('listOfTransactions returns response from client', function () {
+test('listOfTransactions returns ListPage of TransactionData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions' => Http::response([
             'object' => 'list',
@@ -83,15 +83,22 @@ test('listOfTransactions returns response from client', function () {
                 ['object' => 'subscription_transaction', 'id' => 'transaction1', 'purchased_at' => 1658399423658],
                 ['object' => 'subscription_transaction', 'id' => 'transaction2', 'purchased_at' => 1658399423659],
             ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/subscriptions/test-subscription-id/transactions',
         ], 200),
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
+    $listPage = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect(count($response->json('items')))->toBe(2);
+    expect($listPage)->toBeInstanceOf(ListPage::class);
+    expect(count($listPage->items()))->toBe(2);
+    expect($listPage->items()[0])->toBeInstanceOf(TransactionData::class);
+    expect($listPage->items()[0]->getId())->toBe('transaction1');
+    expect($listPage->items()[0]->getPurchasedAtMs())->toBe(1658399423658);
+    expect($listPage->items()[1])->toBeInstanceOf(TransactionData::class);
+    expect($listPage->items()[1]->getId())->toBe('transaction2');
+    expect($listPage->items()[1]->getPurchasedAtMs())->toBe(1658399423659);
 });
 
 test('getCustomerPortalUrl returns response from client', function () {
@@ -209,23 +216,23 @@ test('listOfEntitlements method properly encodes special characters in subscript
     expect($response->nextCursor())->toBeNull();
 });
 
-// TODO: return ListPage<SubscriptionTransactionData>
 test('listOfTransactions method properly encodes special characters in subscription id', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions' => Http::response([
+        'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions*' => Http::response([
             'object' => 'list',
             'items' => [],
             'next_page' => null,
-            'url' => '/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions',
+            'url' => '/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions&limit=20',
         ], 200),
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
+    $listPage = RevenueCat::subscriptions()->listOfTransactions($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect(count($response->json('items')))->toBe(0);
+    expect($listPage)->toBeInstanceOf(ListPage::class);
+    expect(count($listPage->items()))->toBe(0);
+    expect($listPage->items())->toBe([]);
+    expect($listPage->nextCursor())->toBeNull();
 });
 
 test('getCustomerPortalUrl method properly encodes special characters in subscription id', function () {

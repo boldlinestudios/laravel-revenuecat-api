@@ -18,6 +18,7 @@ use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Data\ProjectData;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use Illuminate\Http\Client\Response;
 
 trait ConvenienceMethods
@@ -443,14 +444,18 @@ trait ConvenienceMethods
         return $this->subscriptions()->listOfEntitlements($subscriptionId, $limit, $startingAfter, $extra);
     }
 
-    public function listSubscriptionTransactions(string $subscriptionId): Response
-    {
-        return $this->subscriptions()->listOfTransactions($subscriptionId);
-    }
-
     public function getSubscriptionCustomerPortalUrl(string $subscriptionId): Response
     {
         return $this->subscriptions()->getCustomerPortalUrl($subscriptionId);
+    }
+
+    /**
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<TransactionData>
+     */
+    public function listSubscriptionTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    {
+        return $this->subscriptions()->listOfTransactions($subscriptionId, $limit, $startingAfter, $extra);
     }
 
     public function cancelWebBillingSubscription(string $subscriptionId): Response

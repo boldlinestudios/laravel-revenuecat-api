@@ -5,6 +5,7 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
@@ -51,13 +52,17 @@ class Subscription
     /**
      * Get a Play Store subscription's transactions
      * This endpoint requires the following permission(s): customer_information:subscriptions:read
+     *
+     * @param  array<string, mixed>  $extra
+     * @return ListPage<TransactionData>
      */
-    // TODO: return ListPage<SubscriptionTransactionData>
-    public function listOfTransactions(string $subscriptionId): Response
+    public function listOfTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         $subscriptionId = rawurlencode($subscriptionId);
+        $path = "/subscriptions/{$subscriptionId}/transactions";
 
-        return $this->client->get("/subscriptions/{$subscriptionId}/transactions");
+        /** @var ListPage<TransactionData> */
+        return $this->listPageForPath($path, TransactionData::class, $limit, $startingAfter, $extra);
     }
 
     /**

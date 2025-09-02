@@ -88,8 +88,8 @@ use Illuminate\Support\Facades\Facade;
  *
  * Subscriptions
  * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData getSubscription(string $subscriptionId)
- * @method static \Illuminate\Http\Client\Response listSubscriptionEntitlements(string $subscriptionId)
- * @method static \Illuminate\Http\Client\Response listSubscriptionTransactions(string $subscriptionId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\EntitlementData> listSubscriptionEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData> listSubscriptionTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
  * @method static \Illuminate\Http\Client\Response getSubscriptionCustomerPortalUrl(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response cancelWebBillingSubscription(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response refundWebBillingSubscription(string $subscriptionId)
