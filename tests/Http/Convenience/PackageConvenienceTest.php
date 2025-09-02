@@ -22,7 +22,7 @@ test('getPackage calls packages()->get() with correct parameters', function () {
     expect($package->getId())->toBe('test-package-id');
 });
 
-test('getPackageList calls packages()->list() with correct parameters', function () {
+test('listPackages calls packages()->list() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
             'object' => 'list',
@@ -33,7 +33,7 @@ test('getPackageList calls packages()->list() with correct parameters', function
         ], 200),
     ]);
 
-    $list = RevenueCat::getPackageList(10);
+    $list = RevenueCat::listPackages(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -95,7 +95,7 @@ test('deletePackage calls packages()->delete() with correct parameters', functio
     expect($deleted)->toBeTrue();
 });
 
-test('getPackageProducts calls packages()->listOfProducts() with correct parameters', function () {
+test('listPackageProducts calls packages()->listOfProducts() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages/test-package-id/products' => Http::response([
             'object' => 'list',
@@ -106,7 +106,7 @@ test('getPackageProducts calls packages()->listOfProducts() with correct paramet
         ], 200),
     ]);
 
-    $response = RevenueCat::getPackageProducts('test-package-id');
+    $response = RevenueCat::listPackageProducts('test-package-id');
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(2);

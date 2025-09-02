@@ -20,7 +20,7 @@ test('getEntitlement calls entitlements()->get() with correct parameters', funct
     expect($entitlement->getId())->toBe('test-entitlement-id');
 });
 
-test('getEntitlementList calls entitlements()->list() with correct parameters', function () {
+test('listEntitlements calls entitlements()->list() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
             'object' => 'list',
@@ -31,7 +31,7 @@ test('getEntitlementList calls entitlements()->list() with correct parameters', 
         ], 200),
     ]);
 
-    $list = RevenueCat::getEntitlementList(10);
+    $list = RevenueCat::listEntitlements(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -90,7 +90,7 @@ test('deleteEntitlement calls entitlements()->delete() with correct parameters',
     expect($deleted)->toBeTrue();
 });
 
-test('getEntitlementProducts calls entitlements()->listOfProducts() with correct parameters', function () {
+test('listEntitlementProducts calls entitlements()->listOfProducts() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements/test-entitlement-id/products' => Http::response([
             'object' => 'list',
@@ -130,7 +130,7 @@ test('getEntitlementProducts calls entitlements()->listOfProducts() with correct
         ], 200),
     ]);
 
-    $response = RevenueCat::getEntitlementProducts('test-entitlement-id');
+    $response = RevenueCat::listEntitlementProducts('test-entitlement-id');
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(2);

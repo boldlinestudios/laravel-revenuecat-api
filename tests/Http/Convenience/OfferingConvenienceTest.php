@@ -21,7 +21,7 @@ test('getOffering calls offerings()->get() with correct parameters', function ()
     expect($response->getId())->toBe('test-offering-id');
 });
 
-test('getOfferingList calls offerings()->list() with correct parameters', function () {
+test('listOfferings calls offerings()->list() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
             'object' => 'list',
@@ -32,7 +32,7 @@ test('getOfferingList calls offerings()->list() with correct parameters', functi
         ], 200),
     ]);
 
-    $response = RevenueCat::getOfferingList(10);
+    $response = RevenueCat::listOfferings(10);
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(2);

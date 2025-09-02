@@ -22,7 +22,7 @@ test('getApp calls apps()->get() with correct parameters', function () {
     expect($response->getId())->toBe('test-app-id');
 });
 
-test('getAppList calls apps()->list() with correct parameters', function () {
+test('listApps calls apps()->list() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/apps?limit=10' => Http::response([
             'object' => 'list',
@@ -33,10 +33,10 @@ test('getAppList calls apps()->list() with correct parameters', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::getAppList(10);
+    $apps = RevenueCat::listApps(10);
 
-    expect($response)->toBeInstanceOf(ListPage::class);
-    expect($response->items())->toHaveCount(2);
+    expect($apps)->toBeInstanceOf(ListPage::class);
+    expect($apps->items())->toHaveCount(2);
 });
 
 test('createApp calls apps()->create() with correct parameters', function () {
@@ -119,7 +119,7 @@ test('getAppStoreKitConfig calls apps()->storeKitConfig() with correct parameter
     expect($response->json('config'))->toBe('store_kit_configuration_data');
 });
 
-test('getAppPublicKeys calls apps()->listOfPublicKeys() with correct parameters', function () {
+test('listAppPublicKeys calls apps()->listOfPublicKeys() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/apps/test-app-id/public_api_keys' => Http::response([
             'object' => 'list',
@@ -136,7 +136,7 @@ test('getAppPublicKeys calls apps()->listOfPublicKeys() with correct parameters'
         ], 200),
     ]);
 
-    $publicKeys = RevenueCat::getAppPublicKeys('test-app-id');
+    $publicKeys = RevenueCat::listAppPublicKeys('test-app-id');
 
     expect($publicKeys)->toBeInstanceOf(ListPage::class);
     expect($publicKeys->items())->toHaveCount(1);

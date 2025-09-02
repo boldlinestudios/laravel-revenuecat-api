@@ -25,7 +25,7 @@ test('getCustomer calls customers()->get() with correct parameters', function ()
     expect($customer->getId())->toBe('test-customer-id');
 });
 
-test('getCustomerList calls customers()->list() with correct parameters', function () {
+test('listCustomers calls customers()->list() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers?limit=10' => Http::response([
             'object' => 'list',
@@ -36,7 +36,7 @@ test('getCustomerList calls customers()->list() with correct parameters', functi
         ], 200),
     ]);
 
-    $list = RevenueCat::getCustomerList(10);
+    $list = RevenueCat::listCustomers(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -71,7 +71,7 @@ test('deleteCustomer calls customers()->delete() with correct parameters', funct
     expect($deleted)->toBeTrue();
 });
 
-test('getCustomerSubscriptions calls customers()->listOfSubscriptions() with correct parameters', function () {
+test('listCustomerSubscriptions calls customers()->listOfSubscriptions() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/subscriptions?limit=10' => Http::response([
             'object' => 'list',
@@ -81,7 +81,7 @@ test('getCustomerSubscriptions calls customers()->listOfSubscriptions() with cor
         ], 200),
     ]);
 
-    $listOfSubscriptions = RevenueCat::getCustomerSubscriptions('test-customer-id', 10);
+    $listOfSubscriptions = RevenueCat::listCustomerSubscriptions('test-customer-id', 10);
 
     expect($listOfSubscriptions)->toBeInstanceOf(ListPage::class);
     expect(count($listOfSubscriptions->items()))->toBe(1);
@@ -90,7 +90,7 @@ test('getCustomerSubscriptions calls customers()->listOfSubscriptions() with cor
     expect($listOfSubscriptions->items()[0]->getStatus())->toBe('active');
 });
 
-test('getCustomerPurchases calls customers()->listOfPurchases() with correct parameters', function () {
+test('listCustomerPurchases calls customers()->listOfPurchases() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/purchases' => Http::response([
             'object' => 'list',
@@ -162,14 +162,14 @@ test('getCustomerPurchases calls customers()->listOfPurchases() with correct par
         ], 200),
     ]);
 
-    $response = RevenueCat::getCustomerPurchases('test-customer-id');
+    $response = RevenueCat::listCustomerPurchases('test-customer-id');
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(1);
     expect($response->items()[0])->toBeInstanceOf(PurchaseData::class);
 });
 
-test('getCustomerActiveEntitlements calls customers()->listOfActiveEntitlements() with correct parameters', function () {
+test('listCustomerActiveEntitlements calls customers()->listOfActiveEntitlements() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/active_entitlements' => Http::response([
             'object' => 'list',
@@ -179,14 +179,14 @@ test('getCustomerActiveEntitlements calls customers()->listOfActiveEntitlements(
         ], 200),
     ]);
 
-    $list = RevenueCat::getCustomerActiveEntitlements('test-customer-id');
+    $list = RevenueCat::listCustomerActiveEntitlements('test-customer-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(1);
     expect($list->items()[0])->toBeInstanceOf(ActiveEntitlementData::class);
 });
 
-test('getCustomerAliases calls customers()->listOfAliases() with correct parameters', function () {
+test('listCustomerAliases calls customers()->listOfAliases() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/aliases' => Http::response([
             'object' => 'list',
@@ -196,14 +196,14 @@ test('getCustomerAliases calls customers()->listOfAliases() with correct paramet
         ], 200),
     ]);
 
-    $list = RevenueCat::getCustomerAliases('test-customer-id');
+    $list = RevenueCat::listCustomerAliases('test-customer-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(1);
     expect($list->items()[0])->toBeInstanceOf(AliasData::class);
 });
 
-test('getCustomerVirtualCurrencyBalances calls customers()->listOfVirtualCurrencyBalances() with correct parameters', function () {
+test('listCustomerVirtualCurrencyBalances calls customers()->listOfVirtualCurrencyBalances() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/virtual_currencies' => Http::response([
             'object' => 'list',
@@ -214,14 +214,14 @@ test('getCustomerVirtualCurrencyBalances calls customers()->listOfVirtualCurrenc
         ], 200),
     ]);
 
-    $list = RevenueCat::getCustomerVirtualCurrencyBalances('test-customer-id');
+    $list = RevenueCat::listCustomerVirtualCurrencyBalances('test-customer-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
     expect($list->items()[0])->toBeInstanceOf(VirtualCurrencyBalanceData::class);
 });
 
-test('getCustomerAttributes calls customers()->listOfAttributes() with correct parameters', function () {
+test('listCustomerAttributes calls customers()->listOfAttributes() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
             'object' => 'list',
@@ -232,7 +232,7 @@ test('getCustomerAttributes calls customers()->listOfAttributes() with correct p
         ], 200),
     ]);
 
-    $list = RevenueCat::getCustomerAttributes('test-customer-id');
+    $list = RevenueCat::listCustomerAttributes('test-customer-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);

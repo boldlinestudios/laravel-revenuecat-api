@@ -23,7 +23,7 @@ test('getPurchase calls purchases()->get() with correct parameters', function ()
     expect($purchase->getId())->toBe('test-purchase-id');
 });
 
-test('getPurchaseEntitlements calls purchases()->listOfEntitlements() with correct parameters', function () {
+test('listPurchaseEntitlements calls purchases()->listOfEntitlements() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/purchases/test-purchase-id/entitlements' => Http::response([
             'object' => 'list',
@@ -34,7 +34,7 @@ test('getPurchaseEntitlements calls purchases()->listOfEntitlements() with corre
         ], 200),
     ]);
 
-    $list = RevenueCat::getPurchaseEntitlements('test-purchase-id');
+    $list = RevenueCat::listPurchaseEntitlements('test-purchase-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);

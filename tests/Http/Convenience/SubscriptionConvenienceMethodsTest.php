@@ -21,7 +21,7 @@ test('getSubscription calls subscriptions()->get() with correct parameters', fun
     expect($sub)->toBeInstanceOf(SubscriptionData::class);
 });
 
-test('getSubscriptionEntitlements calls subscriptions()->listOfEntitlements() with correct parameters', function () {
+test('listSubscriptionEntitlements calls subscriptions()->listOfEntitlements() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/entitlements' => Http::response([
             'object' => 'list',
@@ -32,14 +32,14 @@ test('getSubscriptionEntitlements calls subscriptions()->listOfEntitlements() wi
         ], 200),
     ]);
 
-    $list = RevenueCat::getSubscriptionEntitlements('test-subscription-id');
+    $list = RevenueCat::listSubscriptionEntitlements('test-subscription-id');
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
     expect($list->items()[0])->toBeInstanceOf(EntitlementData::class);
 });
 
-test('getSubscriptionTransactions calls subscriptions()->listOfTransactions() with correct parameters', function () {
+test('listSubscriptionTransactions calls subscriptions()->listOfTransactions() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions' => Http::response([
             'object' => 'list',
@@ -50,7 +50,7 @@ test('getSubscriptionTransactions calls subscriptions()->listOfTransactions() wi
         ], 200),
     ]);
 
-    $response = RevenueCat::getSubscriptionTransactions('test-subscription-id');
+    $response = RevenueCat::listSubscriptionTransactions('test-subscription-id');
 
     expect($response)->toBeInstanceOf(Response::class);
     expect($response->successful())->toBeTrue();

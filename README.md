@@ -86,7 +86,7 @@ Direct shortcut methods for common operations.
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $entitlement = RevenueCat::getEntitlement('entitlement_id'); // EntitlementData
-$entitlements = RevenueCat::getEntitlementList(10); // ListPage<EntitlementData>
+$entitlements = RevenueCat::listEntitlements(10); // ListPage<EntitlementData>
 $newEntitlement = RevenueCat::createEntitlement('premium', 'Premium access to all features'); // EntitlementData
 ```
 ## Endpoints
