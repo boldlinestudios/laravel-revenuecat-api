@@ -400,6 +400,18 @@ trait ConvenienceMethods
         return $this->purchases()->refundWebBillingPurchase($purchaseId);
     }
 
+    /**
+     * Search for a one-time purchases by any of its associated store_purchase_identifier values
+     * For example, this may include the transactionId of any transaction in an Apple App Store purchase,
+     * or any order ID from a Google Play Store purchase.
+     *
+     * @return ListPage<PurchaseData>
+     */
+    public function searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage
+    {
+        return $this->purchases()->searchPurchasesByIdentifier($storePurchaseIdentifier);
+    }
+
     // Subscription convenience methods
     public function getSubscription(string $subscriptionId): SubscriptionData
     {

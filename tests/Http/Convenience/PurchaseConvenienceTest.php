@@ -67,3 +67,33 @@ test('refundWebBillingPurchase calls purchases()->refundWebBillingPurchase() wit
     expect($purchase)->toBeInstanceOf(PurchaseData::class);
     expect($purchase->getId())->toBe('test-purchase-id');
 });
+
+test('searchPurchasesByIdentifier calls purchases()->searchPurchasesByIdentifier() with correct parameters', function () {
+    $identifier = 'GPA.1234-5678-9012-34567';
+
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/purchases/search*' => Http::response([
+            'object' => 'list',
+            'items' => [
+                [
+                    'object' => 'purchase',
+                    'id' => 'purchase1',
+                    'customer_id' => 'customer123',
+                    'product_id' => 'product123',
+                    'store_purchase_identifier' => $identifier,
+                    'purchased_at' => 1658399423658,
+                ],
+            ],
+            'next_page' => null,
+            'url' => '/v2/projects/test_project/purchases/search?store_purchase_identifier=GPA.1234-5678-9012-34567&limit=20',
+        ], 200),
+    ]);
+
+    $list = RevenueCat::searchPurchasesByIdentifier($identifier);
+
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(1);
+    expect($list->items()[0])->toBeInstanceOf(PurchaseData::class);
+    expect($list->items()[0]->getId())->toBe('purchase1');
+    expect($list->items()[0]->getStorePurchaseIdentifier())->toBe($identifier);
+});

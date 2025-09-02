@@ -53,4 +53,20 @@ class Purchase
 
         return PurchaseData::fromResponse($this->client->post($path));
     }
+
+    /**
+     * Search for a one-time purchases by any of its associated store_purchase_identifier values
+     * For example, this may include the transactionId of any transaction in an Apple App Store purchase,
+     * or any order ID from a Google Play Store purchase.
+     *
+     * @return ListPage<PurchaseData>
+     */
+    public function searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage
+    {
+        $storePurchaseIdentifier = rawurlencode($storePurchaseIdentifier);
+        $path = "/purchases/search?store_purchase_identifier={$storePurchaseIdentifier}";
+
+        /** @var ListPage<PurchaseData> */
+        return $this->listPageForPath($path, PurchaseData::class);
+    }
 }
