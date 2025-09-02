@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Project projects()
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Purchase purchases()
  * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Subscription subscriptions()
+ * @method static \BoldlineStudios\RevenueCatApi\Endpoints\Paywall paywalls()
  *
  * Convenience methods (DTOs for resources; Response for utility endpoints)
  *
