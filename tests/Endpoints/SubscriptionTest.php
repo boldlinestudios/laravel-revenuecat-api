@@ -281,3 +281,38 @@ test('refundWebBillingSubscription method properly encodes special characters in
     expect($response->successful())->toBeTrue();
     expect($response->json('status'))->toBe('refunded');
 });
+
+test('refundPlayStoreSubscriptionTransaction returns TransactionData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions/test-transaction-id/actions/refund' => Http::response([
+            'object' => 'subscription_transaction',
+            'id' => 'test-transaction-id',
+            'purchased_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $subscriptionId = 'test-subscription-id';
+    $transactionId = 'test-transaction-id';
+    $transaction = RevenueCat::subscriptions()->refundPlayStoreSubscriptionTransaction($subscriptionId, $transactionId);
+
+    expect($transaction)->toBeInstanceOf(TransactionData::class);
+    expect($transaction->getId())->toBe('test-transaction-id');
+    expect($transaction->getPurchasedAtMs())->toBe(1658399423658);
+});
+
+test('refundPlayStoreSubscriptionTransaction method properly encodes special characters in subscription and transaction ids', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/transactions/test%20transaction%20with%20spaces%20%26%20special%20chars/actions/refund' => Http::response([
+            'object' => 'subscription_transaction',
+            'id' => 'test transaction with spaces & special chars',
+            'purchased_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $subscriptionId = 'test subscription with spaces & special chars';
+    $transactionId = 'test transaction with spaces & special chars';
+    $transaction = RevenueCat::subscriptions()->refundPlayStoreSubscriptionTransaction($subscriptionId, $transactionId);
+
+    expect($transaction)->toBeInstanceOf(TransactionData::class);
+    expect($transaction->getId())->toBe('test transaction with spaces & special chars');
+});

@@ -110,3 +110,19 @@ test('refundWebBillingSubscription calls subscriptions()->refundWebBillingSubscr
     expect($response->successful())->toBeTrue();
     expect($response->json('status'))->toBe('refunded');
 });
+
+test('refundPlayStoreSubscriptionTransaction calls subscriptions()->refundPlayStoreSubscriptionTransaction() with correct parameters', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/transactions/test-transaction-id/actions/refund' => Http::response([
+            'object' => 'subscription_transaction',
+            'id' => 'test-transaction-id',
+            'purchased_at' => 1658399423658,
+        ], 200),
+    ]);
+
+    $transaction = RevenueCat::refundPlayStoreSubscriptionTransaction('test-subscription-id', 'test-transaction-id');
+
+    expect($transaction)->toBeInstanceOf(TransactionData::class);
+    expect($transaction->getId())->toBe('test-transaction-id');
+    expect($transaction->getPurchasedAtMs())->toBe(1658399423658);
+});

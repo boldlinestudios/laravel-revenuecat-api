@@ -77,6 +77,20 @@ class Subscription
     }
 
     /**
+     * Refund a Play Store subscription's transaction.
+     * This endpoint does not cancel the subscription or revoke access to it.
+     */
+    public function refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
+    {
+        $subscriptionId = rawurlencode($subscriptionId);
+        $transactionId = rawurlencode($transactionId);
+
+        $url = "/subscriptions/{$subscriptionId}/transactions/{$transactionId}/actions/refund";
+
+        return TransactionData::fromResponse($this->client->post($url));
+    }
+
+    /**
      * Cancel an active Web Billing subscription. The customer will lose access
      * to the associated entitlements at the end of the current period.
      * This endpoint requires the following permission(s): customer_information:subscriptions:read_write

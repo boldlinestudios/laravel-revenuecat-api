@@ -93,6 +93,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Illuminate\Http\Client\Response getSubscriptionCustomerPortalUrl(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response cancelWebBillingSubscription(string $subscriptionId)
  * @method static \Illuminate\Http\Client\Response refundWebBillingSubscription(string $subscriptionId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId)
  */
 class RevenueCat extends Facade
 {

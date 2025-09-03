@@ -471,6 +471,15 @@ $resp = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_
 $resp = RevenueCat::refundWebBillingSubscription('subscription_id');
 ```
 
+#### Refund Play Store subscription transaction
+```php
+// Signature:
+// subscriptions()->refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
+
+$transaction = RevenueCat::subscriptions()->refundPlayStoreSubscriptionTransaction('subscription_id', 'transaction_id');
+$transaction = RevenueCat::refundPlayStoreSubscriptionTransaction('subscription_id', 'transaction_id');
+```
+
 ## Invoices
 
 #### List customer invoices

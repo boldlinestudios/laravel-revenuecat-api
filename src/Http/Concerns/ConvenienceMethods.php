@@ -467,4 +467,13 @@ trait ConvenienceMethods
     {
         return $this->subscriptions()->refundWebBillingSubscription($subscriptionId);
     }
+
+    /**
+     * Refund a Play Store subscription's transaction.
+     * This endpoint does not cancel the subscription or revoke access to it.
+     */
+    public function refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
+    {
+        return $this->subscriptions()->refundPlayStoreSubscriptionTransaction($subscriptionId, $transactionId);
+    }
 }
