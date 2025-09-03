@@ -22,7 +22,7 @@ test('getPackage calls packages()->get() with correct parameters', function () {
     expect($package->getId())->toBe('test-package-id');
 });
 
-test('listPackages calls packages()->list() with correct parameters', function () {
+test('listPackages calls packages()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
             'object' => 'list',

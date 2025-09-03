@@ -21,7 +21,7 @@ test('getProduct calls products()->get() with correct parameters', function () {
     expect($product->getId())->toBe('test-product-id');
 });
 
-test('listProducts calls products()->list() with correct parameters', function () {
+test('listProducts calls products()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/products?limit=10' => Http::response([
             'object' => 'list',

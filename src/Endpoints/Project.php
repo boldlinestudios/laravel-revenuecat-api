@@ -27,7 +27,7 @@ class Project
      * @param  array<string, mixed>  $extra
      * @return ListPage<ProjectData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<ProjectData> */
         return $this->listAsDto(ProjectData::class, $limit, $startingAfter, $extra);

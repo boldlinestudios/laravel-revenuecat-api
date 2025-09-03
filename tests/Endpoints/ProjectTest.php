@@ -17,7 +17,7 @@ test('list returns ListPage of ProjectData', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::projects()->list(10);
+    $list = RevenueCat::projects()->all(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -33,7 +33,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::projects()->list();
+    $list = RevenueCat::projects()->all();
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(0);
@@ -51,7 +51,7 @@ test('list method works with no parameters', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::projects()->list();
+    $list = RevenueCat::projects()->all();
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect($list->items())->toHaveCount(1);
@@ -71,7 +71,7 @@ test('list method works with no parameters using class method', function () {
 
     $client = app(\BoldlineStudios\RevenueCatApi\Http\RevenueCatClient::class);
 
-    $list = $client->projects()->list();
+    $list = $client->projects()->all();
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(1);

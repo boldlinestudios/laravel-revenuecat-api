@@ -19,7 +19,7 @@ trait Listable
      * @param  string|null  $startingAfter  Cursor id to continue after
      * @param  array<string, mixed>  $extra  Additional query parameters to merge
      */
-    public function listRaw(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
+    public function allRaw(int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
         $query = [];
 
@@ -53,7 +53,7 @@ trait Listable
         string $nextPageKey = 'next_page',
         string $urlKey = 'url'
     ): ListPage {
-        $response = $this->listRaw($limit, $startingAfter, $extra);
+        $response = $this->allRaw($limit, $startingAfter, $extra);
         $payload = $response->json();
         $payload = is_array($payload) ? $payload : [];
 
@@ -137,7 +137,7 @@ trait Listable
      *
      * @param  array<string, mixed>  $extra
      */
-    protected function listRawForPath(string $path, int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
+    protected function allRawForPath(string $path, int $limit = 20, ?string $startingAfter = null, array $extra = []): Response
     {
         return $this->client()->get($path, $this->buildListQuery($limit, $startingAfter, $extra));
     }
@@ -159,7 +159,7 @@ trait Listable
         string $nextPageKey = 'next_page',
         string $urlKey = 'url'
     ): ListPage {
-        $response = $this->listRawForPath($path, $limit, $startingAfter, $extra);
+        $response = $this->allRawForPath($path, $limit, $startingAfter, $extra);
 
         return $this->listFromResponse($response, $dtoClass, $itemsKey, $nextPageKey, $urlKey);
     }

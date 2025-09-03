@@ -54,7 +54,7 @@ class Offering
      * @param  array<string, mixed>  $extra
      * @return ListPage<OfferingData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<OfferingData> */
         return $this->listAsDto(OfferingData::class, $limit, $startingAfter, $extra);

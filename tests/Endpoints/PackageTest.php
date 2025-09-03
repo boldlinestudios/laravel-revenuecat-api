@@ -19,7 +19,7 @@ test('list returns ListPage of PackageData', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::packages()->list(10);
+    $list = RevenueCat::packages()->all(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -229,7 +229,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::packages()->list();
+    $list = RevenueCat::packages()->all();
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(0);

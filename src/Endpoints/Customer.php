@@ -85,7 +85,7 @@ class Customer
      * @param  array<string, mixed>  $extra
      * @return ListPage<CustomerData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<CustomerData> */
         return $this->listAsDto(CustomerData::class, $limit, $startingAfter, $extra);

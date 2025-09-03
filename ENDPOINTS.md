@@ -1,503 +1,283 @@
-# Endpoint Examples
+# Endpoint and Convenience Methods
 
+## Example Usage
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+
+$app = RevenueCat::apps()->get('app1a2b3c4');
 ```
+---
 
-## Apps
+## **Endpoints Reference**
 
-#### Get
+All endpoint methods below are available through their respective endpoint classes:
+
+### **App Endpoints** (`RevenueCat::apps()`)
 ```php
-// Signature: 
-// apps()->get(string $appId): AppData
+// CRUD operations
+get(string $appId): AppData
 
-$app = RevenueCat::apps()->get('app_id');
-$app = RevenueCat::getApp('app_id');
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AppData>
+
+create(string $name, string $type, array $storeConfig): AppData
+
+update(string $appId, ?string $name, array $storeConfig): AppData
+
+delete(string $appId): bool
+
+// App-specific endpoints
+listOfPublicKeys(string $appId): ListPage<PublicApiKeyData>
+
+storeKitConfig(string $appId): Response
 ```
 
-#### List
+### **Customer Endpoints** (`RevenueCat::customers()`)
 ```php
-// Signature: 
-// apps()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<AppData>
+// CRUD operations
+get(string $customerId): CustomerData
 
-$apps = RevenueCat::apps()->list(10);
-$apps = RevenueCat::listApps(10);
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<CustomerData>
+
+create(string $id, array $attributes): CustomerData
+
+delete(string $customerId): bool
+
+// Customer relationships
+listOfSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<SubscriptionData>
+
+listOfPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<PurchaseData>
+
+listOfActiveEntitlements(string $customerId): ListPage<ActiveEntitlementData>
+
+listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AliasData>
+
+listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<VirtualCurrencyBalanceData>
+
+listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AttributeData>
+
+// Customer actions
+setAttributes(string $customerId, array $attributes): ListPage<AttributeData>
 ```
 
-#### Create
+### **Entitlement Endpoints** (`RevenueCat::entitlements()`)
 ```php
-// Signature: 
-// apps()->create(string $name, string $type, array<string, array<string, mixed>> $storeConfig): AppData
+get(string $entitlementId): EntitlementData
 
-$app = RevenueCat::apps()->create('My App', 'app_store', [
-        'app_store' => [
-            'bundle_id' => 'com.example.app'
-        ]
-    ]);
-$app = RevenueCat::createApp('My App', 'app_store', [
-    'app_store' => [
-        'bundle_id' => 'com.example.app'
-    ]
-]);
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<EntitlementData>
+
+create(string $lookupKey, string $displayName): EntitlementData
+
+update(string $entitlementId, string $displayName): EntitlementData
+
+delete(string $entitlementId): bool
+
+// Product management
+attachProducts(string $entitlementId, array $productIds): EntitlementData
+
+detachProducts(string $entitlementId, array $productIds): EntitlementData
+
+listOfProducts(string $entitlementId): ListPage<ProductData>
 ```
 
-#### Update
+### **Offering Endpoints** (`RevenueCat::offerings()`)
 ```php
-// Signature: 
-// apps()->update(string $appId, array<string, mixed> $data): AppData
+get(string $offeringId): OfferingData
 
-$updated = RevenueCat::apps()->update('app_id', [
-  'name' => 'New Name',
-  // optional provider config keys allowed
-  // 'app_store' => ['bundle_id' => 'com.example.app']
-]);
-$updated = RevenueCat::updateApp('app_id', [
-  'name' => 'New Name',
-  // 'app_store' => ['bundle_id' => 'com.example.app']
-]);
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<OfferingData>
+
+create(string $lookupKey, string $displayName, ?array $metadata): OfferingData
+
+update(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata): OfferingData
+
+delete(string $offeringId): bool
 ```
 
-#### Delete
+### **Package Endpoints** (`RevenueCat::packages()`)
 ```php
-// Signature: apps()->delete(string $appId): bool
+get(string $packageId): PackageData
 
-$deleted = RevenueCat::apps()->delete('app_id');
-$deleted = RevenueCat::deleteApp('app_id');
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<PackageData>
+
+create(string $lookupKey, string $displayName, ?int $position): PackageData
+
+update(string $packageId, ?string $displayName, ?int $position): PackageData
+
+delete(string $packageId): bool
+
+// Product management
+listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProductData>
+
+attachProducts(string $packageId, array $productAssociationList): PackageData
+
+detachProducts(string $packageId, array $productIds): PackageData
 ```
 
-#### StoreKit config
+### **Product Endpoints** (`RevenueCat::products()`)
 ```php
-// Signature: apps()->storeKitConfig(string $appId): Illuminate\Http\Client\Response
+get(string $productId): ProductData
 
-$resp = RevenueCat::apps()->storeKitConfig('app_id');
-$resp = RevenueCat::getAppStoreKitConfig('app_id');
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProductData>
+
+create(string $storeIdentifier, string $appId, string $type, ?string $displayName): ProductData
+
+delete(string $productId): bool
 ```
 
-#### Public API keys
+### **Project Endpoints** (`RevenueCat::projects()`)
 ```php
-// Signature: apps()->listOfPublicKeys(string $appId): ListPage<PublicApiKeyData>
-
-$apps = RevenueCat::apps()->listOfPublicKeys('app_id');
-$apps = RevenueCat::listAppPublicKeys('app_id');
+all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProjectData>
 ```
 
-## Customers
-
-#### Get
+### **Purchase Endpoints** (`RevenueCat::purchases()`)
 ```php
-// Signature:
-// customers()->get(string $customerId): CustomerData
+get(string $purchaseId): PurchaseData
 
-$customer = RevenueCat::customers()->get('customer_id');
-$customer = RevenueCat::getCustomer('customer_id');
+listOfEntitlements(string $purchaseId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<EntitlementData>
+
+refundWebBillingPurchase(string $purchaseId): PurchaseData
+
+searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage<PurchaseData>
 ```
 
-#### List
+### **Subscription Endpoints** (`RevenueCat::subscriptions()`)
 ```php
-// Signature:
-// customers()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerData>
+get(string $subscriptionId): SubscriptionData
 
-$customers = RevenueCat::customers()->list(25);
+listOfEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<EntitlementData>
+
+listOfTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<TransactionData>
+
+// Portal & management
+getCustomerPortalUrl(string $subscriptionId): Response
+
+// Cancellation & refunds
+cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
+
+refundWebBillingSubscription(string $subscriptionId): SubscriptionData
+
+refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
 ```
 
-#### Create
+### **Invoice Endpoints** (`RevenueCat::invoices()`)
 ```php
-// Signature:
-// customers()->create(string $id, list<array{name: string, value: string}> $attributes): CustomerData
-
-$customer = RevenueCat::customers()->create('customer_id', [
-  ['name' => '$email', 'value' => 'me@example.com'],
-]);
+listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<InvoiceData>
 ```
 
-#### Delete
+### **Paywall Endpoints** (`RevenueCat::paywalls()`)
 ```php
-// Signature:
-// customers()->delete(string $customerId): bool
-
-$deleted = RevenueCat::customers()->delete('customer_id');
-$deleted = RevenueCat::deleteCustomer('customer_id');
+create(string $offeringId): PaywallData
 ```
 
-#### Subscriptions
+---
+
+## **Complete Convenience Methods Reference**
+
+All methods below are available through the `ConvenienceMethods` trait and can be called directly on the `RevenueCat` facade:
+
+### **App Methods**
 ```php
-// Signature:
-// customers()->listOfSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<SubscriptionData>
+// Core app operations
+getApp(string $appId): AppData
+listApps(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AppData>
+createApp(string $name, string $type, array $storeConfig): AppData
+updateApp(string $appId, ?string $name, array $storeConfig): AppData
+deleteApp(string $appId): bool
 
-$subs = RevenueCat::customers()->listOfSubscriptions('customer_id');
-$subs = RevenueCat::listCustomerSubscriptions('customer_id');
+// App-specific operations
+listAppPublicKeys(string $appId): ListPage<PublicApiKeyData>
+getAppStoreKitConfig(string $appId): Response
 ```
 
-#### Purchases
+### **Customer Methods**
 ```php
-// Signature:
-// customers()->listOfPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<PurchaseData>
+// CRUD operations
+getCustomer(string $customerId): CustomerData
+listCustomers(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<CustomerData>
+createCustomer(string $id, array $attributes): CustomerData
+deleteCustomer(string $customerId): bool
 
-$purchases = RevenueCat::customers()->listOfPurchases('customer_id');
-$purchases = RevenueCat::listCustomerPurchases('customer_id');
+// Customer relationships
+listCustomerSubscriptions(string $customerId): ListPage<SubscriptionData>
+listCustomerPurchases(string $customerId): ListPage<PurchaseData>
+listCustomerActiveEntitlements(string $customerId): ListPage<ActiveEntitlementData>
+listCustomerAliases(string $customerId): ListPage<AliasData>
+listCustomerVirtualCurrencyBalances(string $customerId): ListPage<VirtualCurrencyBalanceData>
+listCustomerAttributes(string $customerId): ListPage<AttributeData>
 ```
 
-#### Active entitlements
+### **Entitlement Methods**
 ```php
-// Signature:
-// customers()->listOfActiveEntitlements(string $customerId): ListPage<CustomerActiveEntitlementData>
-
-$entitlements = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
-$entitlements = RevenueCat::listCustomerActiveEntitlements('customer_id');
+getEntitlement(string $entitlementId): EntitlementData
+listEntitlements(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<EntitlementData>
+createEntitlement(string $lookupKey, string $displayName): EntitlementData
+updateEntitlement(string $entitlementId, string $displayName): EntitlementData
+deleteEntitlement(string $entitlementId): bool
+attachEntitlementProducts(string $entitlementId, array $productIds): EntitlementData
+detachEntitlementProducts(string $entitlementId, array $productIds): EntitlementData
+listEntitlementProducts(string $entitlementId): ListPage<ProductData>
 ```
 
-#### Aliases
+### **Offering Methods**
 ```php
-// Signature:
-// customers()->listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerAliasData>
-
-$aliases = RevenueCat::customers()->listOfAliases('customer_id');
-$aliases = RevenueCat::listCustomerAliases('customer_id');
+getOffering(string $offeringId): OfferingData
+listOfferings(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<OfferingData>
+createOffering(string $lookupKey, string $displayName, ?array $metadata): OfferingData
+updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata): OfferingData
+deleteOffering(string $offeringId): bool
 ```
 
-#### Virtual currency balances
+### **Package Methods**
 ```php
-// Signature:
-// customers()->listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerVirtualCurrencyBalanceData>
-
-$balances = RevenueCat::customers()->listOfVirtualCurrencyBalances('customer_id');
-$balances = RevenueCat::listCustomerVirtualCurrencyBalances('customer_id');
+getPackage(string $packageId): PackageData
+listPackages(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<PackageData>
+createPackage(string $lookupKey, string $displayName, ?int $position): PackageData
+updatePackage(string $packageId, ?string $displayName, ?int $position): PackageData
+deletePackage(string $packageId): bool
+listPackageProducts(string $packageId): ListPage<ProductData>
+attachPackageProducts(string $packageId, array $productAssociationList): PackageData
+detachPackageProducts(string $packageId, array $productIds): PackageData
 ```
 
-#### Attributes
+### **Product Methods**
 ```php
-// Signature:
-// customers()->listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<CustomerAttributeData>
-
-$attrs = RevenueCat::customers()->listOfAttributes('customer_id');
-$attrs = RevenueCat::listCustomerAttributes('customer_id');
+getProduct(string $productId): ProductData
+listProducts(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProductData>
+createProduct(string $storeIdentifier, string $appId, string $type, ?string $displayName): ProductData
+deleteProduct(string $productId): bool
 ```
 
-#### Set attributes
+### **Project Methods**
 ```php
-// Signature:
-// customers()->setAttributes(string $customerId, list<array{name: string, value: string}> $attributes): ListPage<CustomerAttributeData>
-
-$attrs = RevenueCat::customers()->setAttributes('customer_id', [
-  ['name' => '$email', 'value' => 'support@revenuecat.com'],
-]);
+listProjects(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProjectData>
 ```
 
-## Entitlements
-
-#### Get
+### **Purchase Methods**
 ```php
-// Signature:
-// entitlements()->get(string $entitlementId): EntitlementData
-
-$entitlement = RevenueCat::entitlements()->get('entitlement_id');
-$entitlement = RevenueCat::getEntitlement('entitlement_id');
+getPurchase(string $purchaseId): PurchaseData
+listPurchaseEntitlements(string $purchaseId): ListPage<EntitlementData>
+refundWebBillingPurchase(string $purchaseId): PurchaseData
+searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage<PurchaseData>
 ```
 
-#### List
+### **Subscription Methods**
 ```php
-// Signature:
-// entitlements()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<EntitlementData>
-
-$ents = RevenueCat::entitlements()->list(10);
-$ents = RevenueCat::listEntitlements(10);
+getSubscription(string $subscriptionId): SubscriptionData
+listSubscriptionEntitlements(string $subscriptionId): ListPage<EntitlementData>
+listSubscriptionTransactions(string $subscriptionId): ListPage<TransactionData>
+getSubscriptionCustomerPortalUrl(string $subscriptionId): Response
+cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
+refundWebBillingSubscription(string $subscriptionId): SubscriptionData
+refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
 ```
 
-#### Create
+### **Invoice Methods**
 ```php
-// Signature:
-// entitlements()->create(string $lookupKey, string $displayName): EntitlementData
-
-$created = RevenueCat::entitlements()->create('premium', 'Premium');
+listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<InvoiceData>
 ```
 
-#### Update
+### **Paywall Methods**
 ```php
-// Signature:
-// entitlements()->update(string $entitlementId, string $displayName): EntitlementData
-
-$updated = RevenueCat::entitlements()->update('entitlement_id', 'Pro');
+createPaywall(string $offeringId): PaywallData
 ```
 
-#### Delete
-```php
-// Signature:
-// entitlements()->delete(string $entitlementId): bool
-
-$deleted = RevenueCat::entitlements()->delete('entitlement_id');
-$deleted = RevenueCat::deleteEntitlement('entitlement_id');
-```
-
-#### Attach products
-```php
-// Signature:
-// entitlements()->attachProducts(string $entitlementId, array<string> $productIds): EntitlementData
-
-$entitlement = RevenueCat::entitlements()->attachProducts('entitlement_id', ['prod_1']);
-$entitlement = RevenueCat::attachEntitlementProducts('entitlement_id', ['prod_1']);
-```
-
-#### Detach products
-```php
-// Signature:
-// entitlements()->detachProducts(string $entitlementId, array<string> $productIds): EntitlementData
-
-$entitlement = RevenueCat::entitlements()->detachProducts('entitlement_id', ['prod_1']);
-$entitlement = RevenueCat::detachEntitlementProducts('entitlement_id', ['prod_1']);
-```
-
-#### Products
-```php
-// Signature:
-// entitlements()->listOfProducts(string $entitlementId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProductData>
-
-$products = RevenueCat::entitlements()->listOfProducts('entitlement_id');
-$products = RevenueCat::listEntitlementProducts('entitlement_id');
-```
-
-## Offerings
-
-#### Get
-```php
-// Signature:
-// offerings()->get(string $offeringId): OfferingData
-
-$offering = RevenueCat::offerings()->get('offering_id');
-$offering = RevenueCat::getOffering('offering_id');
-```
-
-#### List
-```php
-// Signature:
-// offerings()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<OfferingData>
-
-$offerings = RevenueCat::offerings()->list(10);
-$offerings = RevenueCat::listOfferings(10);
-```
-
-#### Create
-```php
-// Signature:
-// offerings()->create(string $lookupKey, string $displayName, ?array<string, mixed> $metadata = null): OfferingData
-$created = RevenueCat::offerings()->create('basic', 'Basic', ['color' => 'blue']);
-```
-
-#### Update
-```php
-// Signature:
-// offerings()->update(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array<string, mixed> $metadata = null): OfferingData
-
-$updated = RevenueCat::offerings()->update('offering_id', 'Pro', null, ['color' => 'green']);
-```
-
-#### Delete
-```php
-// Signature:
-// offerings()->delete(string $offeringId): bool
-
-$deleted = RevenueCat::offerings()->delete('offering_id');
-$deleted = RevenueCat::deleteOffering('offering_id');
-```
-
-## Packages
-
-#### Get
-```php
-// Signature:
-// packages()->get(string $packageId): PackageData
-
-$pkg = RevenueCat::packages()->get('package_id');
-$pkg = RevenueCat::getPackage('package_id');
-```
-
-#### List
-```php
-// Signature:
-// packages()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<PackageData>
-
-$pkgs = RevenueCat::packages()->list(10);
-$pkgs = RevenueCat::listPackages(10);
-```
-
-#### Create
-```php
-// Signature:
-// packages()->create(string $lookupKey, string $displayName, ?int $position = null): PackageData
-
-$created = RevenueCat::packages()->create('gold', 'Gold', 1);
-```
-
-#### Update
-```php
-// Signature:
-// packages()->update(string $packageId, ?string $displayName, ?int $position = null): PackageData
-
-$updated = RevenueCat::packages()->update('package_id', 'Platinum', 2);
-```
-
-#### Delete
-```php
-// Signature:
-// packages()->delete(string $packageId): bool
-
-$deleted = RevenueCat::packages()->delete('package_id');
-$deleted = RevenueCat::deletePackage('package_id');
-```
-
-#### Products
-```php
-// Signature:
-// packages()->listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProductData>
-
-$products = RevenueCat::packages()->listOfProducts('package_id');
-$products = RevenueCat::listPackageProducts('package_id');
-```
-
-## Products
-
-#### Get
-```php
-// Signature:
-// products()->get(string $productId): ProductData
-
-$product = RevenueCat::products()->get('product_id');
-$product = RevenueCat::getProduct('product_id');
-```
-
-#### List
-```php
-// Signature:
-// products()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProductData>
-
-$products = RevenueCat::products()->list(10);
-$products = RevenueCat::listProducts(10);
-```
-
-#### Create
-```php
-// Signature:
-// products()->create(string $storeIdentifier, string $appId, string $type, ?string $displayName = null): ProductData
-
-$created = RevenueCat::products()->create('rc_1w_199', 'app_id', 'subscription', 'Display Name');
-```
-
-#### Delete
-```php
-// Signature:
-// products()->delete(string $productId): bool
-
-$deleted = RevenueCat::products()->delete('product_id');
-$deleted = RevenueCat::deleteProduct('product_id');
-```
-
-## Projects
-
-#### List (not project-scoped)
-```php
-// Signature:
-// projects()->list(int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<ProjectData>
-
-$projects = RevenueCat::projects()->list(5);
-$projects = RevenueCat::listProjects(5);
-```
-
-## Purchases
-
-#### Get
-```php
-// Signature:
-// purchases()->get(string $purchaseId): PurchaseData
-
-$purchase = RevenueCat::purchases()->get('purchase_id');
-$purchase = RevenueCat::getPurchase('purchase_id');
-```
-
-#### Entitlements (Response)
-```php
-// Signature:
-// purchases()->listOfEntitlements(string $purchaseId): ListPage<EntitlementData>
-
-$entitlements = RevenueCat::purchases()->listOfEntitlements('purchase_id');
-$entitlements = RevenueCat::listPurchaseEntitlements('purchase_id');
-```
-
-## Subscriptions
-
-#### Get
-```php
-// Signature:
-// subscriptions()->get(string $subscriptionId): SubscriptionData
-
-$sub = RevenueCat::subscriptions()->get('subscription_id');
-$sub = RevenueCat::getSubscription('subscription_id');
-```
-
-#### Entitlements (Response)
-```php
-// Signature:
-// subscriptions()->listOfEntitlements(string $subscriptionId): ListPage<EntitlementData>
-
-$ents = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
-$resp = RevenueCat::listSubscriptionEntitlements('subscription_id');
-```
-
-#### Transactions
-```php
-// Signature:
-// subscriptions()->listOfTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<TransactionData>
-
-$transactions = RevenueCat::subscriptions()->listOfTransactions('subscription_id');
-$transactions = RevenueCat::listSubscriptionTransactions('subscription_id');
-```
-
-#### Customer portal URL (Response)
-```php
-// Signature:
-// subscriptions()->getCustomerPortalUrl(string $subscriptionId): Illuminate\Http\Client\Response
-
-$resp = RevenueCat::subscriptions()->getCustomerPortalUrl('subscription_id');
-$resp = RevenueCat::getSubscriptionCustomerPortalUrl('subscription_id');
-```
-
-#### Cancel/Refund web billing
-```php
-// Signature:
-// subscriptions()->cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
-// subscriptions()->refundWebBillingSubscription(string $subscriptionId): SubscriptionData
-
-$subscription = RevenueCat::subscriptions()->cancelWebBillingSubscription('subscription_id');
-$subscription = RevenueCat::cancelWebBillingSubscription('subscription_id');
-$subscription = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
-$subscription = RevenueCat::refundWebBillingSubscription('subscription_id');
-```
-
-#### Refund Play Store subscription transaction
-```php
-// Signature:
-// subscriptions()->refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
-
-$transaction = RevenueCat::subscriptions()->refundPlayStoreSubscriptionTransaction('subscription_id', 'transaction_id');
-$transaction = RevenueCat::refundPlayStoreSubscriptionTransaction('subscription_id', 'transaction_id');
-```
-
-## Invoices
-
-#### List customer invoices
-```php
-// Signature:
-// invoices()->listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = []): ListPage<InvoiceData>
-
-$invoices = RevenueCat::invoices()->listCustomerInvoices('customer_id');
-$invoices = RevenueCat::listCustomerInvoices('customer_id');
-```
-
-## Paywalls
-
-#### Create
-```php
-// Signature:
-// paywalls()->create(string $offeringId): PaywallData
-
-$paywall = RevenueCat::paywalls()->create('offering_id');
-$paywall = RevenueCat::createPaywall('offering_id');
-```
+---

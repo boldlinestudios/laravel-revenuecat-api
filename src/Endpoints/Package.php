@@ -87,7 +87,7 @@ class Package
 
         // We unwrap the inner "product" payloads into ProductData DTOs while preserving
         // standard pagination fields.
-        $response = $this->listRawForPath($path, $limit, $startingAfter, $extra);
+        $response = $this->allRawForPath($path, $limit, $startingAfter, $extra);
         $payload = $response->json();
         $payload = is_array($payload) ? $payload : [];
 
@@ -120,7 +120,7 @@ class Package
      * @param  array<string, mixed>  $extra
      * @return ListPage<PackageData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<PackageData> */
         return $this->listAsDto(PackageData::class, $limit, $startingAfter, $extra);

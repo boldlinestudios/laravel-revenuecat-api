@@ -63,7 +63,7 @@ test('list returns ListPage of AppData', function () use ($sampleApp) {
         ], 200),
     ]);
 
-    $list = RevenueCat::apps()->list(10);
+    $list = RevenueCat::apps()->all(10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -239,7 +239,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $list = RevenueCat::apps()->list();
+    $list = RevenueCat::apps()->all();
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(0);

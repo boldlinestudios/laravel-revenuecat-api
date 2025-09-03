@@ -87,7 +87,7 @@ class Entitlement
      * @param  array<string, mixed>  $extra
      * @return ListPage<EntitlementData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<EntitlementData> */
         return $this->listAsDto(EntitlementData::class, $limit, $startingAfter, $extra);

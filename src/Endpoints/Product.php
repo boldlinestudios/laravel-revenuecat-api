@@ -55,7 +55,7 @@ class Product
      * @param  array<string, mixed>  $extra
      * @return ListPage<ProductData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<ProductData> */
         return $this->listAsDto(ProductData::class, $limit, $startingAfter, $extra);

@@ -142,7 +142,7 @@ class App
      * @param  array<string, mixed>  $extra
      * @return ListPage<AppData>
      */
-    public function list(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         /** @var ListPage<AppData> */
         return $this->listAsDto(AppData::class, $limit, $startingAfter, $extra);

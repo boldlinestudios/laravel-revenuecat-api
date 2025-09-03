@@ -19,7 +19,7 @@ test('list returns ListPage of EntitlementData', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::entitlements()->list(10);
+    $response = RevenueCat::entitlements()->all(10);
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(2);
@@ -145,7 +145,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::entitlements()->list();
+    $response = RevenueCat::entitlements()->all();
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(0);

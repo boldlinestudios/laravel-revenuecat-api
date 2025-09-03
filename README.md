@@ -74,7 +74,7 @@ Organized by resource, similar to the REST API.
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $customer = RevenueCat::customers()->get('customer_id'); // CustomerData
-$customers = RevenueCat::customers()->list(25); // ListPage<CustomerData>
+$customers = RevenueCat::customers()->all(25); // ListPage<CustomerData>
 
 foreach ($customers->items() as $c) { /* $c is CustomerData */ }
 ```
@@ -96,8 +96,10 @@ Available endpoints:
 - Apps
 - Customers
 - Entitlements
+- Invoices
 - Offerings
 - Packages
+- Paywalls
 - Products
 - Projects
 - Purchases

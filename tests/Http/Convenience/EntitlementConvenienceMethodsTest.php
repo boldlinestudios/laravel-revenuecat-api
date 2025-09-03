@@ -20,7 +20,7 @@ test('getEntitlement calls entitlements()->get() with correct parameters', funct
     expect($entitlement->getId())->toBe('test-entitlement-id');
 });
 
-test('listEntitlements calls entitlements()->list() with correct parameters', function () {
+test('listEntitlements calls entitlements()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/entitlements?limit=10' => Http::response([
             'object' => 'list',

@@ -22,7 +22,7 @@ test('getApp calls apps()->get() with correct parameters', function () {
     expect($response->getId())->toBe('test-app-id');
 });
 
-test('listApps calls apps()->list() with correct parameters', function () {
+test('listApps calls apps()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/apps?limit=10' => Http::response([
             'object' => 'list',

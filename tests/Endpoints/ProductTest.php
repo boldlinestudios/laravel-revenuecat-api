@@ -18,7 +18,7 @@ test('list returns ListPage of ProductData', function () {
         ], 200),
     ]);
 
-    $products = RevenueCat::products()->list(10);
+    $products = RevenueCat::products()->all(10);
 
     expect($products)->toBeInstanceOf(ListPage::class);
     expect(count($products->items()))->toBe(2);
@@ -150,7 +150,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $products = RevenueCat::products()->list();
+    $products = RevenueCat::products()->all();
 
     expect($products)->toBeInstanceOf(ListPage::class);
     expect($products->items())->toBe([]);

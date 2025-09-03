@@ -38,11 +38,11 @@ describe('Rate Limit Exceptions', function () {
             ]),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(RateLimitException::class, 'Rate limit exceeded');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (RateLimitException $e) {
             expect($e->getStatusCode())->toBe(429);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -67,11 +67,11 @@ describe('Rate Limit Exceptions', function () {
             ], 429),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(RateLimitException::class);
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (RateLimitException $e) {
             expect($e->getLimit())->toBeNull();
             expect($e->getRemaining())->toBeNull();
@@ -92,11 +92,11 @@ describe('Client Error Exceptions', function () {
             ], 400),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(BadRequestException::class, 'Content-Type not application/json');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (BadRequestException $e) {
             expect($e->getStatusCode())->toBe(400);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -118,11 +118,11 @@ describe('Client Error Exceptions', function () {
             ], 401),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(AuthenticationException::class, 'Invalid API key');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (AuthenticationException $e) {
             expect($e->getStatusCode())->toBe(401);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -144,11 +144,11 @@ describe('Client Error Exceptions', function () {
             ], 403),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(AuthorizationException::class, 'Insufficient permissions');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (AuthorizationException $e) {
             expect($e->getStatusCode())->toBe(403);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -257,11 +257,11 @@ describe('Server Error Exceptions', function () {
             ], 500),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(ServerErrorException::class, 'There was an internal server error');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (ServerErrorException $e) {
             expect($e->getStatusCode())->toBe(500);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field
@@ -284,7 +284,7 @@ describe('Server Error Exceptions', function () {
             ], 502),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(ServerErrorException::class, 'Bad gateway');
     });
 
@@ -299,7 +299,7 @@ describe('Server Error Exceptions', function () {
             ], 503),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(ServerErrorException::class, 'Service unavailable');
     });
 });
@@ -312,11 +312,11 @@ describe('Error Response Parsing', function () {
             ], 400),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(BadRequestException::class, 'RevenueCat API error');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (BadRequestException $e) {
             expect($e->getErrorCode())->toBeNull();
             expect($e->getErrorType())->toBeNull();
@@ -329,7 +329,7 @@ describe('Error Response Parsing', function () {
             'https://api.example.com/v2/projects/test_project/apps' => Http::response('Invalid JSON', 400),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(BadRequestException::class, 'RevenueCat API error');
     });
 
@@ -338,7 +338,7 @@ describe('Error Response Parsing', function () {
             'https://api.example.com/v2/projects/test_project/apps' => Http::response('', 400),
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(BadRequestException::class, 'RevenueCat API error');
     });
 });
@@ -355,11 +355,11 @@ describe('Unknown Status Code Handling', function () {
             ], 418), // I'm a teapot - definitely unknown
         ]);
 
-        expect(fn () => RevenueCat::apps()->list())
+        expect(fn () => RevenueCat::apps()->all())
             ->toThrow(ApiResponseException::class, 'Unknown error occurred');
 
         try {
-            RevenueCat::apps()->list();
+            RevenueCat::apps()->all();
         } catch (ApiResponseException $e) {
             expect($e->getStatusCode())->toBe(418);
             expect($e->getErrorCode())->toBeNull(); // RevenueCat doesn't use 'code' field

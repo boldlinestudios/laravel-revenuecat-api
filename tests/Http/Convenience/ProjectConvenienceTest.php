@@ -5,7 +5,7 @@ use BoldlineStudios\RevenueCatApi\Data\ProjectData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
-test('listProjects calls projects()->list() with correct parameters', function () {
+test('listProjects calls projects()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects?limit=10' => Http::response([
             'object' => 'list',

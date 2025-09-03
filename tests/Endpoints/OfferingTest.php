@@ -18,7 +18,7 @@ test('list returns ListPage of OfferingData', function () {
         ], 200),
     ]);
 
-    $offerings = RevenueCat::offerings()->list(10);
+    $offerings = RevenueCat::offerings()->all(10);
 
     expect($offerings)->toBeInstanceOf(ListPage::class);
     expect(count($offerings->items()))->toBe(2);
@@ -134,7 +134,7 @@ test('list method works with empty query array', function () {
         ], 200),
     ]);
 
-    $response = RevenueCat::offerings()->list();
+    $response = RevenueCat::offerings()->all();
 
     expect($response)->toBeInstanceOf(ListPage::class);
     expect(count($response->items()))->toBe(0);

@@ -35,7 +35,7 @@ trait ConvenienceMethods
      */
     public function listApps(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->apps()->list($limit, $startingAfter, $extra);
+        return $this->apps()->all($limit, $startingAfter, $extra);
     }
 
     /**
@@ -105,7 +105,7 @@ trait ConvenienceMethods
      */
     public function listCustomers(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->list($limit, $startingAfter, $extra);
+        return $this->customers()->all($limit, $startingAfter, $extra);
     }
 
     /**
@@ -192,7 +192,7 @@ trait ConvenienceMethods
      */
     public function listEntitlements(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->entitlements()->list($limit, $startingAfter, $extra);
+        return $this->entitlements()->all($limit, $startingAfter, $extra);
     }
 
     public function createEntitlement(string $lookupKey, string $displayName): EntitlementData
@@ -250,7 +250,7 @@ trait ConvenienceMethods
      */
     public function listOfferings(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->offerings()->list($limit, $startingAfter, $extra);
+        return $this->offerings()->all($limit, $startingAfter, $extra);
     }
 
     /**
@@ -290,7 +290,7 @@ trait ConvenienceMethods
      */
     public function listPackages(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->packages()->list($limit, $startingAfter, $extra);
+        return $this->packages()->all($limit, $startingAfter, $extra);
     }
 
     /**
@@ -357,7 +357,7 @@ trait ConvenienceMethods
      */
     public function listProducts(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->products()->list($limit, $startingAfter, $extra);
+        return $this->products()->all($limit, $startingAfter, $extra);
     }
 
     /**
@@ -380,7 +380,7 @@ trait ConvenienceMethods
      */
     public function listProjects(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->projects()->list($limit, $startingAfter, $extra);
+        return $this->projects()->all($limit, $startingAfter, $extra);
     }
 
     // Purchase convenience methods

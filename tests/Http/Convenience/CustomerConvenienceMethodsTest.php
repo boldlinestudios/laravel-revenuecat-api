@@ -25,7 +25,7 @@ test('getCustomer calls customers()->get() with correct parameters', function ()
     expect($customer->getId())->toBe('test-customer-id');
 });
 
-test('listCustomers calls customers()->list() with correct parameters', function () {
+test('listCustomers calls customers()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers?limit=10' => Http::response([
             'object' => 'list',

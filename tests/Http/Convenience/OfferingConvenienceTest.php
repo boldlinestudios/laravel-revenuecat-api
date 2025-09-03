@@ -21,7 +21,7 @@ test('getOffering calls offerings()->get() with correct parameters', function ()
     expect($response->getId())->toBe('test-offering-id');
 });
 
-test('listOfferings calls offerings()->list() with correct parameters', function () {
+test('listOfferings calls offerings()->all() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/offerings?limit=10' => Http::response([
             'object' => 'list',
