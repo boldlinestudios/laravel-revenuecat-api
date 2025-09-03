@@ -25,13 +25,11 @@ For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
 
 ## Why use this package?
 
-- Typed objects so your IDE can help.  
+- Typed objects  
 
-- Common operations are available as simple methods
+- Simple methods
 
-- Error handling follows RevenueCat’s own model 
-
-- The underlying response is available if you need full control.
+- Error handling
 
 
 ## Installation
@@ -132,37 +130,40 @@ return $product->toArray();
 List methods return a `ListPage<T>` that handles pagination automatically:
 
 ```php
-// Get first page of customers (default 20 per page)
-$customersPage = RevenueCat::listCustomers();
+// Paginate through all customers
+$allCustomers = [];
+$cursor = null;
+$pageNumber = 1;
 
-// Get pagination metadata
-echo "Total items in this page: " . count($customersPage->items());
-echo "Next cursor: " . $customersPage->nextCursor();
-echo "API URL used: " . $customersPage->url();
+do {
+    // Get current page (20 customers per page)
+    $page = RevenueCat::listCustomers(20, $cursor);
 
-// Access the items
-foreach ($customersPage->items() as $customer) {
-    echo $customer->getId();      // Customer ID
-    echo $customer->getEmail();   // Customer email
-}
+    echo "Page {$pageNumber}: " . count($page->items()) . " customers\n";
 
-// Check if there are more pages
-if ($customersPage->nextCursor()) {
-    // Get next page using the cursor (nextCursor() returns just the cursor value)
-    $cursor = $customersPage->nextCursor();
-    $nextPage = RevenueCat::listCustomers(20, $cursor);
-
-    foreach ($nextPage->items() as $customer) {
-        // Process next page items
+    // Process customers on this page
+    foreach ($page->items() as $customer) {
+        echo $customer->getId();
+        echo $customer->getLastSeenPlatform();
+        $allCustomers[] = $customer;  // Collect all customers
     }
-}
+
+    // Get cursor for next page
+    $cursor = $page->nextCursor();
+    $pageNumber++;
+
+} while ($cursor); // Continue until no more pages
+
+echo "Total customers found: " . count($allCustomers);
+
+
 ```
 
 ### Advanced Pagination
 
 ```php
 // Custom page size and starting point
-$page = RevenueCat::listSubscriptions(100, 'cursor_123');
+$page = RevenueCat::listCustomers(100, 'cursor_123');
 
 
 ```
