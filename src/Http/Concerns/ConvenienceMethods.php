@@ -458,12 +458,12 @@ trait ConvenienceMethods
         return $this->subscriptions()->listOfTransactions($subscriptionId, $limit, $startingAfter, $extra);
     }
 
-    public function cancelWebBillingSubscription(string $subscriptionId): Response
+    public function cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
     {
         return $this->subscriptions()->cancelWebBillingSubscription($subscriptionId);
     }
 
-    public function refundWebBillingSubscription(string $subscriptionId): Response
+    public function refundWebBillingSubscription(string $subscriptionId): SubscriptionData
     {
         return $this->subscriptions()->refundWebBillingSubscription($subscriptionId);
     }

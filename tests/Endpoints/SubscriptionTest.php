@@ -116,8 +116,7 @@ test('getCustomerPortalUrl returns response from client', function () {
     expect($response->json('url'))->toBe('https://portal.example.com/access/abc123');
 });
 
-// TODO: return subscription data
-test('cancelWebBillingSubscription returns response from client', function () {
+test('cancelWebBillingSubscription returns SubscriptionData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/actions/cancel' => Http::response([
             'object' => 'subscription',
@@ -125,35 +124,82 @@ test('cancelWebBillingSubscription returns response from client', function () {
             'customer_id' => 'customer123',
             'original_customer_id' => 'original_customer123',
             'product_id' => 'product123',
-
             'status' => 'cancelled',
-            'cancelled_at' => '2024-01-01T00:00:00Z',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('cancelled');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test-subscription-id');
+    expect($subscription->getStatus())->toBe('cancelled');
+    expect($subscription->getCustomerId())->toBe('customer123');
+    expect($subscription->getProductId())->toBe('product123');
 });
 
-test('refundWebBillingSubscription returns response from client', function () {
+test('refundWebBillingSubscription returns SubscriptionData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/actions/refund' => Http::response([
+            'object' => 'subscription',
             'id' => 'test-subscription-id',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
             'status' => 'refunded',
-            'refunded_at' => '2024-01-01T00:00:00Z',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('refunded');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test-subscription-id');
+    expect($subscription->getStatus())->toBe('refunded');
+    expect($subscription->getCustomerId())->toBe('customer123');
+    expect($subscription->getProductId())->toBe('product123');
 });
 
 test('get method properly encodes special characters in subscription id', function () {
@@ -253,33 +299,83 @@ test('getCustomerPortalUrl method properly encodes special characters in subscri
 test('cancelWebBillingSubscription method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/actions/cancel' => Http::response([
+            'object' => 'subscription',
             'id' => 'test subscription with spaces & special chars',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
             'status' => 'cancelled',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->cancelWebBillingSubscription($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('cancelled');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test subscription with spaces & special chars');
+    expect($subscription->getStatus())->toBe('cancelled');
 });
 
 test('refundWebBillingSubscription method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/actions/refund' => Http::response([
+            'object' => 'subscription',
             'id' => 'test subscription with spaces & special chars',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
             'status' => 'refunded',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
+    $subscription = RevenueCat::subscriptions()->refundWebBillingSubscription($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('refunded');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test subscription with spaces & special chars');
+    expect($subscription->getStatus())->toBe('refunded');
 });
 
 test('refundPlayStoreSubscriptionTransaction returns TransactionData', function () {

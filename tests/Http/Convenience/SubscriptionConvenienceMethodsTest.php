@@ -84,15 +84,39 @@ test('cancelWebBillingSubscription calls subscriptions()->cancelWebBillingSubscr
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/actions/cancel' => Http::response([
             'object' => 'subscription',
             'id' => 'test-subscription-id',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
             'status' => 'cancelled',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
-    $response = RevenueCat::cancelWebBillingSubscription('test-subscription-id');
+    $subscription = RevenueCat::cancelWebBillingSubscription('test-subscription-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('cancelled');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test-subscription-id');
+    expect($subscription->getStatus())->toBe('cancelled');
 });
 
 test('refundWebBillingSubscription calls subscriptions()->refundWebBillingSubscription() with correct parameters', function () {
@@ -100,15 +124,39 @@ test('refundWebBillingSubscription calls subscriptions()->refundWebBillingSubscr
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/actions/refund' => Http::response([
             'object' => 'subscription',
             'id' => 'test-subscription-id',
+            'customer_id' => 'customer123',
+            'original_customer_id' => 'original_customer123',
+            'product_id' => 'product123',
             'status' => 'refunded',
+            'total_revenue_in_usd' => [
+                'currency' => 'USD',
+                'gross' => 100,
+                'commission' => 10,
+                'tax' => 0.75,
+                'proceeds' => 90,
+            ],
+            'entitlements' => [
+                'premium_access' => true,
+                'basic_access' => false,
+            ],
+            'starts_at' => 1714435200000,
+            'current_period_starts_at' => 1714435200000,
+            'gives_access' => true,
+            'pending_payment' => false,
+            'auto_renewal_status' => 'active',
+            'environment' => 'production',
+            'store' => 'app_store',
+            'store_subscription_identifier' => '1234567890',
+            'ownership' => 'purchased',
+            'country' => 'US',
         ], 200),
     ]);
 
-    $response = RevenueCat::refundWebBillingSubscription('test-subscription-id');
+    $subscription = RevenueCat::refundWebBillingSubscription('test-subscription-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('status'))->toBe('refunded');
+    expect($subscription)->toBeInstanceOf(SubscriptionData::class);
+    expect($subscription->getId())->toBe('test-subscription-id');
+    expect($subscription->getStatus())->toBe('refunded');
 });
 
 test('refundPlayStoreSubscriptionTransaction calls subscriptions()->refundPlayStoreSubscriptionTransaction() with correct parameters', function () {

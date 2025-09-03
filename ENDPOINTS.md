@@ -142,8 +142,8 @@ $purchases = RevenueCat::listCustomerPurchases('customer_id');
 // Signature:
 // customers()->listOfActiveEntitlements(string $customerId): ListPage<CustomerActiveEntitlementData>
 
-$ents = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
-$ents = RevenueCat::listCustomerActiveEntitlements('customer_id');
+$entitlements = RevenueCat::customers()->listOfActiveEntitlements('customer_id');
+$entitlements = RevenueCat::listCustomerActiveEntitlements('customer_id');
 ```
 
 #### Aliases
@@ -190,8 +190,8 @@ $attrs = RevenueCat::customers()->setAttributes('customer_id', [
 // Signature:
 // entitlements()->get(string $entitlementId): EntitlementData
 
-$ent = RevenueCat::entitlements()->get('entitlement_id');
-$ent = RevenueCat::getEntitlement('entitlement_id');
+$entitlement = RevenueCat::entitlements()->get('entitlement_id');
+$entitlement = RevenueCat::getEntitlement('entitlement_id');
 ```
 
 #### List
@@ -415,10 +415,10 @@ $purchase = RevenueCat::getPurchase('purchase_id');
 #### Entitlements (Response)
 ```php
 // Signature:
-// purchases()->listOfEntitlements(string $purchaseId): Illuminate\Http\Client\Response
+// purchases()->listOfEntitlements(string $purchaseId): ListPage<EntitlementData>
 
-$resp = RevenueCat::purchases()->listOfEntitlements('purchase_id');
-$resp = RevenueCat::listPurchaseEntitlements('purchase_id');
+$entitlements = RevenueCat::purchases()->listOfEntitlements('purchase_id');
+$entitlements = RevenueCat::listPurchaseEntitlements('purchase_id');
 ```
 
 ## Subscriptions
@@ -435,9 +435,9 @@ $sub = RevenueCat::getSubscription('subscription_id');
 #### Entitlements (Response)
 ```php
 // Signature:
-// subscriptions()->listOfEntitlements(string $subscriptionId): Illuminate\Http\Client\Response
+// subscriptions()->listOfEntitlements(string $subscriptionId): ListPage<EntitlementData>
 
-$resp = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
+$ents = RevenueCat::subscriptions()->listOfEntitlements('subscription_id');
 $resp = RevenueCat::listSubscriptionEntitlements('subscription_id');
 ```
 
@@ -459,16 +459,16 @@ $resp = RevenueCat::subscriptions()->getCustomerPortalUrl('subscription_id');
 $resp = RevenueCat::getSubscriptionCustomerPortalUrl('subscription_id');
 ```
 
-#### Cancel/Refund web billing (Response)
+#### Cancel/Refund web billing
 ```php
 // Signature:
-// subscriptions()->cancelWebBillingSubscription(string $subscriptionId): Illuminate\Http\Client\Response
-// subscriptions()->refundWebBillingSubscription(string $subscriptionId): Illuminate\Http\Client\Response
+// subscriptions()->cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
+// subscriptions()->refundWebBillingSubscription(string $subscriptionId): SubscriptionData
 
-$resp = RevenueCat::subscriptions()->cancelWebBillingSubscription('subscription_id');
-$resp = RevenueCat::cancelWebBillingSubscription('subscription_id');
-$resp = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
-$resp = RevenueCat::refundWebBillingSubscription('subscription_id');
+$subscription = RevenueCat::subscriptions()->cancelWebBillingSubscription('subscription_id');
+$subscription = RevenueCat::cancelWebBillingSubscription('subscription_id');
+$subscription = RevenueCat::subscriptions()->refundWebBillingSubscription('subscription_id');
+$subscription = RevenueCat::refundWebBillingSubscription('subscription_id');
 ```
 
 #### Refund Play Store subscription transaction

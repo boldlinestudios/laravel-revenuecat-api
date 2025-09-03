@@ -95,11 +95,11 @@ class Subscription
      * to the associated entitlements at the end of the current period.
      * This endpoint requires the following permission(s): customer_information:subscriptions:read_write
      */
-    public function cancelWebBillingSubscription(string $subscriptionId): Response
+    public function cancelWebBillingSubscription(string $subscriptionId): SubscriptionData
     {
         $subscriptionId = rawurlencode($subscriptionId);
 
-        return $this->client->post("/subscriptions/{$subscriptionId}/actions/cancel");
+        return SubscriptionData::fromResponse($this->client->post("/subscriptions/{$subscriptionId}/actions/cancel"));
     }
 
     /**
@@ -107,10 +107,10 @@ class Subscription
      * The customer will immediately lose access to the associated entitlements.
      * This endpoint requires the following permission(s): customer_information:subscriptions:read_write
      */
-    public function refundWebBillingSubscription(string $subscriptionId): Response
+    public function refundWebBillingSubscription(string $subscriptionId): SubscriptionData
     {
         $subscriptionId = rawurlencode($subscriptionId);
 
-        return $this->client->post("/subscriptions/{$subscriptionId}/actions/refund");
+        return SubscriptionData::fromResponse($this->client->post("/subscriptions/{$subscriptionId}/actions/refund"));
     }
 }
