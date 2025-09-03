@@ -102,6 +102,18 @@ trait Listable
         }
 
         $next = isset($payload[$nextPageKey]) && is_string($payload[$nextPageKey]) ? $payload[$nextPageKey] : null;
+
+        // Parse the next_page URL to extract just the starting_after cursor
+        if ($next !== null) {
+            $parsedUrl = parse_url($next);
+            if (isset($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $queryParams);
+                $next = isset($queryParams['starting_after']) && is_string($queryParams['starting_after'])
+                    ? $queryParams['starting_after']
+                    : null;
+            }
+        }
+
         $url = isset($payload[$urlKey]) && is_string($payload[$urlKey]) ? $payload[$urlKey] : $this->basePath();
 
         return new ListPage($dtos, $next, $url, $response);

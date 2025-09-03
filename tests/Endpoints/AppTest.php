@@ -207,7 +207,7 @@ test('listOfPublicKeys returns response from client', function () {
     expect($publicKeys->items()[0]->getKey())->toBe('goog_1ab2c3d4');
     expect($publicKeys->items()[0]->getEnvironment())->toBe('production');
     expect($publicKeys->items()[0]->getAppId())->toBe('app1a2b3c4');
-    expect($publicKeys->nextCursor())->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys?starting_after=apikey12345');
+    expect($publicKeys->nextCursor())->toBe('apikey12345');
     expect($publicKeys->url())->toBe('/v2/projects/test_project/apps/test-app-id/public_api_keys');
 });
 

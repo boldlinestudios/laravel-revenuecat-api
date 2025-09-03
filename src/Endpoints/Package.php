@@ -110,6 +110,18 @@ class Package
         }
 
         $next = isset($payload['next_page']) && is_string($payload['next_page']) ? $payload['next_page'] : null;
+
+        // Parse the next_page URL to extract just the starting_after cursor
+        if ($next !== null) {
+            $parsedUrl = parse_url($next);
+            if (isset($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $queryParams);
+                $next = isset($queryParams['starting_after']) && is_string($queryParams['starting_after'])
+                    ? $queryParams['starting_after']
+                    : null;
+            }
+        }
+
         $url = isset($payload['url']) && is_string($payload['url']) ? $payload['url'] : $path;
 
         return new ListPage($dtos, $next, $url, $response);

@@ -9,16 +9,6 @@ It provides typed DTOs, exceptions, and is designed for Laravel apps.
 
 > **Note:** This is not an official package of RevenueCat or Laravel.
 
-## Why use this package?
-
-- This package gives you typed objects so your IDE and static analysis can help.  
-
-- Common operations are available as simple methods
-
-- Error handling follows RevenueCat’s own model 
-
-- The underlying response is available if you need full control.
-
 ## Quick Example
 
 ```php
@@ -32,6 +22,17 @@ echo $subscription->givesAccess();      // true
 ```
 
 For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
+
+## Why use this package?
+
+- Typed objects so your IDE can help.  
+
+- Common operations are available as simple methods
+
+- Error handling follows RevenueCat’s own model 
+
+- The underlying response is available if you need full control.
+
 
 ## Installation
 
@@ -109,9 +110,11 @@ For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
 
 ## Response and DTO Handling
 
-- Most methods return **DTOs** (`AppData`, `CustomerData`, etc.).  
-- List endpoints return a **`ListPage<T>`** wrapper for pagination.  
+- Most methods return **DTOs** (`AppData`, `CustomerData`, etc.).
+- List endpoints return a **`ListPage<T>`** wrapper for pagination.
 - Some utility endpoints return the raw **`Response`**.
+
+### DTOs
 
 DTOs expose typed getters and a `toArray()` method:
 
@@ -124,10 +127,44 @@ echo $product->getType();
 return $product->toArray();
 ```
 
-`ListPage<T>` exposes `items(): array<int,T>`, `nextCursor()`, `url()`, and `raw(): Response`.
+### ListPage & Pagination
+
+List methods return a `ListPage<T>` that handles pagination automatically:
 
 ```php
-$subscriptions = RevenueCat::getSubscriptionList(10);
+// Get first page of customers (default 20 per page)
+$customersPage = RevenueCat::listCustomers();
+
+// Get pagination metadata
+echo "Total items in this page: " . count($customersPage->items());
+echo "Next cursor: " . $customersPage->nextCursor();
+echo "API URL used: " . $customersPage->url();
+
+// Access the items
+foreach ($customersPage->items() as $customer) {
+    echo $customer->getId();      // Customer ID
+    echo $customer->getEmail();   // Customer email
+}
+
+// Check if there are more pages
+if ($customersPage->nextCursor()) {
+    // Get next page using the cursor (nextCursor() returns just the cursor value)
+    $cursor = $customersPage->nextCursor();
+    $nextPage = RevenueCat::listCustomers(20, $cursor);
+
+    foreach ($nextPage->items() as $customer) {
+        // Process next page items
+    }
+}
+```
+
+### Advanced Pagination
+
+```php
+// Custom page size and starting point
+$page = RevenueCat::listSubscriptions(100, 'cursor_123');
+
+
 ```
 ## Error Handling
 
