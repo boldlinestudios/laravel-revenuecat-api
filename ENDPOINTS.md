@@ -39,7 +39,7 @@ delete(string $customerId): bool
 // Customer relationships
 listOfSubscriptions(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<SubscriptionData>
 listOfPurchases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<PurchaseData>
-listOfActiveEntitlements(string $customerId): ListPage<ActiveEntitlementData>
+listOfActiveEntitlements(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ActiveEntitlementData>
 listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AliasData>
 listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<VirtualCurrencyBalanceData>
 listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<AttributeData>
