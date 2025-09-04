@@ -214,13 +214,10 @@ Represents an application in the RevenueCat system with its configuration and st
 <a id="appdata-factory-methods"></a>
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): AppData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): AppData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `AppData` | Create from array.. |
+| `fromResponse()` | `AppData` | Create from HTTP response. |
 
 <a id="appdata-properties"></a>
 ### Properties/Getters
@@ -315,13 +312,10 @@ Represents a customer in the RevenueCat system with their profile, activity hist
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): CustomerData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): CustomerData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `CustomerData` | Create from array.. |
+| `fromResponse()` | `CustomerData` | Create from HTTP response. |
 
 <a id="customerdata-properties"></a>
 ### Properties/Getters
@@ -383,7 +377,7 @@ Represents an alias/ID mapping for a customer in RevenueCat.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `AliasData` | Create from API response array. |
+| `fromArray()` | `AliasData` | Create from array.. |
 | `fromResponse()` | `AliasData` | Create from HTTP response. |
 | `getId()` | `string` | The alias identifier. |
 | `getResourceType()` | `string` | The resource type (always 'alias'). |
@@ -403,7 +397,7 @@ Represents a custom attribute set on a customer.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `AttributeData` | Create from API response array. |
+| `fromArray()` | `AttributeData` | Create from array.. |
 | `fromResponse()` | `AttributeData` | Create from HTTP response. |
 | `getResourceType()` | `string` | The resource type (always 'attribute'). |
 | `getName()` | `string` | Attribute name/key. |
@@ -424,7 +418,7 @@ Represents a virtual currency balance for a customer.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `VirtualCurrencyBalanceData` | Create from API response array. |
+| `fromArray()` | `VirtualCurrencyBalanceData` | Create from array.. |
 | `fromResponse()` | `VirtualCurrencyBalanceData` | Create from HTTP response. |
 | `getResourceType()` | `string` | The resource type. |
 | `getCurrencyCode()` | `string` | Currency code (e.g., 'USD', 'EUR'). |
@@ -443,7 +437,7 @@ Represents an active entitlement for a customer.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `ActiveEntitlementData` | Create from API response array. |
+| `fromArray()` | `ActiveEntitlementData` | Create from array.. |
 | `fromResponse()` | `ActiveEntitlementData` | Create from HTTP response. |
 | `getEntitlementId()` | `string` | The entitlement identifier. |
 | `getExpiresAtMs()` | `?int` | Expiration timestamp in ms since epoch. |
@@ -463,13 +457,10 @@ Represents an entitlement in the RevenueCat system, which defines access levels 
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): EntitlementData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): EntitlementData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `EntitlementData` | Create from array.. |
+| `fromResponse()` | `EntitlementData` | Create from HTTP response. |
 
 <a id="entitlementdata-properties"></a>
 ### Properties/Getters
@@ -526,13 +517,10 @@ Represents a RevenueCat invoice, including total amount, line items, and timesta
 <a id="invoicedata-factory-methods"></a>
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): InvoiceData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): InvoiceData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `InvoiceData` | Create from array.. |
+| `fromResponse()` | `InvoiceData` | Create from HTTP response. |
 
 <a id="invoicedata-properties"></a>
 ### Properties/Getters
@@ -589,7 +577,7 @@ Represents an invoice amount with currency and financial components.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `Amount` | Create from API response array. |
+| `fromArray()` | `Amount` | Create from array.. |
 
 ### Properties/Getters
 
@@ -616,7 +604,7 @@ Represents a single invoice line item with product and unit amount details.
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `LineItem` | Create from API response array. |
+| `fromArray()` | `LineItem` | Create from array.. |
 
 ### Properties/Getters
 
@@ -641,13 +629,10 @@ Represents a product offering in RevenueCat, which groups packages together for 
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): OfferingData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): OfferingData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `OfferingData` | Create from array.. |
+| `fromResponse()` | `OfferingData` | Create from HTTP response. |
 
 <a id="offeringdata-properties"></a>
 ### Properties/Getters
@@ -700,13 +685,10 @@ Represents a package within an offering in RevenueCat, containing pricing and pr
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): PackageData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): PackageData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `PackageData` | Create from array.. |
+| `fromResponse()` | `PackageData` | Create from HTTP response. |
 
 <a id="packagedata-properties"></a>
 ### Properties/Getters
@@ -758,13 +740,10 @@ Represents a paywall configuration in RevenueCat, used for presenting subscripti
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): PaywallData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): PaywallData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `PaywallData` | Create from array.. |
+| `fromResponse()` | `PaywallData` | Create from HTTP response. |
 
 <a id="paywalldata-properties"></a>
 ### Properties/Getters
@@ -819,13 +798,10 @@ Represents a product configuration in RevenueCat, containing pricing information
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): ProductData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): ProductData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `ProductData` | Create from array.. |
+| `fromResponse()` | `ProductData` | Create from HTTP response. |
 
 <a id="productdata-properties"></a>
 ### Properties/Getters
@@ -885,13 +861,10 @@ Represents a RevenueCat project, which is the top-level organizational unit.
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): ProjectData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): ProjectData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `ProjectData` | Create from array.. |
+| `fromResponse()` | `ProjectData` | Create from HTTP response. |
 
 <a id="projectdata-properties"></a>
 ### Properties/Getters
@@ -938,13 +911,10 @@ Represents a purchase/transaction in RevenueCat, containing customer and product
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): PurchaseData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): PurchaseData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `PurchaseData` | Create from array.. |
+| `fromResponse()` | `PurchaseData` | Create from HTTP response. |
 
 <a id="purchasedata-properties"></a>
 ### Properties/Getters
@@ -1018,13 +988,10 @@ Represents a subscription in RevenueCat, containing billing cycle information, s
 
 ### Factory Methods
 
-```php
-// Create from API response array
-public static function fromArray(array $payload): SubscriptionData
-
-// Create from HTTP response
-public static function fromResponse(Response $response): SubscriptionData
-```
+| Method | Return Type | Description |
+|--------|-------------|-------------|
+| `fromArray()` | `SubscriptionData` | Create from array.. |
+| `fromResponse()` | `SubscriptionData` | Create from HTTP response. |
 
 <a id="subscriptiondata-properties"></a>
 ### Properties/Getters
@@ -1113,7 +1080,7 @@ Represents a subscription transaction in RevenueCat, containing purchase informa
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `fromArray()` | `TransactionData` | Create from API response array. |
+| `fromArray()` | `TransactionData` | Create from array.. |
 | `fromResponse()` | `TransactionData` | Create from HTTP response. |
 
 ### Properties/Getters

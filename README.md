@@ -4,8 +4,7 @@
 
 # Laravel RevenueCat API
 
-A package that provides a clean, fully-typed wrapper for the RevenueCat API v2.
-It provides typed DTOs, exceptions, and is designed for Laravel apps.
+A package that provides a clean, fully-typed wrapper for the RevenueCat API v2 in Laravel.
 
 > **Note:** This is not an official package of RevenueCat or Laravel.
 
@@ -21,16 +20,7 @@ echo $subscription->getProductId();     // "prod_1ab2c3d4e5"
 echo $subscription->givesAccess();      // true
 ```
 
-For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
-
-## Why use this package?
-
-- Typed objects  
-
-- Simple methods
-
-- Error handling
-
+For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md). For a complete reference of all DTOs, see [DATA.md](DATA.md).
 
 ## Installation
 
@@ -112,6 +102,8 @@ For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
 - List endpoints return a **`ListPage<T>`** wrapper for pagination.
 - Some utility endpoints return the raw **`Response`**.
 
+See the full DTO catalog and ListPage documentation in [DATA.md](DATA.md).
+
 ### DTOs
 
 DTOs expose typed getters and a `toArray()` method:
@@ -126,6 +118,8 @@ return $product->toArray();
 ```
 
 ### ListPage & Pagination
+
+See `ListPage<T>` documentation in [DATA.md](DATA.md#listpage).
 
 List methods return a `ListPage<T>` that handles pagination automatically:
 
