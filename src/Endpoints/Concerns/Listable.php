@@ -120,6 +120,21 @@ trait Listable
     }
 
     /**
+     * Helper method to create a properly typed ListPage.
+     *
+     * @template T of object
+     *
+     * @param  class-string<T>  $dtoClass
+     * @param  ListPage<object>  $listPage
+     * @return ListPage<T>
+     */
+    protected function castListPage(string $dtoClass, ListPage $listPage): ListPage
+    {
+        /** @var ListPage<T> */
+        return $listPage;
+    }
+
+    /**
      * Build the standard list query parameters used by list endpoints.
      *
      * @param  array<string, mixed>  $extra

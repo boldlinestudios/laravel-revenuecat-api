@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, ?string $name, array<string, array<string, mixed>> $storeConfig)
  * @method static bool deleteApp(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppStoreKitConfig(string $appId)
- * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData> getlistApps(string $appId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData> listAppPublicKeys(string $appId)
  *
  * Customers
  * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData getCustomer(string $customerId)
@@ -48,7 +48,9 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData createEntitlement(string $lookupKey, string $displayName)
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData updateEntitlement(string $entitlementId, string $displayName)
  * @method static bool deleteEntitlement(string $entitlementId)
- * @method static \Illuminate\Http\Client\Response listEntitlementProducts(string $entitlementId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData attachEntitlementProducts(string $entitlementId, array<string> $productIds)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData detachEntitlementProducts(string $entitlementId, array<string> $productIds)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\ProductData> listEntitlementProducts(string $entitlementId)
  *
  * Invoices
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\InvoiceData> listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])

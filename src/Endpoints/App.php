@@ -36,13 +36,15 @@ class App
     /**
      * @return ListPage<PublicApiKeyData>
      */
-    public function listOfPublicKeys(string $appId)
+    public function listOfPublicKeys(string $appId): ListPage
     {
         $appId = rawurlencode($appId);
         $path = "/apps/{$appId}/public_api_keys";
 
-        /** @var ListPage<PublicApiKeyData> */
-        return $this->listPageForPath($path, PublicApiKeyData::class);
+        /** @var ListPage<PublicApiKeyData> $result */
+        $result = $this->listPageForPath($path, PublicApiKeyData::class);
+
+        return $result;
     }
 
     /**
@@ -144,7 +146,9 @@ class App
      */
     public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        /** @var ListPage<AppData> */
-        return $this->listAsDto(AppData::class, $limit, $startingAfter, $extra);
+        /** @var ListPage<AppData> $result */
+        $result = $this->listAsDto(AppData::class, $limit, $startingAfter, $extra);
+
+        return $result;
     }
 }
