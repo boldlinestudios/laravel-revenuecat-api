@@ -1,5 +1,41 @@
 # Endpoint and Convenience Methods
 
+## Quick Navigation
+
+<details>
+<summary><strong>Endpoints</strong></summary>
+
+- [Apps](#app-endpoints)
+- [Customers](#customer-endpoints)
+- [Entitlements](#entitlement-endpoints)
+- [Offerings](#offering-endpoints)
+- [Packages](#package-endpoints)
+- [Products](#product-endpoints)
+- [Projects](#project-endpoints)
+- [Purchases](#purchase-endpoints)
+- [Subscriptions](#subscription-endpoints)
+- [Invoices](#invoice-endpoints)
+- [Paywalls](#paywall-endpoints)
+
+</details>
+
+<details>
+<summary><strong>Convenience Methods</strong></summary>
+
+- [Apps](#app-methods)
+- [Customers](#customer-methods)
+- [Entitlements](#entitlement-methods)
+- [Offerings](#offering-methods)
+- [Packages](#package-methods)
+- [Products](#product-methods)
+- [Projects](#project-methods)
+- [Purchases](#purchase-methods)
+- [Subscriptions](#subscription-methods)
+- [Invoices](#invoice-methods)
+- [Paywalls](#paywall-methods)
+
+</details>
+
 ---
 
 ## **Endpoints Reference**
@@ -14,6 +50,7 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 $app = RevenueCat::apps()->get('app1a2b3c4');
 ```
 
+<a id="app-endpoints"></a>
 ### **App Endpoints** (`RevenueCat::apps()`)
 ```php
 // CRUD operations
@@ -28,6 +65,7 @@ listOfPublicKeys(string $appId): ListPage<PublicApiKeyData>
 storeKitConfig(string $appId): Response
 ```
 
+<a id="customer-endpoints"></a>
 ### **Customer Endpoints** (`RevenueCat::customers()`)
 ```php
 // CRUD operations
@@ -48,6 +86,7 @@ listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = n
 setAttributes(string $customerId, array $attributes): ListPage<AttributeData>
 ```
 
+<a id="entitlement-endpoints"></a>
 ### **Entitlement Endpoints** (`RevenueCat::entitlements()`)
 ```php
 get(string $entitlementId): EntitlementData
@@ -62,6 +101,7 @@ detachProducts(string $entitlementId, array $productIds): EntitlementData
 listOfProducts(string $entitlementId): ListPage<ProductData>
 ```
 
+<a id="offering-endpoints"></a>
 ### **Offering Endpoints** (`RevenueCat::offerings()`)
 ```php
 get(string $offeringId): OfferingData
@@ -71,6 +111,7 @@ update(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metad
 delete(string $offeringId): bool
 ```
 
+<a id="package-endpoints"></a>
 ### **Package Endpoints** (`RevenueCat::packages()`)
 ```php
 get(string $packageId): PackageData
@@ -85,6 +126,7 @@ attachProducts(string $packageId, array $productAssociationList): PackageData
 detachProducts(string $packageId, array $productIds): PackageData
 ```
 
+<a id="product-endpoints"></a>
 ### **Product Endpoints** (`RevenueCat::products()`)
 ```php
 get(string $productId): ProductData
@@ -93,11 +135,13 @@ create(string $storeIdentifier, string $appId, string $type, ?string $displayNam
 delete(string $productId): bool
 ```
 
+<a id="project-endpoints"></a>
 ### **Project Endpoints** (`RevenueCat::projects()`)
 ```php
 all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProjectData>
 ```
 
+<a id="purchase-endpoints"></a>
 ### **Purchase Endpoints** (`RevenueCat::purchases()`)
 ```php
 get(string $purchaseId): PurchaseData
@@ -106,6 +150,7 @@ refundWebBillingPurchase(string $purchaseId): PurchaseData
 searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage<PurchaseData>
 ```
 
+<a id="subscription-endpoints"></a>
 ### **Subscription Endpoints** (`RevenueCat::subscriptions()`)
 ```php
 get(string $subscriptionId): SubscriptionData
@@ -121,11 +166,13 @@ refundWebBillingSubscription(string $subscriptionId): SubscriptionData
 refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
 ```
 
+<a id="invoice-endpoints"></a>
 ### **Invoice Endpoints** (`RevenueCat::invoices()`)
 ```php
 listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<InvoiceData>
 ```
 
+<a id="paywall-endpoints"></a>
 ### **Paywall Endpoints** (`RevenueCat::paywalls()`)
 ```php
 create(string $offeringId): PaywallData
@@ -144,6 +191,7 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 $app = RevenueCat::getApp('app1a2b3c4');
 ```
 
+<a id="app-methods"></a>
 ### **App Methods**
 ```php
 // Core app operations
@@ -158,6 +206,7 @@ listAppPublicKeys(string $appId): ListPage<PublicApiKeyData>
 getAppStoreKitConfig(string $appId): Response
 ```
 
+<a id="customer-methods"></a>
 ### **Customer Methods**
 ```php
 // CRUD operations
@@ -175,6 +224,7 @@ listCustomerVirtualCurrencyBalances(string $customerId): ListPage<VirtualCurrenc
 listCustomerAttributes(string $customerId): ListPage<AttributeData>
 ```
 
+<a id="entitlement-methods"></a>
 ### **Entitlement Methods**
 ```php
 getEntitlement(string $entitlementId): EntitlementData
@@ -187,6 +237,7 @@ detachEntitlementProducts(string $entitlementId, array $productIds): Entitlement
 listEntitlementProducts(string $entitlementId): ListPage<ProductData>
 ```
 
+<a id="offering-methods"></a>
 ### **Offering Methods**
 ```php
 getOffering(string $offeringId): OfferingData
@@ -196,6 +247,7 @@ updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?arra
 deleteOffering(string $offeringId): bool
 ```
 
+<a id="package-methods"></a>
 ### **Package Methods**
 ```php
 getPackage(string $packageId): PackageData
@@ -208,6 +260,7 @@ attachPackageProducts(string $packageId, array $productAssociationList): Package
 detachPackageProducts(string $packageId, array $productIds): PackageData
 ```
 
+<a id="product-methods"></a>
 ### **Product Methods**
 ```php
 getProduct(string $productId): ProductData
@@ -216,11 +269,13 @@ createProduct(string $storeIdentifier, string $appId, string $type, ?string $dis
 deleteProduct(string $productId): bool
 ```
 
+<a id="project-methods"></a>
 ### **Project Methods**
 ```php
 listProjects(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<ProjectData>
 ```
 
+<a id="purchase-methods"></a>
 ### **Purchase Methods**
 ```php
 getPurchase(string $purchaseId): PurchaseData
@@ -229,6 +284,7 @@ refundWebBillingPurchase(string $purchaseId): PurchaseData
 searchPurchasesByIdentifier(string $storePurchaseIdentifier): ListPage<PurchaseData>
 ```
 
+<a id="subscription-methods"></a>
 ### **Subscription Methods**
 ```php
 getSubscription(string $subscriptionId): SubscriptionData
@@ -240,11 +296,13 @@ refundWebBillingSubscription(string $subscriptionId): SubscriptionData
 refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId): TransactionData
 ```
 
+<a id="invoice-methods"></a>
 ### **Invoice Methods**
 ```php
 listCustomerInvoices(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage<InvoiceData>
 ```
 
+<a id="paywall-methods"></a>
 ### **Paywall Methods**
 ```php
 createPaywall(string $offeringId): PaywallData
