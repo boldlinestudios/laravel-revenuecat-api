@@ -113,7 +113,7 @@ class App
     /**
      * Update an app.
      *
-     * @param  array<string, array<string, mixed>>  $storeConfig
+     * @param  ?array<string, array<string, mixed>>  $storeConfig
      *
      * Example payload for $storeConfig:
      * [
@@ -123,19 +123,29 @@ class App
      *   ],
      * ]
      */
-    public function update(string $id, ?string $name, array $storeConfig): AppData
+    public function update(string $id, ?string $name = null, ?array $storeConfig = null): AppData
     {
         // if name is null, it will not be included in the payload
-        if ($name) {
+        if ($name && $storeConfig) {
             return AppData::fromResponse($this->updateRaw($id, [
                 'name' => $name,
                 ...$storeConfig,
             ]));
         }
 
-        return AppData::fromResponse($this->updateRaw($id, [
-            ...$storeConfig,
-        ]));
+        if ($storeConfig) {
+            return AppData::fromResponse($this->updateRaw($id, [
+                ...$storeConfig,
+            ]));
+        }
+
+        if ($name) {
+            return AppData::fromResponse($this->updateRaw($id, [
+                'name' => $name,
+            ]));
+        }
+
+        throw new \InvalidArgumentException('Either name or storeConfig must be provided');
     }
 
     /**

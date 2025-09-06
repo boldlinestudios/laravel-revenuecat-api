@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData getApp(string $appId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\AppData> listApps(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\AppData createApp(string $name, string $type, array<string, array<string, mixed>> $storeConfig)
- * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, ?string $name, array<string, array<string, mixed>> $storeConfig)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\AppData updateApp(string $appId, ?string $name = null, ?array<string, array<string, mixed>> $storeConfig = null) Update an app
  * @method static bool deleteApp(string $appId)
  * @method static \Illuminate\Http\Client\Response getAppStoreKitConfig(string $appId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData> listAppPublicKeys(string $appId)
@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AliasData> listCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData> listCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData> listCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData> setCustomerAttributes(string $customerId, list<array{name: string, value: string}> $attributes)
  *
  * Entitlements
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData getEntitlement(string $entitlementId)

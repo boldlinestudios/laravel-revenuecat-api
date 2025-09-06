@@ -60,7 +60,9 @@ trait ConvenienceMethods
     /**
      * Update an app.
      *
-     * @param  array<string, array<string, mixed>>  $storeConfig
+     * @param  string  $appId  The app ID to update
+     * @param  string|null  $name  The new name for the app (optional)
+     * @param  array<string, array<string, mixed>>  $storeConfig  Store configuration
      *
      * Example payload for $storeConfig:
      * [
@@ -70,7 +72,7 @@ trait ConvenienceMethods
      *   ],
      * ]
      */
-    public function updateApp(string $appId, ?string $name, array $storeConfig): AppData
+    public function updateApp(string $appId, ?string $name = null, ?array $storeConfig = []): AppData
     {
         return $this->apps()->update($appId, $name, $storeConfig);
     }
@@ -178,6 +180,17 @@ trait ConvenienceMethods
     public function listCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
         return $this->customers()->listOfAttributes($customerId, $limit, $startingAfter, $extra);
+    }
+
+    /**
+     * Set attributes for a customer.
+     *
+     * @param  list<array{name: string, value: string}>  $attributes
+     * @return ListPage<AttributeData>
+     */
+    public function setCustomerAttributes(string $customerId, array $attributes): ListPage
+    {
+        return $this->customers()->setAttributes($customerId, $attributes);
     }
 
     // Entitlement convenience methods
