@@ -239,7 +239,28 @@ test('listCustomerAttributes calls customers()->listOfAttributes() with correct 
     expect($list->items()[0])->toBeInstanceOf(AttributeData::class);
 });
 
-test('setCustomerAttributes posts attributes and returns ListPage of AttributeData', function () {
+test('setCustomerAttributes calls customers()->setAttributes() with correct parameters', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com'],
+            ],
+        ], 200),
+    ]);
+
+    $attrs = [
+        ['name' => '$email', 'value' => 'support@revenuecat.com'],
+    ];
+
+    $list = RevenueCat::setCustomerAttributes('test-customer-id', $attrs);
+
+    expect($list)->toBeInstanceOf(ListPage::class);
+    expect(count($list->items()))->toBe(1);
+    expect($list->items()[0])->toBeInstanceOf(AttributeData::class);
+});
+
+test('setAttributes posts attributes and returns ListPage of AttributeData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
             'object' => 'list',
