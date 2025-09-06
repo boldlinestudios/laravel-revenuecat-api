@@ -242,10 +242,8 @@ test('listCustomerAttributes calls customers()->listOfAttributes() with correct 
 test('setCustomerAttributes calls customers()->setAttributes() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
-            'object' => 'list',
-            'items' => [
-                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com'],
-            ],
+            'object' => 'customer',
+            'id' => 'test-customer-id',
         ], 200),
     ]);
 
@@ -253,20 +251,17 @@ test('setCustomerAttributes calls customers()->setAttributes() with correct para
         ['name' => '$email', 'value' => 'support@revenuecat.com'],
     ];
 
-    $list = RevenueCat::setCustomerAttributes('test-customer-id', $attrs);
+    $customer = RevenueCat::setCustomerAttributes('test-customer-id', $attrs);
 
-    expect($list)->toBeInstanceOf(ListPage::class);
-    expect(count($list->items()))->toBe(1);
-    expect($list->items()[0])->toBeInstanceOf(AttributeData::class);
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test-customer-id');
 });
 
-test('setAttributes posts attributes and returns ListPage of AttributeData', function () {
+test('setAttributes posts attributes and returns CustomerData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
-            'object' => 'list',
-            'items' => [
-                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com', 'updated_at' => 1658399423658],
-            ],
+            'object' => 'customer',
+            'id' => 'test-customer-id',
         ], 200),
     ]);
 
@@ -274,8 +269,8 @@ test('setAttributes posts attributes and returns ListPage of AttributeData', fun
         ['name' => '$email', 'value' => 'support@revenuecat.com'],
     ];
 
-    $list = RevenueCat::customers()->setAttributes('test-customer-id', $attrs);
+    $customer = RevenueCat::customers()->setAttributes('test-customer-id', $attrs);
 
-    expect($list)->toBeInstanceOf(ListPage::class);
-    expect(count($list->items()))->toBe(1);
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test-customer-id');
 });

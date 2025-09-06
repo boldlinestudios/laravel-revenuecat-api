@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AliasData> listCustomerAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData> listCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData> listCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
- * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData> setCustomerAttributes(string $customerId, list<array{name: string, value: string}> $attributes)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\CustomerData setCustomerAttributes(string $customerId, list<array{name: string, value: string}> $attributes)
  *
  * Entitlements
  * @method static \BoldlineStudios\RevenueCatApi\Data\EntitlementData getEntitlement(string $entitlementId)

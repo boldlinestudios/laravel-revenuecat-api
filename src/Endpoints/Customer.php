@@ -182,9 +182,8 @@ class Customer
 
     /**
      * @param  list<array{name: string, value: string}>  $attributes
-     * @return ListPage<AttributeData>
      */
-    public function setAttributes(string $customerId, array $attributes): ListPage
+    public function setAttributes(string $customerId, array $attributes): CustomerData
     {
         $customerId = rawurlencode($customerId);
         $path = "/customers/{$customerId}/attributes";
@@ -193,7 +192,6 @@ class Customer
             'attributes' => $this->validateAttributes($attributes),
         ]);
 
-        /** @var ListPage<AttributeData> */
-        return $this->listFromResponse($response, AttributeData::class);
+        return CustomerData::fromResponse($response);
     }
 }

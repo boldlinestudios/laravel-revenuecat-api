@@ -186,9 +186,8 @@ trait ConvenienceMethods
      * Set attributes for a customer.
      *
      * @param  list<array{name: string, value: string}>  $attributes
-     * @return ListPage<AttributeData>
      */
-    public function setCustomerAttributes(string $customerId, array $attributes): ListPage
+    public function setCustomerAttributes(string $customerId, array $attributes): CustomerData
     {
         return $this->customers()->setAttributes($customerId, $attributes);
     }
