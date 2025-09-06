@@ -1,6 +1,6 @@
-# Data Transfer Objects (DTOs)
+# Data Objects
 
-This document provides documentation for all Data Transfer Objects (DTOs) in this package. DTOs are strongly-typed representations of API responses that provide type safety and IDE support.
+This document provides documentation for all data objects in this package. Data objects are strongly-typed representations of API responses that provide type safety and IDE support.
 
 ---
 
@@ -140,7 +140,7 @@ This document provides documentation for all Data Transfer Objects (DTOs) in thi
 <a id="listpage"></a>
 ## ListPage
 
-Represents a paginated collection of DTOs with cursor-based pagination support.
+Represents a paginated collection of data objects with cursor-based pagination support.
 
 <a id="listpage-generic"></a>
 ### Generic Type Support
@@ -152,7 +152,7 @@ ListPage uses PHP generics to provide type safety for collections:
  * @template T of object
  */
 class ListPage<T> {
-    // T can be any DTO: AppData, CustomerData, ProductData, etc.
+    // T can be any data object: AppData, CustomerData, ProductData, etc.
 }
 ```
 
@@ -161,7 +161,7 @@ class ListPage<T> {
 
 | Method | Return Type | Description |
 |--------|-------------|-------------|
-| `items()` | `array<int, T>` | Array of DTO objects in the current page. |
+| `items()` | `array<int, T>` | Array of data objects in the current page. |
 | `nextCursor()` | `?string` | Cursor for the next page, if available. |
 | `url()` | `string` | API endpoint URL used for this request. |
 | `raw()` | `Response` | Raw HTTP response from the API. |

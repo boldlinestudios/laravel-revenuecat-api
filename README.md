@@ -20,7 +20,8 @@ echo $subscription->getProductId();     // "prod_1ab2c3d4e5"
 echo $subscription->givesAccess();      // true
 ```
 
-For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md). For a complete reference of all DTOs, see [DATA.md](DATA.md).
+For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
+For a complete reference of all API response data structures, see [DATA.md](DATA.md).
 
 ## Installation
 
@@ -80,33 +81,33 @@ $newEntitlement = RevenueCat::createEntitlement('premium', 'Premium access to al
 ```
 ## Endpoints
 
-Available endpoints:
+Available endpoints with full documentation and examples:
 
-- Apps
-- Customers
-- Entitlements
-- Invoices
-- Offerings
-- Packages
-- Paywalls
-- Products
-- Projects
-- Purchases
-- Subscriptions
+- [Apps](docs/endpoints/apps.md)
+- [Customers](docs/endpoints/customers.md)
+- [Entitlements](docs/endpoints/entitlements.md)
+- [Invoices](docs/endpoints/invoices.md)
+- [Offerings](docs/endpoints/offerings.md)
+- [Packages](docs/endpoints/packages.md)
+- [Paywalls](docs/endpoints/paywalls.md)
+- [Products](docs/endpoints/products.md)
+- [Projects](docs/endpoints/projects.md)
+- [Purchases](docs/endpoints/purchases.md)
+- [Subscriptions](docs/endpoints/subscriptions.md)
 
-For the full catalog of examples with code, see [ENDPOINTS.md](ENDPOINTS.md).
+For the legacy consolidated documentation, see [ENDPOINTS.md](ENDPOINTS.md).
 
-## Response and DTO Handling
+## Response and Data Handling
 
-- Most methods return **DTOs** (`AppData`, `CustomerData`, etc.).
+- Most methods return **data objects** ([`AppData`](../../DATA.md#appdata), [`CustomerData`](../../DATA.md#customerdata), etc.).
 - List endpoints return a **`ListPage<T>`** wrapper for pagination.
 - Some utility endpoints return the raw **`Response`**.
 
-See the full DTO catalog and ListPage documentation in [DATA.md](DATA.md).
+See the full data object catalog and ListPage documentation in [DATA.md](DATA.md).
 
-### DTOs
+### Data Objects
 
-DTOs expose typed getters and a `toArray()` method:
+Data objects expose typed getters and a `toArray()` method:
 
 ```php
 $product = RevenueCat::getProduct('prod_123');
@@ -117,9 +118,11 @@ echo $product->getType();
 return $product->toArray();
 ```
 
+See [`ProductData`](../../DATA.md#productdata) for all available methods.
+
 ### ListPage & Pagination
 
-See `ListPage<T>` documentation in [DATA.md](DATA.md#listpage).
+See [`ListPage<T>`](../../DATA.md#listpage) documentation in [DATA.md](DATA.md).
 
 List methods return a `ListPage<T>` that handles pagination automatically:
 
@@ -141,6 +144,8 @@ do {
         echo $customer->getLastSeenPlatform();
         $allCustomers[] = $customer;  // Collect all customers
     }
+
+    // See [CustomerData](../../DATA.md#customerdata) for all available methods
 
     // Get cursor for next page
     $cursor = $page->nextCursor();

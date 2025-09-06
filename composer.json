@@ -1,7 +1,20 @@
 {
     "name": "boldlinestudios/laravel-revenuecat-api",
-    "version": "0.3.0",
-    "description": "Laravel wrapper for the RevenueCat API 2.0",
+    "version": "0.4.2",
+    "description": "A Laravel wrapper for the RevenueCat API 2.0",
+    "keywords": [
+        "BoldLineStudios",
+        "laravel",
+        "revenuecat",
+        "laravel-revenuecat-api"
+    ],
+    "homepage": "https://github.com/boldlinestudios/laravel-revenuecat-api",
+    "authors": [
+        {
+            "name": "Ken Gould",
+            "email": "ken@boldlinestudios.com"
+        }
+    ],
     "type": "library",
     "license": "MIT",
     "autoload": {
