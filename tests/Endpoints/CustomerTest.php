@@ -2,6 +2,7 @@
 
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
 use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
 use BoldlineStudios\RevenueCatApi\Data\CustomerData;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
@@ -435,8 +436,11 @@ test('listOfAttributes returns ListPage of CustomerAttributeData', function () {
 test('setAttributes posts attributes and returns CustomerData', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/customers/test-customer-id/attributes' => Http::response([
-            'object' => 'customer',
-            'id' => 'test-customer-id',
+            'object' => 'list',
+            'items' => [
+                ['object' => 'customer.attribute', 'name' => '$email', 'value' => 'support@revenuecat.com', 'updated_at' => 1658399423658],
+                ['object' => 'customer.attribute', 'name' => 'my_custom_attr', 'value' => 'custom value', 'updated_at' => 1658399423659],
+            ],
         ], 200),
     ]);
 
@@ -446,10 +450,13 @@ test('setAttributes posts attributes and returns CustomerData', function () {
         ['name' => 'my_custom_attr', 'value' => 'custom value'],
     ];
 
-    $customer = RevenueCat::customers()->setAttributes($customerId, $attrs);
+    $attributes = RevenueCat::customers()->setAttributes($customerId, $attrs);
 
-    expect($customer)->toBeInstanceOf(CustomerData::class);
-    expect($customer->getId())->toBe('test-customer-id');
+    expect($attributes)->toBeInstanceOf(ListPage::class);
+    expect(count($attributes->items()))->toBe(2);
+    expect($attributes->items()[0])->toBeInstanceOf(AttributeData::class);
+    expect($attributes->items()[0]->getName())->toBe('$email');
+    expect($attributes->items()[0]->getValue())->toBe('support@revenuecat.com');
 });
 
 test('get method properly encodes special characters in customer id', function () {

@@ -30,7 +30,7 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 | List Aliases | `listOfAliases(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<AliasData>` |
 | List Virtual Currency | `listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<VirtualCurrencyBalanceData>` |
 |List Attributes | `listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<AttributeData>` |
-| Set Attributes | `setAttributes(string $customerId, array $attributes)` | `CustomerData` |
+| Set Attributes | `setAttributes(string $customerId, array $attributes)` | `ListPage<AttributeData>` |
 
 </details>
 
@@ -51,7 +51,7 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 | Aliases | `listCustomerAliases(string $customerId)` | `ListPage<AliasData>` |
 | Virtual Currency | `listCustomerVirtualCurrencyBalances(string $customerId)` | `ListPage<VirtualCurrencyBalanceData>` |
 | Attributes | `listCustomerAttributes(string $customerId)` | `ListPage<AttributeData>` |
-| Set Attributes | `setCustomerAttributes(string $customerId, array $attributes)` | `CustomerData` |
+| Set Attributes | `setCustomerAttributes(string $customerId, array $attributes)` | `ListPage<AttributeData>` |
 
 </details>
 
@@ -262,10 +262,16 @@ $newAttributes = [
 ];
 
 // Endpoint-style
-$customer = RevenueCat::customers()->setAttributes('cus_123', $newAttributes);
+$attributes = RevenueCat::customers()->setAttributes('cus_123', $newAttributes);
 
 // Convenience-style
-$customer = RevenueCat::setCustomerAttributes('cus_123', $newAttributes);
+$attributes = RevenueCat::setCustomerAttributes('cus_123', $newAttributes);
+
+// The returned ListPage<AttributeData> contains the updated attributes
+foreach ($attributes->items() as $attribute) {
+    // $attribute is AttributeData
+    echo $attribute->getName() . ': ' . $attribute->getValue() . "\n";
+}
 ```
 
 </details>
