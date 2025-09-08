@@ -2,6 +2,7 @@
 
 namespace BoldlineStudios\RevenueCatApi\Http\Concerns;
 
+use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
@@ -20,7 +21,6 @@ use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
-use Illuminate\Http\Client\Response;
 
 trait ConvenienceMethods
 {
@@ -83,9 +83,9 @@ trait ConvenienceMethods
         return $this->apps()->delete($appId);
     }
 
-    public function getAppStoreKitConfig(string $appId): Response
+    public function getAppStoreKitConfig(string $appId): StoreKitConfigData
     {
-        return $this->apps()->storeKitConfig($appId);
+        return $this->apps()->getStoreKitConfig($appId);
     }
 
     /**

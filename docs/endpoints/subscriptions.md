@@ -2,7 +2,7 @@
 
 > For the official RevenueCat API reference, see [RevenueCat API v2 Docs](https://www.revenuecat.com/docs/api-v2).
 
-**Related Types:** [`SubscriptionData`](../../DATA.md#subscriptiondata), [`EntitlementData`](../../DATA.md#entitlementdata), [`TransactionData`](../../DATA.md#transactiondata), [`ListPage`](../../DATA.md#listpage)
+**Related Types:** [`SubscriptionData`](../../DATA.md#subscriptiondata), [`EntitlementData`](../../DATA.md#entitlementdata), [`TransactionData`](../../DATA.md#transactiondata), [`ManagementUrlData`](../../DATA.md#managementurldata), [`ListPage`](../../DATA.md#listpage)
 
 ---
 

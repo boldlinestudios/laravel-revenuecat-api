@@ -4,7 +4,7 @@
 
 Manage RevenueCat apps and their store-specific configuration.
 
-**Related Types:** [`AppData`](../../DATA.md#appdata), [`PublicApiKeyData`](../../DATA.md#publicapikeydata), [`ListPage`](../../DATA.md#listpage)
+**Related Types:** [`AppData`](../../DATA.md#appdata), [`PublicApiKeyData`](../../DATA.md#publicapikeydata), [`StoreKitConfigData`](../../DATA.md#storekitconfigdata), [`ListPage`](../../DATA.md#listpage)
 
 ---
 
@@ -26,7 +26,7 @@ Manage RevenueCat apps and their store-specific configuration.
 | Update | `update(string $id, ?string $name = null, ?array $storeConfig = null)` | `AppData` |
 | Delete | `delete(string $appId)` | `bool` |
 | Public Keys | `listOfPublicKeys(string $appId)` | `ListPage<PublicApiKeyData>` |
-| StoreKit Config | `storeKitConfig(string $appId)` | `Response` |
+| StoreKit Config | `getStoreKitConfig(string $appId)` | `StoreKitConfigData` |
 
 </details>
 
@@ -42,7 +42,7 @@ Manage RevenueCat apps and their store-specific configuration.
 | Update | `updateApp(string $appId, ?string $name = null, ?array $storeConfig = [])` | `AppData` |
 | Delete | `deleteApp(string $appId)` | `bool` |
 | Public Keys | `listAppPublicKeys(string $appId)` | `ListPage<PublicApiKeyData>` |
-| StoreKit Config | `getAppStoreKitConfig(string $appId)` | `Response` |
+| StoreKit Config | `getAppStoreKitConfig(string $appId)` | `StoreKitConfigData` |
 
 </details>
 
@@ -206,13 +206,16 @@ $keys = RevenueCat::listAppPublicKeys('app_123');
 
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 
 // Endpoint-style
-$response = RevenueCat::apps()->storeKitConfig('app_123');
+$config = RevenueCat::apps()->getStoreKitConfig('app_123');
 
 // Convenience-style
-$response = RevenueCat::getAppStoreKitConfig('app_123');
+$config = RevenueCat::getAppStoreKitConfig('app_123');
+
+// Access the configuration contents
+$contents = $config->getContents();
+$resourceType = $config->getResourceType(); // "store_kit_config_file"
 ```
 
 </details>

@@ -1,9 +1,9 @@
 <?php
 
+use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 // Shared test data that mimics RevenueCat API responses
@@ -165,19 +165,44 @@ test('delete returns true when deletion succeeds', function () {
     expect($deleted)->toBeTrue();
 });
 
-test('storeKitConfig returns response from client', function () {
+test('getStoreKitConfig returns StoreKitConfigData for Apple apps', function () {
     Http::fake([
+        'https://api.example.com/v2/projects/test_project/apps/test-app-id' => Http::response([
+            'object' => 'app',
+            'id' => 'test-app-id',
+            'type' => 'app_store', // Apple app
+        ], 200),
         'https://api.example.com/v2/projects/test_project/apps/test-app-id/store_kit_config' => Http::response([
-            'config' => 'store_kit_configuration_data',
+            'object' => 'store_kit_config_file',
+            'contents' => [
+                'shared_secret' => 'test_secret',
+                'bundle_id' => 'com.example.app',
+            ],
         ], 200),
     ]);
 
     $appId = 'test-app-id';
-    $response = RevenueCat::apps()->storeKitConfig($appId);
+    $config = RevenueCat::apps()->getStoreKitConfig($appId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('config'))->toBe('store_kit_configuration_data');
+    expect($config)->toBeInstanceOf(StoreKitConfigData::class);
+    expect($config->getResourceType())->toBe('store_kit_config_file');
+    expect($config->getContents())->toBeArray();
+    expect($config->getContents()['shared_secret'])->toBe('test_secret');
+});
+
+test('getStoreKitConfig throws exception for non-Apple apps', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/apps/test-app-id' => Http::response([
+            'object' => 'app',
+            'id' => 'test-app-id',
+            'type' => 'play_store', // Android app
+        ], 200),
+    ]);
+
+    $appId = 'test-app-id';
+
+    expect(fn () => RevenueCat::apps()->getStoreKitConfig($appId))
+        ->toThrow(\InvalidArgumentException::class, 'StoreKit config is only available for Apple apps');
 });
 
 test('listOfPublicKeys returns response from client', function () {

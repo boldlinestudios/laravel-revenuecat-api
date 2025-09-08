@@ -3,6 +3,7 @@
 namespace BoldlineStudios\RevenueCatApi\Endpoints;
 
 use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
+use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
@@ -11,7 +12,6 @@ use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class App
 {
@@ -48,11 +48,22 @@ class App
     }
 
     /**
-     * Get the StoreKit config for an app
+     * Get the StoreKit config for an app.
+     *
+     * @throws \InvalidArgumentException If the app is not an Apple app
      */
-    public function storeKitConfig(string $appId): Response
+    public function getStoreKitConfig(string $appId): StoreKitConfigData
     {
-        return $this->client->get("/apps/{$appId}/store_kit_config");
+        // Validate this is an Apple app first
+        $app = $this->get($appId);
+
+        if (! in_array($app->getType(), ['app_store', 'mac_app_store'])) {
+            throw new \InvalidArgumentException('StoreKit config is only available for Apple apps');
+        }
+
+        $response = $this->client->get("/apps/{$appId}/store_kit_config");
+
+        return StoreKitConfigData::fromResponse($response);
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php
 
 use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
+use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
 use BoldlineStudios\RevenueCatApi\Data\AppData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 test('getApp calls apps()->get() with correct parameters', function () {
@@ -105,18 +105,26 @@ test('deleteApp calls apps()->delete() with correct parameters', function () {
     expect($deleted)->toBeTrue();
 });
 
-test('getAppStoreKitConfig calls apps()->storeKitConfig() with correct parameters', function () {
+test('getAppStoreKitConfig calls apps()->getStoreKitConfig() with correct parameters', function () {
     Http::fake([
+        'https://api.example.com/v2/projects/test_project/apps/test-app-id' => Http::response([
+            'object' => 'app',
+            'id' => 'test-app-id',
+            'type' => 'app_store', // Apple app
+        ], 200),
         'https://api.example.com/v2/projects/test_project/apps/test-app-id/store_kit_config' => Http::response([
-            'config' => 'store_kit_configuration_data',
+            'object' => 'store_kit_config_file',
+            'contents' => [
+                'shared_secret' => 'test_secret',
+            ],
         ], 200),
     ]);
 
-    $response = RevenueCat::getAppStoreKitConfig('test-app-id');
+    $config = RevenueCat::getAppStoreKitConfig('test-app-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('config'))->toBe('store_kit_configuration_data');
+    expect($config)->toBeInstanceOf(StoreKitConfigData::class);
+    expect($config->getResourceType())->toBe('store_kit_config_file');
+    expect($config->getContents()['shared_secret'])->toBe('test_secret');
 });
 
 test('listAppPublicKeys calls apps()->listOfPublicKeys() with correct parameters', function () {

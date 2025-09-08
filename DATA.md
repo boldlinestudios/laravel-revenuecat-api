@@ -24,6 +24,8 @@ This document provides documentation for all data objects in this package. Data 
 - [Properties/Getters](#appdata-properties)
 - [Example Usage](#appdata-example-usage)
 - [Store Configuration Structure](#appdata-store-configuration-structure)
+- *Related Types:*
+    - [StoreKitConfigData](#storekitconfigdata)
 
 </details>
 
@@ -300,6 +302,44 @@ Each store configuration array contains store-specific settings:
     'publishable_key' => 'pk_live_...',
     'secret_key' => 'sk_live_...'
 ]
+```
+
+[↑ Back to Top](#quick-navigation)
+
+---
+
+<a id="storekitconfigdata"></a>
+### StoreKitConfigData
+
+Represents Apple StoreKit configuration data for iOS/macOS apps in RevenueCat.
+
+### Factory Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `fromArray()` | `StoreKitConfigData` | Create from array. |
+| `fromResponse()` | `StoreKitConfigData` | Create from HTTP response. |
+
+### Properties/Getters
+
+| Method | Return Type | Description |
+|---|---|---|
+| `getResourceType()` | `string` | The resource type (always 'store_kit_config_file'). |
+| `getContents()` | `array<string, mixed>` | The StoreKit configuration contents. |
+| `getRaw()` | `array<string, mixed>` | Raw response payload. |
+| `toArray()` | `array<string, mixed>` | Array representation of the object. |
+
+### Example Usage
+
+```php
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+
+// Get StoreKit config for an Apple app
+$config = RevenueCat::getAppStoreKitConfig('app_123');
+
+// Access the configuration data
+$contents = $config->getContents(); // Array with StoreKit config
+$resourceType = $config->getResourceType(); // "store_kit_config_file"
 ```
 
 [↑ Back to Top](#quick-navigation)
