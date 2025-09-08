@@ -5,11 +5,11 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
-use Illuminate\Http\Client\Response;
 
 class Subscription
 {
@@ -69,11 +69,12 @@ class Subscription
      * Get a secure, single-use URL that allows customers to access their Web Billing customer portal.
      * This endpoint requires the following permission(s): customer_information:subscriptions:read
      */
-    public function getCustomerPortalUrl(string $subscriptionId): Response
+    public function getCustomerPortalUrl(string $subscriptionId): ManagementUrlData
     {
         $subscriptionId = rawurlencode($subscriptionId);
+        $url = "/subscriptions/{$subscriptionId}/authenticated_management_url";
 
-        return $this->client->get("/subscriptions/{$subscriptionId}/authenticated_management_url");
+        return ManagementUrlData::fromResponse($this->client->get($url));
     }
 
     /**

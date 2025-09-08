@@ -3,9 +3,9 @@
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 test('getSubscription calls subscriptions()->get() with correct parameters', function () {
@@ -68,15 +68,28 @@ test('listSubscriptionTransactions calls subscriptions()->listOfTransactions() w
 test('getSubscriptionCustomerPortalUrl calls subscriptions()->getCustomerPortalUrl() with correct parameters', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/authenticated_management_url' => Http::response([
-            'url' => 'https://portal.example.com/access/123',
+            'object' => 'authenticated_management_url',
+            'management_url' => 'https://portal.example.com/access/123',
         ], 200),
     ]);
 
-    $response = RevenueCat::getSubscriptionCustomerPortalUrl('test-subscription-id');
+    $urlData = RevenueCat::getSubscriptionCustomerPortalUrl('test-subscription-id');
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('url'))->toBe('https://portal.example.com/access/123');
+    expect($urlData)->toBeInstanceOf(ManagementUrlData::class);
+    expect($urlData->getManagementUrl())->toBe('https://portal.example.com/access/123');
+    expect($urlData->getResourceType())->toBe('authenticated_management_url');
+    expect($urlData->getRaw())->toBe([
+        'object' => 'authenticated_management_url',
+        'management_url' => 'https://portal.example.com/access/123',
+    ]);
+    expect($urlData->toArray())->toBe([
+        'object' => 'authenticated_management_url',
+        'management_url' => 'https://portal.example.com/access/123',
+        'raw' => [
+            'object' => 'authenticated_management_url',
+            'management_url' => 'https://portal.example.com/access/123',
+        ],
+    ]);
 });
 
 test('cancelWebBillingSubscription calls subscriptions()->cancelWebBillingSubscription() with correct parameters', function () {

@@ -3,9 +3,9 @@
 use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
 test('get returns response from client with encoded subscription id', function () {
@@ -101,19 +101,31 @@ test('listOfTransactions returns ListPage of TransactionData', function () {
     expect($listPage->items()[1]->getPurchasedAtMs())->toBe(1658399423659);
 });
 
-test('getCustomerPortalUrl returns response from client', function () {
+test('getCustomerPortalUrl returns ManagementUrlData from client', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test-subscription-id/authenticated_management_url' => Http::response([
             'object' => 'authenticated_management_url',
-            'url' => 'https://portal.example.com/access/abc123',
-            'expires_at' => '2024-01-01T01:00:00Z',
+            'management_url' => 'https://portal.example.com/access/abc123',
         ], 200),
     ]);
 
     $subscriptionId = 'test-subscription-id';
-    $response = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
+    $urlData = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
 
-    expect($response->json('url'))->toBe('https://portal.example.com/access/abc123');
+    expect($urlData->getManagementUrl())->toBe('https://portal.example.com/access/abc123');
+    expect($urlData->getResourceType())->toBe('authenticated_management_url');
+    expect($urlData->getRaw())->toBe([
+        'object' => 'authenticated_management_url',
+        'management_url' => 'https://portal.example.com/access/abc123',
+    ]);
+    expect($urlData->toArray())->toBe([
+        'object' => 'authenticated_management_url',
+        'management_url' => 'https://portal.example.com/access/abc123',
+        'raw' => [
+            'object' => 'authenticated_management_url',
+            'management_url' => 'https://portal.example.com/access/abc123',
+        ],
+    ]);
 });
 
 test('cancelWebBillingSubscription returns SubscriptionData', function () {
@@ -284,16 +296,17 @@ test('listOfTransactions method properly encodes special characters in subscript
 test('getCustomerPortalUrl method properly encodes special characters in subscription id', function () {
     Http::fake([
         'https://api.example.com/v2/projects/test_project/subscriptions/test%20subscription%20with%20spaces%20%26%20special%20chars/authenticated_management_url' => Http::response([
-            'url' => 'https://portal.example.com/access/def456',
+            'management_url' => 'https://portal.example.com/access/def456',
+            'object' => 'authenticated_management_url',
         ], 200),
     ]);
 
     $subscriptionId = 'test subscription with spaces & special chars';
-    $response = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
+    $urlData = RevenueCat::subscriptions()->getCustomerPortalUrl($subscriptionId);
 
-    expect($response)->toBeInstanceOf(Response::class);
-    expect($response->successful())->toBeTrue();
-    expect($response->json('url'))->toBe('https://portal.example.com/access/def456');
+    expect($urlData)->toBeInstanceOf(ManagementUrlData::class);
+    expect($urlData->getManagementUrl())->toBe('https://portal.example.com/access/def456');
+    expect($urlData->getResourceType())->toBe('authenticated_management_url');
 });
 
 test('cancelWebBillingSubscription method properly encodes special characters in subscription id', function () {

@@ -133,6 +133,7 @@ This document provides documentation for all data objects in this package. Data 
 - [Properties/Getters](#subscriptiondata-properties)
 - [Example Usage](#subscriptiondata-example-usage)
 - *Related Types:*
+    - [ManagementUrlData](#managementurldata)
     - [TransactionData](#transactiondata)
 
 </details>
@@ -1065,6 +1066,46 @@ foreach ($transactions->items() as $transaction) {
     echo $transaction->getId();
     echo $transaction->getPurchasedAtDate()->format('Y-m-d');
 }
+```
+
+[↑ Back to Top](#quick-navigation)
+
+---
+
+<a id="managementurldata"></a>
+### ManagementUrlData
+
+Represents a management URL for customer subscription portals in RevenueCat.
+
+### Factory Methods
+
+| Method | Return Type | Description |
+|---|---|---|
+| `fromArray()` | `ManagementUrlData` | Create from array. |
+| `fromResponse()` | `ManagementUrlData` | Create from HTTP response. |
+
+### Properties/Getters
+
+| Method | Return Type | Description |
+|---|---|---|
+| `getManagementUrl()` | `string` | Secure, single-use URL for customer subscription management. |
+| `getResourceType()` | `string` | The resource type (object field). |
+| `getRaw()` | `array<string, mixed>` | Raw response payload. |
+| `toArray()` | `array<string, mixed>` | Array representation of the object. |
+
+### Example Usage
+
+```php
+use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+
+// Get management URL for customer portal
+$managementUrl = RevenueCat::getSubscriptionCustomerPortalUrl('sub_123');
+
+// Access the secure URL
+$portalUrl = $managementUrl->getManagementUrl();
+
+// Provide this URL to customers for managing their subscription
+echo "Customer Portal: {$portalUrl}";
 ```
 
 [↑ Back to Top](#quick-navigation)

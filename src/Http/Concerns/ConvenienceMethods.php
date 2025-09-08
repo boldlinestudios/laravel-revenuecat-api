@@ -18,6 +18,7 @@ use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Data\ProjectData;
 use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
 use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
 use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 use Illuminate\Http\Client\Response;
 
@@ -456,7 +457,7 @@ trait ConvenienceMethods
         return $this->subscriptions()->listOfEntitlements($subscriptionId, $limit, $startingAfter, $extra);
     }
 
-    public function getSubscriptionCustomerPortalUrl(string $subscriptionId): Response
+    public function getSubscriptionCustomerPortalUrl(string $subscriptionId): ManagementUrlData
     {
         return $this->subscriptions()->getCustomerPortalUrl($subscriptionId);
     }

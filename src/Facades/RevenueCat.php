@@ -93,7 +93,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData getSubscription(string $subscriptionId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\EntitlementData> listSubscriptionEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData> listSubscriptionTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array<string, mixed> $extra = [])
- * @method static \Illuminate\Http\Client\Response getSubscriptionCustomerPortalUrl(string $subscriptionId)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData getSubscriptionCustomerPortalUrl(string $subscriptionId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData cancelWebBillingSubscription(string $subscriptionId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\SubscriptionData refundWebBillingSubscription(string $subscriptionId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId)

@@ -20,7 +20,7 @@
 | Get | `get(string $subscriptionId)` | `SubscriptionData` |
 | List Entitlements | `listOfEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<EntitlementData>` |
 | List Transactions | `listOfTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<TransactionData>` |
-| Get Customer Portal URL | `getCustomerPortalUrl(string $subscriptionId)` | `Response` |
+| Get Customer Portal URL | `getCustomerPortalUrl(string $subscriptionId)` | `ManagementUrlData` |
 | Cancel Web Billing | `cancelWebBillingSubscription(string $subscriptionId)` | `SubscriptionData` |
 | Refund Web Billing | `refundWebBillingSubscription(string $subscriptionId)` | `SubscriptionData` |
 | Refund Play Store Transaction | `refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId)` | `TransactionData` |
@@ -35,7 +35,7 @@
 | Get | `getSubscription(string $subscriptionId)` | `SubscriptionData` |
 | List Entitlements | `listSubscriptionEntitlements(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<EntitlementData>` |
 | List Transactions | `listSubscriptionTransactions(string $subscriptionId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<TransactionData>` |
-| Get Customer Portal URL | `getSubscriptionCustomerPortalUrl(string $subscriptionId)` | `Response` |
+| Get Customer Portal URL | `getSubscriptionCustomerPortalUrl(string $subscriptionId)` | `ManagementUrlData` |
 | Cancel Web Billing | `cancelWebBillingSubscription(string $subscriptionId)` | `SubscriptionData` |
 | Refund Web Billing | `refundWebBillingSubscription(string $subscriptionId)` | `SubscriptionData` |
 | Refund Play Store Transaction | `refundPlayStoreSubscriptionTransaction(string $subscriptionId, string $transactionId)` | `TransactionData` |
@@ -112,13 +112,16 @@ $transactions = RevenueCat::listSubscriptionTransactions('sub_123', limit: 50);
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
-$response = RevenueCat::subscriptions()->getCustomerPortalUrl('sub_123');
+$managementUrl = RevenueCat::subscriptions()->getCustomerPortalUrl('sub_123');
 
 // Convenience-style
-$response = RevenueCat::getSubscriptionCustomerPortalUrl('sub_123');
+$managementUrl = RevenueCat::getSubscriptionCustomerPortalUrl('sub_123');
 
-// The response contains a secure, single-use URL for customer portal access
-$portalUrl = $response->body();
+// Access the secure, single-use URL for customer portal access
+$portalUrl = $managementUrl->getManagementUrl();
+
+// The URL can be provided to customers for managing their subscription
+echo "Customer Portal: {$portalUrl}";
 ```
 
 </details>
