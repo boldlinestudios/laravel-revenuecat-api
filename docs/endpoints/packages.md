@@ -18,8 +18,8 @@
 | Action | Signature | Returns |
 |---|---|---|
 | Get | `get(string $packageId)` | `PackageData` |
-| List | `all(int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<PackageData>` |
-| Create | `create(string $lookupKey, string $displayName, ?int $position)` | `PackageData` |
+| List (in Offering) | `listOfPackagesInOffering(string $offeringId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<PackageData>` |
+| Create | `create(string $offeringId, string $lookupKey, string $displayName, ?int $position)` | `PackageData` |
 | Update | `update(string $packageId, ?string $displayName, ?int $position)` | `PackageData` |
 | Delete | `delete(string $packageId)` | `bool` |
 | List Products | `listOfProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<ProductData>` |
@@ -34,8 +34,8 @@
 | Action | Signature | Returns |
 |---|---|---|
 | Get | `getPackage(string $packageId)` | `PackageData` |
-| List | `listPackages(int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<PackageData>` |
-| Create | `createPackage(string $lookupKey, string $displayName, ?int $position)` | `PackageData` |
+| List (in Offering) | `listofPackagesinOffering(string $offeringId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<PackageData>` |
+| Create | `createPackage(string $offeringId, string $lookupKey, string $displayName, ?int $position)` | `PackageData` |
 | Update | `updatePackage(string $packageId, ?string $displayName, ?int $position)` | `PackageData` |
 | Delete | `deletePackage(string $packageId)` | `bool` |
 | List Products | `listPackageProducts(string $packageId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<ProductData>` |
@@ -53,6 +53,7 @@
 
 | Name | Type | Required | Notes |
 |---|---|:---:|---|
+| `offeringId` | `string` | ✓ | The offering this package belongs to |
 | `lookupKey` | `string` | ✓ | Unique identifier for the package |
 | `displayName` | `string` | ✓ | Human-readable name for the package |
 | `position` | `?int` | Optional | Display position/order of the package |
@@ -108,14 +109,15 @@ $package = RevenueCat::getPackage('pkg_123');
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
-$page = RevenueCat::packages()->all(limit: 20, startingAfter: 'pkg_abc');
+$offeringId = 'off_123'; // Replace with actual offering ID
+$page = RevenueCat::packages()->listOfPackagesInOffering($offeringId, limit: 20, startingAfter: 'pkg_abc');
 
 foreach ($page->items() as $package) {
     // $package is PackageData
 }
 
 // Convenience-style
-$page = RevenueCat::listPackages(limit: 20, startingAfter: 'pkg_abc');
+$page = RevenueCat::listofPackagesinOffering($offeringId, limit: 20, startingAfter: 'pkg_abc');
 ```
 
 </details>
@@ -126,14 +128,16 @@ $page = RevenueCat::listPackages(limit: 20, startingAfter: 'pkg_abc');
 ```php
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 
+$offeringId = 'off_123'; // Replace with actual offering ID
+
 // Create with basic information
-$package = RevenueCat::packages()->create(lookupKey: 'monthly_plan', displayName: 'Monthly Plan');
+$package = RevenueCat::packages()->create($offeringId, lookupKey: 'monthly_plan', displayName: 'Monthly Plan');
 
 // Create with position
-$package = RevenueCat::packages()->create(lookupKey: 'yearly_plan', displayName: 'Yearly Plan', position: 1);
+$package = RevenueCat::packages()->create($offeringId, lookupKey: 'yearly_plan', displayName: 'Yearly Plan', position: 1);
 
 // Convenience-style
-$package = RevenueCat::createPackage(lookupKey: 'monthly_plan', displayName: 'Monthly Plan', position: 2);
+$package = RevenueCat::createPackage($offeringId, lookupKey: 'monthly_plan', displayName: 'Monthly Plan', position: 2);
 ```
 
 </details>
@@ -198,11 +202,11 @@ use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 $productAssociations = [
     [
         'product_id' => 'prod_123',
-        'eligibility_criteria' => 'eligible'
+        'eligibility_criteria' => 'all'
     ],
     [
         'product_id' => 'prod_456',
-        'eligibility_criteria' => 'ineligible'
+        'eligibility_criteria' => 'google_sdk_lt_6'
     ]
 ];
 
