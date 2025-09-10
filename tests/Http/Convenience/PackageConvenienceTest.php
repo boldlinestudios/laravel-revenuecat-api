@@ -41,7 +41,7 @@ test('listofPackagesinOffering calls packages()->listOfPackagesInOffering() with
 
 test('createPackage calls packages()->create() with correct parameters', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages' => Http::response([
+        'https://api.example.com/v2/projects/test_project/offerings/test_offering_id/packages' => Http::response([
             'object' => 'package',
             'id' => 'new-package-id',
             'lookup_key' => 'monthly',
@@ -51,7 +51,7 @@ test('createPackage calls packages()->create() with correct parameters', functio
         ], 201),
     ]);
 
-    $package = RevenueCat::createPackage('monthly', 'Monthly', 1);
+    $package = RevenueCat::createPackage('test_offering_id', 'monthly', 'Monthly', 1);
 
     expect($package)->toBeInstanceOf(PackageData::class);
     expect($package->getId())->toBe('new-package-id');

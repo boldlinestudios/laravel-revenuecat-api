@@ -35,8 +35,11 @@ class Package
     /**
      * Create a package.
      */
-    public function create(string $lookupKey, string $displayName, ?int $position = null): PackageData
+    public function create(string $offeringId, string $lookupKey, string $displayName, ?int $position = null): PackageData
     {
+        $offeringId = rawurlencode($offeringId);
+        $path = "/offerings/{$offeringId}/packages";
+
         $data = [
             'lookup_key' => $lookupKey,
             'display_name' => $displayName,
@@ -45,7 +48,7 @@ class Package
             $data['position'] = $position;
         }
 
-        return PackageData::fromResponse($this->createRaw($data));
+        return PackageData::fromResponse($this->client->post($path, $data));
     }
 
     public function get(string $appId): PackageData

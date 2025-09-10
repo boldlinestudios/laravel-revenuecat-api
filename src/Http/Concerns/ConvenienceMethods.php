@@ -311,11 +311,11 @@ trait ConvenienceMethods
     }
 
     /**
-     * Create a package.
+     * Create a package in an offering.
      */
-    public function createPackage(string $lookupKey, string $displayName, ?int $position = null): PackageData
+    public function createPackage(string $offeringId, string $lookupKey, string $displayName, ?int $position = null): PackageData
     {
-        return $this->packages()->create($lookupKey, $displayName, $position);
+        return $this->packages()->create($offeringId, $lookupKey, $displayName, $position);
     }
 
     /**

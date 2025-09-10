@@ -27,7 +27,7 @@ test('listOfPackagesInOffering returns ListPage of PackageData', function () {
 
 test('create returns PackageData DTO', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages' => Http::response([
+        'https://api.example.com/v2/projects/test_project/offerings/test_offering_id/packages' => Http::response([
             'object' => 'package',
             'id' => 'new_package_id',
             'lookup_key' => 'new_package',
@@ -37,7 +37,7 @@ test('create returns PackageData DTO', function () {
         ], 201),
     ]);
 
-    $package = RevenueCat::packages()->create('new_package', 'New package', 1);
+    $package = RevenueCat::packages()->create('test_offering_id', 'new_package', 'New package', 1);
 
     expect($package)->toBeInstanceOf(PackageData::class);
     expect($package->getId())->toBe('new_package_id');
