@@ -5,7 +5,6 @@ namespace BoldlineStudios\RevenueCatApi\Endpoints;
 use BoldlineStudios\RevenueCatApi\Data\ListPage;
 use BoldlineStudios\RevenueCatApi\Data\PackageData;
 use BoldlineStudios\RevenueCatApi\Data\ProductData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
@@ -14,7 +13,6 @@ use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Package
 {
-    use Creatable;
     use Deletable;
     use Listable;
     use Retrievable;
