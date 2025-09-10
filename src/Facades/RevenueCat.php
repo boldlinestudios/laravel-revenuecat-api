@@ -60,12 +60,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData getOffering(string $offeringId)
  * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\OfferingData> listOfferings(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData createOffering(string $lookupKey, string $displayName, ?array<string, mixed> $metadata = null)
- * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array<string, mixed> $metadata = null)
+ * @method static \BoldlineStudios\RevenueCatApi\Data\OfferingData updateOffering(string $offeringId, ?string $displayName = null, ?bool $isCurrent = null, ?array<string, mixed> $metadata = null)
  * @method static bool deleteOffering(string $offeringId)
  *
  * Packages
  * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData getPackage(string $packageId)
- * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\PackageData> listPackages(int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
+ * @method static \BoldlineStudios\RevenueCatApi\Data\ListPage<\BoldlineStudios\RevenueCatApi\Data\PackageData> listofPackagesinOffering(string $offeringId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData createPackage(string $lookupKey, string $displayName, ?int $position = null)
  * @method static \BoldlineStudios\RevenueCatApi\Data\PackageData updatePackage(string $packageId, ?string $displayName, ?int $position = null)
  * @method static bool deletePackage(string $packageId)

@@ -22,9 +22,9 @@ test('getPackage calls packages()->get() with correct parameters', function () {
     expect($package->getId())->toBe('test-package-id');
 });
 
-test('listPackages calls packages()->all() with correct parameters', function () {
+test('listofPackagesinOffering calls packages()->listOfPackagesInOffering() with correct parameters', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
+        'https://api.example.com/v2/projects/test_project/offerings/test_offering_id/packages?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
                 ['object' => 'package', 'id' => 'pkg1', 'lookup_key' => 'basic', 'display_name' => 'Basic', 'position' => 1],
@@ -33,7 +33,7 @@ test('listPackages calls packages()->all() with correct parameters', function ()
         ], 200),
     ]);
 
-    $list = RevenueCat::listPackages(10);
+    $list = RevenueCat::listofPackagesinOffering('test_offering_id', 10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);

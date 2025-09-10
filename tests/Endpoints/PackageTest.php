@@ -6,20 +6,20 @@ use BoldlineStudios\RevenueCatApi\Data\ProductData;
 use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
-test('list returns ListPage of PackageData', function () {
+test('listOfPackagesInOffering returns ListPage of PackageData', function () {
     Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages?limit=10' => Http::response([
+        'https://api.example.com/v2/projects/test_project/offerings/test_offering_id/packages?limit=10' => Http::response([
             'object' => 'list',
             'items' => [
                 ['object' => 'package', 'id' => 'package1', 'lookup_key' => 'basic_package', 'display_name' => 'Basic', 'position' => 1],
                 ['object' => 'package', 'id' => 'package2', 'lookup_key' => 'premium_package', 'display_name' => 'Premium', 'position' => 2],
             ],
             'next_page' => null,
-            'url' => '/v2/projects/test_project/packages',
+            'url' => '/v2/projects/test_project/offerings/test_offering_id/packages',
         ], 200),
     ]);
 
-    $list = RevenueCat::packages()->all(10);
+    $list = RevenueCat::packages()->listOfPackagesInOffering('test_offering_id', 10);
 
     expect($list)->toBeInstanceOf(ListPage::class);
     expect(count($list->items()))->toBe(2);
@@ -217,22 +217,6 @@ test('listOfProducts method properly encodes special characters in package id', 
     expect(count($page->items()))->toBe(0);
     expect($page->items())->toBe([]);
     expect($page->nextCursor())->toBeNull();
-});
-
-test('list method works with empty query array', function () {
-    Http::fake([
-        'https://api.example.com/v2/projects/test_project/packages' => Http::response([
-            'object' => 'list',
-            'items' => [],
-            'next_page' => null,
-            'url' => '/v2/projects/test_project/packages',
-        ], 200),
-    ]);
-
-    $list = RevenueCat::packages()->all();
-
-    expect($list)->toBeInstanceOf(ListPage::class);
-    expect(count($list->items()))->toBe(0);
 });
 
 test('attachProducts attaches products to package and returns PackageData', function () {

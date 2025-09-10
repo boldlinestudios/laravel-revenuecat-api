@@ -34,7 +34,7 @@ class Offering
     /**
      * @param  array<string, mixed>|null  $metadata
      */
-    public function create(string $lookupKey, string $displayName, ?array $metadata = []): OfferingData
+    public function create(string $lookupKey, string $displayName, ?array $metadata = null): OfferingData
     {
         $data = [
             'lookup_key' => $lookupKey,
@@ -67,7 +67,7 @@ class Offering
      *
      * Note: any null values will be ignored and not updated
      */
-    public function update(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata = []): OfferingData
+    public function update(string $offeringId, ?string $displayName = null, ?bool $isCurrent = null, ?array $metadata = null): OfferingData
     {
         $data = [];
         if ($displayName) {
@@ -78,6 +78,10 @@ class Offering
         }
         if ($metadata) {
             $data['metadata'] = $metadata;
+        }
+
+        if (empty($data)) {
+            throw new \InvalidArgumentException('No data to update for offering '.$offeringId);
         }
 
         return OfferingData::fromResponse($this->updateRaw($offeringId, $data));

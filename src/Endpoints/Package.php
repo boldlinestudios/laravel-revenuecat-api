@@ -129,13 +129,18 @@ class Package
     }
 
     /**
+     * Get a list of packages in an offering
+     *
      * @param  array<string, mixed>  $extra
      * @return ListPage<PackageData>
      */
-    public function all(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function listOfPackagesInOffering(string $offeringId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
+        $offeringId = rawurlencode($offeringId);
+        $path = "/offerings/{$offeringId}/packages";
+
         /** @var ListPage<PackageData> */
-        return $this->listAsDto(PackageData::class, $limit, $startingAfter, $extra);
+        return $this->listPageForPath($path, PackageData::class, $limit, $startingAfter, $extra);
     }
 
     /**

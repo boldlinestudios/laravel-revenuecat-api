@@ -149,11 +149,12 @@ trait ConvenienceMethods
     }
 
     /**
+     * @param  array<string, mixed>  $extra
      * @return ListPage<ActiveEntitlementData>
      */
-    public function listCustomerActiveEntitlements(string $customerId): ListPage
+    public function listCustomerActiveEntitlements(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->customers()->listOfActiveEntitlements($customerId);
+        return $this->customers()->listOfActiveEntitlements($customerId, $limit, $startingAfter, $extra);
     }
 
     /**
@@ -270,7 +271,7 @@ trait ConvenienceMethods
     /**
      * @param  array<string, mixed>|null  $metadata
      */
-    public function createOffering(string $lookupKey, string $displayName, ?array $metadata = []): OfferingData
+    public function createOffering(string $lookupKey, string $displayName, ?array $metadata = null): OfferingData
     {
         return $this->offerings()->create($lookupKey, $displayName, $metadata);
     }
@@ -282,7 +283,7 @@ trait ConvenienceMethods
      *
      * Note: any null values will be ignored and not updated
      */
-    public function updateOffering(string $offeringId, ?string $displayName, ?bool $isCurrent, ?array $metadata = []): OfferingData
+    public function updateOffering(string $offeringId, ?string $displayName = null, ?bool $isCurrent = null, ?array $metadata = null): OfferingData
     {
         return $this->offerings()->update($offeringId, $displayName, $isCurrent, $metadata);
     }
@@ -299,12 +300,14 @@ trait ConvenienceMethods
     }
 
     /**
+     * Get a list of packages in an offering
+     *
      * @param  array<string,mixed>  $extra
      * @return ListPage<PackageData>
      */
-    public function listPackages(int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
+    public function listofPackagesinOffering(string $offeringId, int $limit = 20, ?string $startingAfter = null, array $extra = []): ListPage
     {
-        return $this->packages()->all($limit, $startingAfter, $extra);
+        return $this->packages()->listOfPackagesInOffering($offeringId, $limit, $startingAfter, $extra);
     }
 
     /**

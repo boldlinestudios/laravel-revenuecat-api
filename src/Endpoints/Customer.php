@@ -136,8 +136,7 @@ class Customer
 
     /**
      * Get a list of aliases for a customer
-     */
-    /**
+     *
      * @param  array<string, mixed>  $extra
      * @return ListPage<AliasData>
      */
