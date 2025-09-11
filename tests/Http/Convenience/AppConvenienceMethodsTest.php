@@ -1,10 +1,10 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
-use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
-use BoldlineStudios\RevenueCatApi\Data\AppData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
+use BoldLineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
+use BoldLineStudios\RevenueCatApi\Data\AppData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('getApp calls apps()->get() with correct parameters', function () {

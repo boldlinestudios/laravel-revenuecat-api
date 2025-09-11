@@ -60,7 +60,7 @@ Manage RevenueCat invoices for customers, including retrieving invoice history a
 <summary><strong>List Customer Invoices</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $invoices = RevenueCat::invoices()->listCustomerInvoices('cus_123', limit: 20);
@@ -83,7 +83,7 @@ $invoices = RevenueCat::listCustomerInvoices('cus_123', limit: 20);
 <summary><strong>Access Invoice Details</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $invoices = RevenueCat::listCustomerInvoices('cus_123');
 

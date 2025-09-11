@@ -37,7 +37,7 @@ Each endpoint documentation file includes:
 
 ### Quick Start
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Get a customer
 $customer = RevenueCat::getCustomer('cus_123');

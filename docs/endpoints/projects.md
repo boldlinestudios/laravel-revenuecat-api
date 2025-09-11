@@ -59,7 +59,7 @@
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::projects()->all(limit: 20);
 

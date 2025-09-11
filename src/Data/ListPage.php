@@ -1,6 +1,6 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldLineStudios\RevenueCatApi\Data;
 
 use Illuminate\Http\Client\Response;
 

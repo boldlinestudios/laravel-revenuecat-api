@@ -173,7 +173,7 @@ class ListPage<T> {
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // ListPage<CustomerData>
 $customers = RevenueCat::listCustomers();
@@ -249,7 +249,7 @@ Represents an application in the RevenueCat system with its configuration and st
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $app = RevenueCat::getApp('app_123');
 
@@ -332,7 +332,7 @@ Represents Apple StoreKit configuration data for iOS/macOS apps in RevenueCat.
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Get StoreKit config for an Apple app
 $config = RevenueCat::getAppStoreKitConfig('app_123');
@@ -383,7 +383,7 @@ Represents a customer in the RevenueCat system with their profile, activity hist
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $customer = RevenueCat::getCustomer('cus_123');
 
@@ -523,7 +523,7 @@ Represents an entitlement in the RevenueCat system, which defines access levels 
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $entitlement = RevenueCat::getEntitlement('ent_123');
 
@@ -570,8 +570,8 @@ Represents a RevenueCat invoice, including total amount, line items, and timesta
 |--------|-------------|-------------|
 | `getId()` | `string` | Unique identifier of the invoice. |
 | `getResourceType()` | `string` | The resource type (object field). |
-| `getTotalAmount()` | `\BoldlineStudios\RevenueCatApi\Data\Invoice\Amount` | Total amount for the invoice. |
-| `getLineItems()` | `array<int, \BoldlineStudios\RevenueCatApi\Data\Invoice\LineItem>` | Line items included in the invoice. |
+| `getTotalAmount()` | `\BoldLineStudios\RevenueCatApi\Data\Invoice\Amount` | Total amount for the invoice. |
+| `getLineItems()` | `array<int, \BoldLineStudios\RevenueCatApi\Data\Invoice\LineItem>` | Line items included in the invoice. |
 | `getIssuedAtMs()` | `?int` | Issued timestamp in ms since epoch (UTC). |
 | `getIssuedAtDate()` | `?\DateTimeImmutable` | Issued timestamp as DateTime object. |
 | `getPaidAtMs()` | `?int` | Paid timestamp in ms since epoch (UTC). |
@@ -584,7 +584,7 @@ Represents a RevenueCat invoice, including total amount, line items, and timesta
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // List a customer's invoices
 $invoices = RevenueCat::listCustomerInvoices('cus_123');
@@ -697,7 +697,7 @@ Represents a product offering in RevenueCat, which groups packages together for 
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $offering = RevenueCat::getOffering('offering_123');
 
@@ -751,7 +751,7 @@ Represents a package within an offering in RevenueCat, containing pricing and pr
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $package = RevenueCat::getPackage('package_123');
 
@@ -806,7 +806,7 @@ Represents a paywall configuration in RevenueCat, used for presenting subscripti
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $paywall = RevenueCat::createPaywall('offering_123');
 
@@ -867,7 +867,7 @@ Represents a product configuration in RevenueCat, containing pricing information
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $product = RevenueCat::getProduct('prod_123');
 
@@ -924,7 +924,7 @@ Represents a RevenueCat project, which is the top-level organizational unit.
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // List all projects
 $projects = RevenueCat::listProjects();
@@ -986,7 +986,7 @@ Represents a purchase/transaction in RevenueCat, containing customer and product
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // List customer purchases
 $purchases = RevenueCat::listCustomerPurchases('cus_123');
@@ -1071,7 +1071,7 @@ Represents a subscription in RevenueCat, containing billing cycle information, s
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Get subscription details
 $subscription = RevenueCat::getSubscription('sub_123');
@@ -1136,7 +1136,7 @@ Represents a management URL for customer subscription portals in RevenueCat.
 ### Example Usage
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Get management URL for customer portal
 $managementUrl = RevenueCat::getSubscriptionCustomerPortalUrl('sub_123');

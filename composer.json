@@ -1,12 +1,13 @@
 {
     "name": "boldlinestudios/laravel-revenuecat-api",
-    "version": "0.4.2",
-    "description": "A Laravel wrapper for the RevenueCat API 2.0",
+    "description": "A package for Laravel backends to integrate with RevenueCat API v2 via typed methods and structured data objects.",
     "keywords": [
         "BoldLineStudios",
         "laravel",
         "revenuecat",
-        "laravel-revenuecat-api"
+        "laravel-revenuecats-api",
+        "sdk",
+        "iap"
     ],
     "homepage": "https://github.com/boldlinestudios/laravel-revenuecat-api",
     "authors": [
@@ -19,12 +20,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "BoldlineStudios\\RevenueCatApi\\": "src/"
+            "BoldLineStudios\\RevenueCatApi\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-        "BoldlineStudios\\RevenueCatApi\\Tests\\": "tests/"
+        "BoldLineStudios\\RevenueCatApi\\Tests\\": "tests/"
         }
     },
     "require": {
@@ -37,8 +38,6 @@
         "pestphp/pest": "^3.8",
         "phpstan/phpstan": "^2.1"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "config": {
         "sort-packages": true,
         "preferred-install": "dist",
@@ -50,15 +49,16 @@
     "extra": {
         "laravel": {
             "providers": [
-                "BoldlineStudios\\RevenueCatApi\\RevenueCatApiServiceProvider"
+                "BoldLineStudios\\RevenueCatApi\\RevenueCatApiServiceProvider"
             ],
             "aliases": {
-                "RevenueCat": "BoldlineStudios\\RevenueCatApi\\Facades\\RevenueCat"
+                "RevenueCat": "BoldLineStudios\\RevenueCatApi\\Facades\\RevenueCat"
             }
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test": "vendor/bin/pest",
+        "lint": "vendor/bin/pint -v",
+        "stan": "vendor/bin/phpstan analyse"
     }
 }

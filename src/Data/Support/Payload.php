@@ -1,6 +1,6 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data\Support;
+namespace BoldLineStudios\RevenueCatApi\Data\Support;
 
 final class Payload
 {

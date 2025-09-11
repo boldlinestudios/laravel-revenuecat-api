@@ -1,8 +1,8 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\ProductData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\ProductData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('list returns ListPage of ProductData', function () {

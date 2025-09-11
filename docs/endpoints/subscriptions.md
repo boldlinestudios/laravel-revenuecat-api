@@ -64,7 +64,7 @@
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $subscription = RevenueCat::subscriptions()->get('sub_123');
@@ -79,7 +79,7 @@ $subscription = RevenueCat::getSubscription('sub_123');
 <summary><strong>List Entitlements</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlements = RevenueCat::subscriptions()->listOfEntitlements('sub_123', limit: 50);
@@ -94,7 +94,7 @@ $entitlements = RevenueCat::listSubscriptionEntitlements('sub_123', limit: 50);
 <summary><strong>List Transactions</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $transactions = RevenueCat::subscriptions()->listOfTransactions('sub_123', limit: 50);
@@ -109,7 +109,7 @@ $transactions = RevenueCat::listSubscriptionTransactions('sub_123', limit: 50);
 <summary><strong>Get Customer Portal URL</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $managementUrl = RevenueCat::subscriptions()->getCustomerPortalUrl('sub_123');
@@ -130,7 +130,7 @@ echo "Customer Portal: {$portalUrl}";
 <summary><strong>Cancel Web Billing Subscription</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Cancel subscription (customer loses access at end of current period)
 // Endpoint-style
@@ -146,7 +146,7 @@ $subscription = RevenueCat::cancelWebBillingSubscription('sub_123');
 <summary><strong>Refund Web Billing Subscription</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Refund most recent payment (customer immediately loses access)
 // Endpoint-style
@@ -162,7 +162,7 @@ $subscription = RevenueCat::refundWebBillingSubscription('sub_123');
 <summary><strong>Refund Play Store Subscription Transaction</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Refund specific Play Store transaction (does not cancel subscription)
 // Endpoint-style

@@ -1,15 +1,15 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\OfferingData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\OfferingData;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Offering
 {

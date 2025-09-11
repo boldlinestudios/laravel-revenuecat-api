@@ -1,10 +1,10 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\PaywallData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\PaywallData;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Paywall
 {

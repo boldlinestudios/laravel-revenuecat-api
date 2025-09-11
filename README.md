@@ -11,7 +11,7 @@ A Laravel package for the RevenueCat API v2, providing typed methods and structu
 ## Quick Example
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $subscription = RevenueCat::getSubscription('sub1ab2c3d4e5');
 
@@ -61,7 +61,7 @@ You can call methods in two ways. Both return the same results, so use whichever
 Organized by resource, similar to the REST API.
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $customer = RevenueCat::customers()->get('customer_id'); // CustomerData
 $customers = RevenueCat::customers()->all(25); // ListPage<CustomerData>
@@ -73,7 +73,7 @@ foreach ($customers->items() as $c) { /* $c is CustomerData */ }
 Direct shortcut methods for common operations.
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $entitlement = RevenueCat::getEntitlement('entitlement_id'); // EntitlementData
 $entitlements = RevenueCat::listEntitlements(10); // ListPage<EntitlementData>

@@ -1,5 +1,5 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Exceptions;
+namespace BoldLineStudios\RevenueCatApi\Exceptions;
 
 class BadRequestException extends ApiResponseException {}

@@ -1,8 +1,8 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\ProjectData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\ProjectData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('listProjects calls projects()->all() with correct parameters', function () {

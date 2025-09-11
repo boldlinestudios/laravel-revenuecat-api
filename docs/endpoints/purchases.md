@@ -60,7 +60,7 @@
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $purchase = RevenueCat::purchases()->get('pur_123');
@@ -75,7 +75,7 @@ $purchase = RevenueCat::getPurchase('pur_123');
 <summary><strong>List Entitlements</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlements = RevenueCat::purchases()->listOfEntitlements('pur_123', limit: 50);
@@ -90,7 +90,7 @@ $entitlements = RevenueCat::listPurchaseEntitlements('pur_123', limit: 50);
 <summary><strong>Refund Web Billing Purchase</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $refundedPurchase = RevenueCat::purchases()->refundWebBillingPurchase('pur_123');
@@ -105,7 +105,7 @@ $refundedPurchase = RevenueCat::refundWebBillingPurchase('pur_123');
 <summary><strong>Search Purchases by Identifier</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Search by store purchase identifier
 $purchases = RevenueCat::purchases()->searchPurchasesByIdentifier('1000001234567890');

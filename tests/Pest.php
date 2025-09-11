@@ -5,7 +5,7 @@ use Orchestra\Testbench\TestCase;
 uses(TestCase::class)
     ->beforeEach(function () {
         // Register the package's service provider
-        $this->app->register(\BoldlineStudios\RevenueCatApi\RevenueCatApiServiceProvider::class);
+        $this->app->register(\BoldLineStudios\RevenueCatApi\RevenueCatApiServiceProvider::class);
 
         // Set up test configuration
         config([

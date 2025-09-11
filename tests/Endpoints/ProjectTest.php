@@ -1,7 +1,7 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('list returns ListPage of ProjectData', function () {
@@ -69,7 +69,7 @@ test('list method works with no parameters using class method', function () {
         ], 200),
     ]);
 
-    $client = app(\BoldlineStudios\RevenueCatApi\Http\RevenueCatClient::class);
+    $client = app(\BoldLineStudios\RevenueCatApi\Http\RevenueCatClient::class);
 
     $list = $client->projects()->all();
 

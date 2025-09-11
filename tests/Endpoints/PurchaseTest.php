@@ -1,9 +1,9 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('get returns response from client with encoded purchase id', function () {

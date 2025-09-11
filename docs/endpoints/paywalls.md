@@ -55,7 +55,7 @@
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $paywall = RevenueCat::paywalls()->create(offeringId: 'off_123');

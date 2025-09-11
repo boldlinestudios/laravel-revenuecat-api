@@ -92,7 +92,7 @@ Manage RevenueCat entitlements and their associated products.
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlement = RevenueCat::entitlements()->get('ent_123');
@@ -107,7 +107,7 @@ $entitlement = RevenueCat::getEntitlement('ent_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::entitlements()->all(limit: 20);
 
@@ -125,7 +125,7 @@ $page = RevenueCat::listEntitlements(limit: 20);
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlement = RevenueCat::entitlements()->create(lookupKey: 'premium_access', displayName: 'Premium Access');
@@ -140,7 +140,7 @@ $entitlement = RevenueCat::createEntitlement(lookupKey: 'premium_access', displa
 <summary><strong>Update</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlement = RevenueCat::entitlements()->update('ent_123', 'Updated Premium Access');
@@ -155,7 +155,7 @@ $entitlement = RevenueCat::updateEntitlement('ent_123', 'Updated Premium Access'
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::entitlements()->delete('ent_123'); // bool
@@ -170,7 +170,7 @@ $deleted = RevenueCat::deleteEntitlement('ent_123');
 <summary><strong>List Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $products = RevenueCat::entitlements()->listOfProducts('ent_123', limit: 50);
@@ -185,7 +185,7 @@ $products = RevenueCat::listEntitlementProducts('ent_123');
 <summary><strong>Attach Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $productIds = ['prod_123', 'prod_456'];
 
@@ -202,7 +202,7 @@ $entitlement = RevenueCat::attachEntitlementProducts('ent_123', $productIds);
 <summary><strong>Detach Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $productIds = ['prod_123'];
 

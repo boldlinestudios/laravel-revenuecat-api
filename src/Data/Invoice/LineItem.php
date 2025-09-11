@@ -1,8 +1,8 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data\Invoice;
+namespace BoldLineStudios\RevenueCatApi\Data\Invoice;
 
-use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
+use BoldLineStudios\RevenueCatApi\Data\Support\Payload;
 
 /**
  * Represents a line item in an invoice

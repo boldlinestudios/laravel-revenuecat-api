@@ -1,14 +1,14 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
+use BoldLineStudios\RevenueCatApi\Data\CustomerData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('getCustomer calls customers()->get() with correct parameters', function () {

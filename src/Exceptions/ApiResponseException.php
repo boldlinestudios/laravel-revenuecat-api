@@ -1,6 +1,6 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Exceptions;
+namespace BoldLineStudios\RevenueCatApi\Exceptions;
 
 class ApiResponseException extends RevenueCatException
 {

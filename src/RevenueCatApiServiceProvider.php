@@ -1,8 +1,8 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi;
+namespace BoldLineStudios\RevenueCatApi;
 
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Support\ServiceProvider;
 
 class RevenueCatApiServiceProvider extends ServiceProvider

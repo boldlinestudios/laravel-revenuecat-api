@@ -1,8 +1,8 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data\Customer;
+namespace BoldLineStudios\RevenueCatApi\Data\Customer;
 
-use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
+use BoldLineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 class AliasData

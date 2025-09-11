@@ -92,7 +92,7 @@
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $package = RevenueCat::packages()->get('pkg_123');
@@ -107,7 +107,7 @@ $package = RevenueCat::getPackage('pkg_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $offeringId = 'off_123'; // Replace with actual offering ID
 $page = RevenueCat::packages()->listOfPackagesInOffering($offeringId, limit: 20, startingAfter: 'pkg_abc');
@@ -126,7 +126,7 @@ $page = RevenueCat::listofPackagesinOffering($offeringId, limit: 20, startingAft
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $offeringId = 'off_123'; // Replace with actual offering ID
 
@@ -146,7 +146,7 @@ $package = RevenueCat::createPackage($offeringId, lookupKey: 'monthly_plan', dis
 <summary><strong>Update</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Update display name
 $package = RevenueCat::packages()->update('pkg_123', displayName: 'Updated Package Name');
@@ -167,7 +167,7 @@ $package = RevenueCat::updatePackage('pkg_123', displayName: 'New Name', positio
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::packages()->delete('pkg_123'); // bool
@@ -182,7 +182,7 @@ $deleted = RevenueCat::deletePackage('pkg_123');
 <summary><strong>List Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $products = RevenueCat::packages()->listOfProducts('pkg_123', limit: 50);
@@ -197,7 +197,7 @@ $products = RevenueCat::listPackageProducts('pkg_123', limit: 50);
 <summary><strong>Attach Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $productAssociations = [
     [
@@ -223,7 +223,7 @@ $package = RevenueCat::attachPackageProducts('pkg_123', $productAssociations);
 <summary><strong>Detach Products</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $productIds = ['prod_123', 'prod_456'];
 

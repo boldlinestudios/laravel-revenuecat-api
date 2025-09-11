@@ -1,26 +1,26 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Http\Concerns;
+namespace BoldLineStudios\RevenueCatApi\Http\Concerns;
 
-use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
-use BoldlineStudios\RevenueCatApi\Data\AppData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerData;
-use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\InvoiceData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\OfferingData;
-use BoldlineStudios\RevenueCatApi\Data\PackageData;
-use BoldlineStudios\RevenueCatApi\Data\PaywallData;
-use BoldlineStudios\RevenueCatApi\Data\ProductData;
-use BoldlineStudios\RevenueCatApi\Data\ProjectData;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
-use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
-use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
+use BoldLineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
+use BoldLineStudios\RevenueCatApi\Data\AppData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
+use BoldLineStudios\RevenueCatApi\Data\CustomerData;
+use BoldLineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\InvoiceData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\OfferingData;
+use BoldLineStudios\RevenueCatApi\Data\PackageData;
+use BoldLineStudios\RevenueCatApi\Data\PaywallData;
+use BoldLineStudios\RevenueCatApi\Data\ProductData;
+use BoldLineStudios\RevenueCatApi\Data\ProjectData;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldLineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
+use BoldLineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
 
 trait ConvenienceMethods
 {
@@ -89,7 +89,7 @@ trait ConvenienceMethods
     }
 
     /**
-     * @return ListPage<\BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData>
+     * @return ListPage<\BoldLineStudios\RevenueCatApi\Data\App\PublicApiKeyData>
      */
     public function listAppPublicKeys(string $appId)
     {

@@ -82,7 +82,7 @@ Manage RevenueCat apps and their store-specific configuration.
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $app = RevenueCat::apps()->get('app_123');
@@ -97,7 +97,7 @@ $app = RevenueCat::getApp('app_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::apps()->all(limit: 20);
 
@@ -115,7 +115,7 @@ $page = RevenueCat::listApps(limit: 20);
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $storeConfig = [
     'play_store' => [
@@ -136,7 +136,7 @@ $app = RevenueCat::createApp(name: 'My App', type: 'play_store', storeConfig: $s
 <summary><strong>Update</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Update name and store configuration
 $app = RevenueCat::apps()->update('app_123', name: 'New Name', storeConfig: [
@@ -172,7 +172,7 @@ $app = RevenueCat::updateApp('app_123', name: 'New Name', storeConfig: [
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::apps()->delete('app_123'); // bool
@@ -187,7 +187,7 @@ $deleted = RevenueCat::deleteApp('app_123');
 <summary><strong>Public Keys</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $keys = RevenueCat::apps()->listOfPublicKeys('app_123'); // ListPage<PublicApiKeyData>
@@ -202,7 +202,7 @@ $keys = RevenueCat::listAppPublicKeys('app_123');
 <summary><strong>StoreKit Config</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $config = RevenueCat::apps()->getStoreKitConfig('app_123');

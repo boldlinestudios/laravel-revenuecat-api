@@ -1,7 +1,7 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\PaywallData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\PaywallData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('create returns PaywallData DTO', function () {

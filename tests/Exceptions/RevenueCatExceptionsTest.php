@@ -1,15 +1,15 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Exceptions\ApiResponseException;
-use BoldlineStudios\RevenueCatApi\Exceptions\AuthenticationException;
-use BoldlineStudios\RevenueCatApi\Exceptions\AuthorizationException;
-use BoldlineStudios\RevenueCatApi\Exceptions\BadRequestException;
-use BoldlineStudios\RevenueCatApi\Exceptions\ConflictException;
-use BoldlineStudios\RevenueCatApi\Exceptions\NotFoundException;
-use BoldlineStudios\RevenueCatApi\Exceptions\RateLimitException;
-use BoldlineStudios\RevenueCatApi\Exceptions\ServerErrorException;
-use BoldlineStudios\RevenueCatApi\Exceptions\ValidationException;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Exceptions\ApiResponseException;
+use BoldLineStudios\RevenueCatApi\Exceptions\AuthenticationException;
+use BoldLineStudios\RevenueCatApi\Exceptions\AuthorizationException;
+use BoldLineStudios\RevenueCatApi\Exceptions\BadRequestException;
+use BoldLineStudios\RevenueCatApi\Exceptions\ConflictException;
+use BoldLineStudios\RevenueCatApi\Exceptions\NotFoundException;
+use BoldLineStudios\RevenueCatApi\Exceptions\RateLimitException;
+use BoldLineStudios\RevenueCatApi\Exceptions\ServerErrorException;
+use BoldLineStudios\RevenueCatApi\Exceptions\ValidationException;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
@@ -383,7 +383,7 @@ describe('Exception Inheritance', function () {
 
         foreach ($exceptions as $exceptionClass) {
             $exception = new $exceptionClass('Test message', 400);
-            expect($exception)->toBeInstanceOf(\BoldlineStudios\RevenueCatApi\Exceptions\RevenueCatException::class);
+            expect($exception)->toBeInstanceOf(\BoldLineStudios\RevenueCatApi\Exceptions\RevenueCatException::class);
         }
     });
 
@@ -401,7 +401,7 @@ describe('Exception Inheritance', function () {
 
         foreach ($exceptions as $exceptionClass) {
             $exception = new $exceptionClass('Test message', 400);
-            expect($exception)->toBeInstanceOf(\BoldlineStudios\RevenueCatApi\Exceptions\ApiResponseException::class);
+            expect($exception)->toBeInstanceOf(\BoldLineStudios\RevenueCatApi\Exceptions\ApiResponseException::class);
         }
     });
 });

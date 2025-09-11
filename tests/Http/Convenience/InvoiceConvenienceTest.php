@@ -1,9 +1,9 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\Invoice\LineItem;
-use BoldlineStudios\RevenueCatApi\Data\InvoiceData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\Invoice\LineItem;
+use BoldLineStudios\RevenueCatApi\Data\InvoiceData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('listCustomerInvoices calls invoices()->listCustomerInvoices() with correct parameters', function () {

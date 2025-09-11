@@ -1,8 +1,8 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\InvoiceData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\InvoiceData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('listCustomerInvoices returns ListPage of InvoiceData', function () {

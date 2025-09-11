@@ -1,21 +1,21 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AliasData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AliasData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
+use BoldLineStudios\RevenueCatApi\Data\CustomerData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Customer
 {

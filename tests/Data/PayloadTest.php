@@ -1,6 +1,6 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
+use BoldLineStudios\RevenueCatApi\Data\Support\Payload;
 
 // requireNonEmptyString
 test('requireNonEmptyString returns the string when valid', function () {

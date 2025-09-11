@@ -1,13 +1,13 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Purchase
 {

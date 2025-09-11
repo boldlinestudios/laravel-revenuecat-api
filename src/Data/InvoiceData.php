@@ -1,10 +1,10 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldLineStudios\RevenueCatApi\Data;
 
-use BoldlineStudios\RevenueCatApi\Data\Invoice\Amount;
-use BoldlineStudios\RevenueCatApi\Data\Invoice\LineItem;
-use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
+use BoldLineStudios\RevenueCatApi\Data\Invoice\Amount;
+use BoldLineStudios\RevenueCatApi\Data\Invoice\LineItem;
+use BoldLineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 /**

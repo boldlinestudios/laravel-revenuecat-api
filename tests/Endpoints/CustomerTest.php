@@ -1,16 +1,16 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\AppData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\AttributeData;
-use BoldlineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
-use BoldlineStudios\RevenueCatApi\Data\CustomerData;
-use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\ProductData;
-use BoldlineStudios\RevenueCatApi\Data\PurchaseData;
-use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\AppData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\ActiveEntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData;
+use BoldLineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData;
+use BoldLineStudios\RevenueCatApi\Data\CustomerData;
+use BoldLineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\ProductData;
+use BoldLineStudios\RevenueCatApi\Data\PurchaseData;
+use BoldLineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('list returns ListPage of CustomerData', function () {

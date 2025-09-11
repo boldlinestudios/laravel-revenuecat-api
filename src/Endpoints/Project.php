@@ -1,11 +1,11 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\ProjectData;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\ProjectData;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class Project
 {

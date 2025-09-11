@@ -1,8 +1,8 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Data;
+namespace BoldLineStudios\RevenueCatApi\Data;
 
-use BoldlineStudios\RevenueCatApi\Data\Support\Payload;
+use BoldLineStudios\RevenueCatApi\Data\Support\Payload;
 use Illuminate\Http\Client\Response;
 
 class CustomerData

@@ -1,8 +1,8 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints\Concerns;
+namespace BoldLineStudios\RevenueCatApi\Endpoints\Concerns;
 
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 trait Deletable

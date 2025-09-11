@@ -1,9 +1,9 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints\Concerns;
+namespace BoldLineStudios\RevenueCatApi\Endpoints\Concerns;
 
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 use Illuminate\Http\Client\Response;
 
 trait Listable

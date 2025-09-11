@@ -1,17 +1,17 @@
 <?php
 
-namespace BoldlineStudios\RevenueCatApi\Endpoints;
+namespace BoldLineStudios\RevenueCatApi\Endpoints;
 
-use BoldlineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
-use BoldlineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
-use BoldlineStudios\RevenueCatApi\Data\AppData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
-use BoldlineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
-use BoldlineStudios\RevenueCatApi\Http\RevenueCatClient;
+use BoldLineStudios\RevenueCatApi\Data\App\PublicApiKeyData;
+use BoldLineStudios\RevenueCatApi\Data\App\StoreKitConfigData;
+use BoldLineStudios\RevenueCatApi\Data\AppData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Creatable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Deletable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
+use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
+use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
 
 class App
 {

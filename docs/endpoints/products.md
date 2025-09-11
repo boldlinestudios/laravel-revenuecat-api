@@ -62,7 +62,7 @@ Manage RevenueCat products, which represent the actual store products (subscript
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $product = RevenueCat::products()->get('prod_123');
@@ -77,7 +77,7 @@ $product = RevenueCat::getProduct('prod_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::products()->all(limit: 20);
 
@@ -95,7 +95,7 @@ $page = RevenueCat::listProducts(limit: 20);
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Create a subscription product
 $product = RevenueCat::products()->create(
@@ -127,7 +127,7 @@ $product = RevenueCat::createProduct(
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::products()->delete('prod_123'); // bool

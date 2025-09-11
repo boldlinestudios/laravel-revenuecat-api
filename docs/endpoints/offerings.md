@@ -77,7 +77,7 @@ Manage RevenueCat offerings, which are collections of packages that can be prese
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $offering = RevenueCat::offerings()->get('off_123');
@@ -92,7 +92,7 @@ $offering = RevenueCat::getOffering('off_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::offerings()->all(limit: 20);
 
@@ -110,7 +110,7 @@ $page = RevenueCat::listOfferings(limit: 20);
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Create with basic information
 $offering = RevenueCat::offerings()->create(lookupKey: 'premium_plan', displayName: 'Premium Plan');
@@ -133,7 +133,7 @@ $offering = RevenueCat::createOffering(lookupKey: 'premium_plan', displayName: '
 <summary><strong>Update</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Update display name
 $offering = RevenueCat::offerings()->update('off_123', 'Updated Premium Plan');
@@ -155,7 +155,7 @@ $offering = RevenueCat::updateOffering('off_123', displayName: 'Updated Premium 
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::offerings()->delete('off_123'); // bool

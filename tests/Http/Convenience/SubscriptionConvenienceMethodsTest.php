@@ -1,11 +1,11 @@
 <?php
 
-use BoldlineStudios\RevenueCatApi\Data\EntitlementData;
-use BoldlineStudios\RevenueCatApi\Data\ListPage;
-use BoldlineStudios\RevenueCatApi\Data\SubscriptionData;
-use BoldlineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
-use BoldlineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Data\EntitlementData;
+use BoldLineStudios\RevenueCatApi\Data\ListPage;
+use BoldLineStudios\RevenueCatApi\Data\SubscriptionData;
+use BoldLineStudios\RevenueCatApi\Data\Subscriptions\ManagementUrlData;
+use BoldLineStudios\RevenueCatApi\Data\Subscriptions\TransactionData;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 use Illuminate\Support\Facades\Http;
 
 test('getSubscription calls subscriptions()->get() with correct parameters', function () {

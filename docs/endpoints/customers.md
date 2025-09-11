@@ -97,7 +97,7 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 <summary><strong>Get</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $customer = RevenueCat::customers()->get('cus_123');
@@ -112,7 +112,7 @@ $customer = RevenueCat::getCustomer('cus_123');
 <summary><strong>List</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $page = RevenueCat::customers()->all(limit: 20);
 
@@ -130,7 +130,7 @@ $page = RevenueCat::listCustomers(limit: 20);
 <summary><strong>Create</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $attributes = [
     ['name' => '$email', 'value' => 'user@example.com'],
@@ -149,7 +149,7 @@ $customer = RevenueCat::createCustomer(id: 'cus_123', attributes: $attributes);
 <summary><strong>Delete</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $deleted = RevenueCat::customers()->delete('cus_123'); // bool
@@ -164,7 +164,7 @@ $deleted = RevenueCat::deleteCustomer('cus_123');
 <summary><strong>List Subscriptions</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $subscriptions = RevenueCat::customers()->listOfSubscriptions('cus_123', limit: 50);
@@ -179,7 +179,7 @@ $subscriptions = RevenueCat::listCustomerSubscriptions('cus_123', limit: 50);
 <summary><strong>List Purchases</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $purchases = RevenueCat::customers()->listOfPurchases('cus_123', limit: 50);
@@ -194,7 +194,7 @@ $purchases = RevenueCat::listCustomerPurchases('cus_123', limit: 50);
 <summary><strong>List Active Entitlements</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $entitlements = RevenueCat::customers()->listOfActiveEntitlements('cus_123', limit: 50);
@@ -209,7 +209,7 @@ $entitlements = RevenueCat::listCustomerActiveEntitlements('cus_123', limit: 50)
 <summary><strong>List Aliases</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $aliases = RevenueCat::customers()->listOfAliases('cus_123', limit: 50);
@@ -224,7 +224,7 @@ $aliases = RevenueCat::listCustomerAliases('cus_123', limit: 50);
 <summary><strong>List Virtual Currency Balances</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $balances = RevenueCat::customers()->listOfVirtualCurrencyBalances('cus_123', limit: 50);
@@ -239,7 +239,7 @@ $balances = RevenueCat::listCustomerVirtualCurrencyBalances('cus_123', limit: 50
 <summary><strong>List Attributes</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 // Endpoint-style
 $attributes = RevenueCat::customers()->listOfAttributes('cus_123', limit: 50);
@@ -254,7 +254,7 @@ $attributes = RevenueCat::listCustomerAttributes('cus_123', limit: 50);
 <summary><strong>Set Attributes</strong></summary>
 
 ```php
-use BoldlineStudios\RevenueCatApi\Facades\RevenueCat;
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
 
 $newAttributes = [
     ['name' => '$email', 'value' => 'support@example.com'],
