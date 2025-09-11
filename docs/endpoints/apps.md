@@ -73,9 +73,6 @@ Manage RevenueCat apps and their store-specific configuration.
 
 </details>
 
-<br>
-
-> See concrete config shapes in [`AppData` store config](../../DATA.md#appdata-store-configuration-structure).
 
 ---
 

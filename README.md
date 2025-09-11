@@ -4,7 +4,7 @@
 
 # Laravel RevenueCat API
 
-A package that provides a clean, fully-typed wrapper for the RevenueCat API v2 in Laravel.
+A Laravel package for the RevenueCat API v2, providing typed methods and structured data objects.
 
 > **Note:** This is not an official package of RevenueCat or Laravel.
 
@@ -95,15 +95,12 @@ Available endpoints with full documentation and examples:
 - [Purchases](docs/endpoints/purchases.md)
 - [Subscriptions](docs/endpoints/subscriptions.md)
 
-For the legacy consolidated documentation, see [ENDPOINTS.md](ENDPOINTS.md).
-
 ## Response and Data Handling
 
-- Most methods return **data objects** ([`AppData`](../../DATA.md#appdata), [`CustomerData`](../../DATA.md#customerdata), etc.).
-- List endpoints return a **`ListPage<T>`** wrapper for pagination.
-- Some utility endpoints return the raw **`Response`**.
+- Most methods return **data objects** ([`AppData`](DATA.md#appdata), [`CustomerData`](DATA.md#customerdata), etc.).
+- List endpoints return a **`ListPage<T>`** ([`ListPage<T>`](DATA.md#listpage)) wrapper for pagination.
 
-See the full data object catalog and ListPage documentation in [DATA.md](DATA.md).
+See the full data object catalog [DATA.md](DATA.md).
 
 ### Data Objects
 
@@ -118,11 +115,11 @@ echo $product->getType();
 return $product->toArray();
 ```
 
-See [`ProductData`](../../DATA.md#productdata) for all available methods.
+See [`ProductData`](DATA.md#productdata) for all available methods.
 
 ### ListPage & Pagination
 
-See [`ListPage<T>`](../../DATA.md#listpage) documentation in [DATA.md](DATA.md).
+See [`ListPage<T>`](DATA.md#listpage) documentation in [DATA.md](DATA.md).
 
 List methods return a `ListPage<T>` that handles pagination automatically:
 
@@ -145,7 +142,7 @@ do {
         $allCustomers[] = $customer;  // Collect all customers
     }
 
-    // See [CustomerData](../../DATA.md#customerdata) for all available methods
+    // See [CustomerData](DATA.md#customerdata) for all available methods
 
     // Get cursor for next page
     $cursor = $page->nextCursor();
@@ -183,17 +180,17 @@ Non-2xx responses throw typed exceptions matching RevenueCat’s error model:
 ## Testing
 
 ```bash
-./vendor/bin/pest
+composer test
 ```
 
 ## Linting
 ```bash
-./vendor/bin/pint
+composer lint
 ```
 
 ## Static Analysis
 ```bash
-./vendor/bin/phpstan analyze
+composer stan
 ```
 
 ## Contributing
