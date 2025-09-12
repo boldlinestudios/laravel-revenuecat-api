@@ -53,6 +53,6 @@ return [
     | The timeout in seconds for API requests. Default is 30 seconds.
     |
     */
-    'timeout' => env('REVENUECAT_TIMEOUT', 30),
+    'timeout' => (int) env('REVENUECAT_TIMEOUT', 30),
 
 ];
