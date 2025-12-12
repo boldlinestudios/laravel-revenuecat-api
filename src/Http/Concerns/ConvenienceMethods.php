@@ -195,6 +195,17 @@ trait ConvenienceMethods
         return $this->customers()->setAttributes($customerId, $attributes);
     }
 
+    /**
+     * Grant an entitlement to a customer unless one already exists.
+     * As a side effect, a promotional subscription is created.
+     *
+     * This endpoint requires the following permission(s): customer_information:customers:read_write.
+     */
+    public function grantCustomerEntitlement(string $customerId, string $entitlementId, int $expiresAtMs): CustomerData
+    {
+        return $this->customers()->grantEntitlement($customerId, $entitlementId, $expiresAtMs);
+    }
+
     // Entitlement convenience methods
     public function getEntitlement(string $entitlementId): EntitlementData
     {

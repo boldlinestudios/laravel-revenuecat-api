@@ -16,6 +16,7 @@ use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Listable;
 use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Retrievable;
 use BoldLineStudios\RevenueCatApi\Endpoints\Concerns\Updatable;
 use BoldLineStudios\RevenueCatApi\Http\RevenueCatClient;
+use Illuminate\Http\Client\Response;
 
 class Customer
 {
@@ -192,5 +193,42 @@ class Customer
 
         /** @var ListPage<AttributeData> */
         return $this->listPageForPath($path, AttributeData::class);
+    }
+
+    /**
+     * Grant an entitlement to a customer unless one already exists.
+     * As a side effect, a promotional subscription is created.
+     *
+     * This endpoint requires the following permission(s): customer_information:customers:read_write.
+     */
+    public function grantEntitlement(string $customerId, string $entitlementId, int $expiresAtMs): CustomerData
+    {
+        return CustomerData::fromResponse(
+            $this->grantEntitlementRaw($customerId, $entitlementId, $expiresAtMs)
+        );
+    }
+
+    /**
+     * Grant an entitlement to a customer (raw Response).
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function grantEntitlementRaw(string $customerId, string $entitlementId, int $expiresAtMs): Response
+    {
+        if (trim($entitlementId) === '') {
+            throw new \InvalidArgumentException('entitlementId must be a non-empty string.');
+        }
+
+        if ($expiresAtMs <= 0) {
+            throw new \InvalidArgumentException('expiresAtMs must be a positive integer (ms since epoch).');
+        }
+
+        $customerId = rawurlencode($customerId);
+        $path = "/customers/{$customerId}/actions/grant_entitlement";
+
+        return $this->client()->post($path, [
+            'entitlement_id' => $entitlementId,
+            'expires_at' => $expiresAtMs,
+        ]);
     }
 }

@@ -31,6 +31,7 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 | List Virtual Currency | `listOfVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<VirtualCurrencyBalanceData>` |
 |List Attributes | `listOfAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array $extra = [])` | `ListPage<AttributeData>` |
 | Set Attributes | `setAttributes(string $customerId, array $attributes)` | `ListPage<AttributeData>` |
+| Grant Entitlement | `grantEntitlement(string $customerId, string $entitlementId, int $expiresAtMs)` | `CustomerData` |
 
 </details>
 
@@ -52,6 +53,7 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 | Virtual Currency | `listCustomerVirtualCurrencyBalances(string $customerId)` | `ListPage<VirtualCurrencyBalanceData>` |
 | Attributes | `listCustomerAttributes(string $customerId)` | `ListPage<AttributeData>` |
 | Set Attributes | `setCustomerAttributes(string $customerId, array $attributes)` | `ListPage<AttributeData>` |
+| Grant Entitlement | `grantCustomerEntitlement(string $customerId, string $entitlementId, int $expiresAtMs)` | `CustomerData` |
 
 </details>
 
@@ -87,6 +89,23 @@ Manage RevenueCat customers, their attributes, and relationships with subscripti
 | `attributes` | `array<array{name: string, value: string}>` | ✓ | List of attribute objects to set |
 
 > Each attribute must be an array with `name` and `value` string keys.
+</details>
+
+<details>
+<summary><strong>Grant Entitlement Parameters</strong></summary>
+
+<br>
+
+**Grant Entitlement**
+
+This endpoint requires the following permission(s): `customer_information:customers:read_write`.
+
+| Name | Type | Required | Notes |
+|---|---|:---:|---|
+| `customerId` | `string` | ✓ | Customer identifier |
+| `entitlementId` | `string` | ✓ | Entitlement identifier to grant |
+| `expiresAtMs` | `int` | ✓ | Expiration in ms since epoch |
+
 </details>
 
 ---
@@ -272,6 +291,25 @@ foreach ($attributes->items() as $attribute) {
     // $attribute is AttributeData
     echo $attribute->getName() . ': ' . $attribute->getValue() . "\n";
 }
+```
+
+</details>
+
+<details open>
+<summary><strong>Grant Entitlement</strong></summary>
+
+```php
+use BoldLineStudios\RevenueCatApi\Facades\RevenueCat;
+
+$customerId = 'cus_123';
+$entitlementId = 'premium';
+$expiresAtMs = 1658399423658;
+
+// Endpoint-style
+$customer = RevenueCat::customers()->grantEntitlement($customerId, $entitlementId, $expiresAtMs);
+
+// Convenience-style
+$customer = RevenueCat::grantCustomerEntitlement($customerId, $entitlementId, $expiresAtMs);
 ```
 
 </details>

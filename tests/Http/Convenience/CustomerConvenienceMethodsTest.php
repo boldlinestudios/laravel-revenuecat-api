@@ -287,3 +287,22 @@ test('setAttributes posts attributes and returns ListPage of AttributeData', fun
     expect($attributes->items()[0]->getValue())->toBe('support@revenuecat.com');
     expect($attributes->items()[0]->getUpdatedAtMs())->toBe(1658399423658);
 });
+
+test('grantCustomerEntitlement calls customers()->grantEntitlement() with correct parameters', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/customers/test-customer-id/actions/grant_entitlement' => Http::response([
+            'object' => 'customer',
+            'id' => 'test-customer-id',
+            'project_id' => 'test_project',
+        ], 201),
+    ]);
+
+    $customer = RevenueCat::grantCustomerEntitlement(
+        customerId: 'test-customer-id',
+        entitlementId: 'entla1b2c3d4e5',
+        expiresAtMs: 1658399423658
+    );
+
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test-customer-id');
+});

@@ -59,6 +59,6 @@
     "scripts": {
         "test": "vendor/bin/pest",
         "lint": "vendor/bin/pint -v",
-        "stan": "vendor/bin/phpstan analyse"
+        "stan": "vendor/bin/phpstan analyse --memory-limit=1G"
     }
 }
