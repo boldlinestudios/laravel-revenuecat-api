@@ -496,3 +496,55 @@ test('create throws if attributes is not a list', function () {
         'value' => 'test@example.com',
     ]))->toThrow(\InvalidArgumentException::class, 'Attributes must be a list of {name, value} items.');
 });
+
+test('grantEntitlement grants entitlement to customer and returns CustomerData', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/customers/test-customer-id/actions/grant_entitlement' => Http::response([
+            'object' => 'customer',
+            'id' => 'test-customer-id',
+            'project_id' => 'test_project',
+        ], 201),
+    ]);
+
+    $customer = RevenueCat::customers()->grantEntitlement(
+        customerId: 'test-customer-id',
+        entitlementId: 'entla1b2c3d4e5',
+        expiresAtMs: 1658399423658
+    );
+
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test-customer-id');
+});
+
+test('grantEntitlement properly encodes special characters in customer id', function () {
+    Http::fake([
+        'https://api.example.com/v2/projects/test_project/customers/test%20customer%20with%20spaces%20%26%20special%20chars/actions/grant_entitlement' => Http::response([
+            'object' => 'customer',
+            'id' => 'test customer with spaces & special chars',
+        ], 201),
+    ]);
+
+    $customerId = 'test customer with spaces & special chars';
+    $customer = RevenueCat::customers()->grantEntitlement($customerId, 'entla1b2c3d4e5', 1658399423658);
+
+    expect($customer)->toBeInstanceOf(CustomerData::class);
+    expect($customer->getId())->toBe('test customer with spaces & special chars');
+});
+
+test('grantEntitlement throws on empty entitlementId', function () {
+    expect(fn () => RevenueCat::customers()->grantEntitlement('cust-1', '', 1658399423658))
+        ->toThrow(\InvalidArgumentException::class, 'entitlementId must be a non-empty string.');
+});
+
+test('grantEntitlement throws on whitespace entitlementId', function () {
+    expect(fn () => RevenueCat::customers()->grantEntitlement('cust-1', '   ', 1658399423658))
+        ->toThrow(\InvalidArgumentException::class, 'entitlementId must be a non-empty string.');
+});
+
+test('grantEntitlement throws on non-positive expiresAtMs', function () {
+    expect(fn () => RevenueCat::customers()->grantEntitlement('cust-1', 'entla1b2c3d4e5', 0))
+        ->toThrow(\InvalidArgumentException::class, 'expiresAtMs must be a positive integer (ms since epoch).');
+
+    expect(fn () => RevenueCat::customers()->grantEntitlement('cust-1', 'entla1b2c3d4e5', -1))
+        ->toThrow(\InvalidArgumentException::class, 'expiresAtMs must be a positive integer (ms since epoch).');
+});
