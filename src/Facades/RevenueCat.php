@@ -42,6 +42,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \BoldLineStudios\RevenueCatApi\Data\ListPage<\BoldLineStudios\RevenueCatApi\Data\Customer\VirtualCurrencyBalanceData> listCustomerVirtualCurrencyBalances(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldLineStudios\RevenueCatApi\Data\ListPage<\BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData> listCustomerAttributes(string $customerId, int $limit = 20, ?string $startingAfter = null, array<string,mixed> $extra = [])
  * @method static \BoldLineStudios\RevenueCatApi\Data\ListPage<\BoldLineStudios\RevenueCatApi\Data\Customer\AttributeData> setCustomerAttributes(string $customerId, list<array{name: string, value: string}> $attributes)
+ * @method static \BoldLineStudios\RevenueCatApi\Data\CustomerData grantCustomerEntitlement(string $customerId, string $entitlementId, int $expiresAtMs)
  *
  * Entitlements
  * @method static \BoldLineStudios\RevenueCatApi\Data\EntitlementData getEntitlement(string $entitlementId)
